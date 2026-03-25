@@ -44,6 +44,7 @@ export type RestaurantMinAggregateOutputType = {
   city: string | null
   state: string | null
   road: string | null
+  createdByUserId: string | null
   contact: string | null
   ratingAvg: number | null
   totalReviews: number | null
@@ -61,6 +62,7 @@ export type RestaurantMaxAggregateOutputType = {
   city: string | null
   state: string | null
   road: string | null
+  createdByUserId: string | null
   contact: string | null
   ratingAvg: number | null
   totalReviews: number | null
@@ -79,6 +81,7 @@ export type RestaurantCountAggregateOutputType = {
   state: number
   road: number
   location: number
+  createdByUserId: number
   contact: number
   images: number
   ratingAvg: number
@@ -109,6 +112,7 @@ export type RestaurantMinAggregateInputType = {
   city?: true
   state?: true
   road?: true
+  createdByUserId?: true
   contact?: true
   ratingAvg?: true
   totalReviews?: true
@@ -126,6 +130,7 @@ export type RestaurantMaxAggregateInputType = {
   city?: true
   state?: true
   road?: true
+  createdByUserId?: true
   contact?: true
   ratingAvg?: true
   totalReviews?: true
@@ -144,6 +149,7 @@ export type RestaurantCountAggregateInputType = {
   state?: true
   road?: true
   location?: true
+  createdByUserId?: true
   contact?: true
   images?: true
   ratingAvg?: true
@@ -250,6 +256,7 @@ export type RestaurantGroupByOutputType = {
   state: string
   road: string
   location: runtime.JsonValue
+  createdByUserId: string
   contact: string | null
   images: string[]
   ratingAvg: number
@@ -292,6 +299,7 @@ export type RestaurantWhereInput = {
   state?: Prisma.StringFilter<"Restaurant"> | string
   road?: Prisma.StringFilter<"Restaurant"> | string
   location?: Prisma.JsonFilter<"Restaurant">
+  createdByUserId?: Prisma.StringFilter<"Restaurant"> | string
   contact?: Prisma.StringNullableFilter<"Restaurant"> | string | null
   images?: Prisma.StringNullableListFilter<"Restaurant">
   ratingAvg?: Prisma.FloatFilter<"Restaurant"> | number
@@ -300,6 +308,7 @@ export type RestaurantWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Restaurant"> | Date | string
   isDeleted?: Prisma.BoolFilter<"Restaurant"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"Restaurant"> | Date | string | null
+  createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   dishes?: Prisma.DishListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
 }
@@ -313,6 +322,7 @@ export type RestaurantOrderByWithRelationInput = {
   state?: Prisma.SortOrder
   road?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  createdByUserId?: Prisma.SortOrder
   contact?: Prisma.SortOrderInput | Prisma.SortOrder
   images?: Prisma.SortOrder
   ratingAvg?: Prisma.SortOrder
@@ -321,6 +331,7 @@ export type RestaurantOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdBy?: Prisma.UserOrderByWithRelationInput
   dishes?: Prisma.DishOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
 }
@@ -337,6 +348,7 @@ export type RestaurantWhereUniqueInput = Prisma.AtLeast<{
   state?: Prisma.StringFilter<"Restaurant"> | string
   road?: Prisma.StringFilter<"Restaurant"> | string
   location?: Prisma.JsonFilter<"Restaurant">
+  createdByUserId?: Prisma.StringFilter<"Restaurant"> | string
   contact?: Prisma.StringNullableFilter<"Restaurant"> | string | null
   images?: Prisma.StringNullableListFilter<"Restaurant">
   ratingAvg?: Prisma.FloatFilter<"Restaurant"> | number
@@ -345,6 +357,7 @@ export type RestaurantWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Restaurant"> | Date | string
   isDeleted?: Prisma.BoolFilter<"Restaurant"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"Restaurant"> | Date | string | null
+  createdBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   dishes?: Prisma.DishListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
 }, "id">
@@ -358,6 +371,7 @@ export type RestaurantOrderByWithAggregationInput = {
   state?: Prisma.SortOrder
   road?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  createdByUserId?: Prisma.SortOrder
   contact?: Prisma.SortOrderInput | Prisma.SortOrder
   images?: Prisma.SortOrder
   ratingAvg?: Prisma.SortOrder
@@ -385,6 +399,7 @@ export type RestaurantScalarWhereWithAggregatesInput = {
   state?: Prisma.StringWithAggregatesFilter<"Restaurant"> | string
   road?: Prisma.StringWithAggregatesFilter<"Restaurant"> | string
   location?: Prisma.JsonWithAggregatesFilter<"Restaurant">
+  createdByUserId?: Prisma.StringWithAggregatesFilter<"Restaurant"> | string
   contact?: Prisma.StringNullableWithAggregatesFilter<"Restaurant"> | string | null
   images?: Prisma.StringNullableListFilter<"Restaurant">
   ratingAvg?: Prisma.FloatWithAggregatesFilter<"Restaurant"> | number
@@ -412,6 +427,7 @@ export type RestaurantCreateInput = {
   updatedAt?: Date | string
   isDeleted?: boolean
   deletedAt?: Date | string | null
+  createdBy: Prisma.UserCreateNestedOneWithoutRestaurantsInput
   dishes?: Prisma.DishCreateNestedManyWithoutRestaurantInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutRestaurantInput
 }
@@ -425,6 +441,7 @@ export type RestaurantUncheckedCreateInput = {
   state: string
   road: string
   location: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdByUserId: string
   contact?: string | null
   images?: Prisma.RestaurantCreateimagesInput | string[]
   ratingAvg?: number
@@ -454,6 +471,7 @@ export type RestaurantUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutRestaurantsNestedInput
   dishes?: Prisma.DishUpdateManyWithoutRestaurantNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutRestaurantNestedInput
 }
@@ -467,6 +485,7 @@ export type RestaurantUncheckedUpdateInput = {
   state?: Prisma.StringFieldUpdateOperationsInput | string
   road?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.RestaurantUpdateimagesInput | string[]
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -488,6 +507,7 @@ export type RestaurantCreateManyInput = {
   state: string
   road: string
   location: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdByUserId: string
   contact?: string | null
   images?: Prisma.RestaurantCreateimagesInput | string[]
   ratingAvg?: number
@@ -526,6 +546,7 @@ export type RestaurantUncheckedUpdateManyInput = {
   state?: Prisma.StringFieldUpdateOperationsInput | string
   road?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.RestaurantUpdateimagesInput | string[]
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -534,6 +555,16 @@ export type RestaurantUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type RestaurantListRelationFilter = {
+  every?: Prisma.RestaurantWhereInput
+  some?: Prisma.RestaurantWhereInput
+  none?: Prisma.RestaurantWhereInput
+}
+
+export type RestaurantOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type RestaurantScalarRelationFilter = {
@@ -558,6 +589,7 @@ export type RestaurantCountOrderByAggregateInput = {
   state?: Prisma.SortOrder
   road?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  createdByUserId?: Prisma.SortOrder
   contact?: Prisma.SortOrder
   images?: Prisma.SortOrder
   ratingAvg?: Prisma.SortOrder
@@ -581,6 +613,7 @@ export type RestaurantMaxOrderByAggregateInput = {
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   road?: Prisma.SortOrder
+  createdByUserId?: Prisma.SortOrder
   contact?: Prisma.SortOrder
   ratingAvg?: Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
@@ -598,6 +631,7 @@ export type RestaurantMinOrderByAggregateInput = {
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   road?: Prisma.SortOrder
+  createdByUserId?: Prisma.SortOrder
   contact?: Prisma.SortOrder
   ratingAvg?: Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
@@ -610,6 +644,48 @@ export type RestaurantMinOrderByAggregateInput = {
 export type RestaurantSumOrderByAggregateInput = {
   ratingAvg?: Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
+}
+
+export type RestaurantCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.RestaurantCreateWithoutCreatedByInput, Prisma.RestaurantUncheckedCreateWithoutCreatedByInput> | Prisma.RestaurantCreateWithoutCreatedByInput[] | Prisma.RestaurantUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.RestaurantCreateOrConnectWithoutCreatedByInput | Prisma.RestaurantCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.RestaurantCreateManyCreatedByInputEnvelope
+  connect?: Prisma.RestaurantWhereUniqueInput | Prisma.RestaurantWhereUniqueInput[]
+}
+
+export type RestaurantUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.RestaurantCreateWithoutCreatedByInput, Prisma.RestaurantUncheckedCreateWithoutCreatedByInput> | Prisma.RestaurantCreateWithoutCreatedByInput[] | Prisma.RestaurantUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.RestaurantCreateOrConnectWithoutCreatedByInput | Prisma.RestaurantCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.RestaurantCreateManyCreatedByInputEnvelope
+  connect?: Prisma.RestaurantWhereUniqueInput | Prisma.RestaurantWhereUniqueInput[]
+}
+
+export type RestaurantUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.RestaurantCreateWithoutCreatedByInput, Prisma.RestaurantUncheckedCreateWithoutCreatedByInput> | Prisma.RestaurantCreateWithoutCreatedByInput[] | Prisma.RestaurantUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.RestaurantCreateOrConnectWithoutCreatedByInput | Prisma.RestaurantCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.RestaurantUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.RestaurantUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.RestaurantCreateManyCreatedByInputEnvelope
+  set?: Prisma.RestaurantWhereUniqueInput | Prisma.RestaurantWhereUniqueInput[]
+  disconnect?: Prisma.RestaurantWhereUniqueInput | Prisma.RestaurantWhereUniqueInput[]
+  delete?: Prisma.RestaurantWhereUniqueInput | Prisma.RestaurantWhereUniqueInput[]
+  connect?: Prisma.RestaurantWhereUniqueInput | Prisma.RestaurantWhereUniqueInput[]
+  update?: Prisma.RestaurantUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.RestaurantUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.RestaurantUpdateManyWithWhereWithoutCreatedByInput | Prisma.RestaurantUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.RestaurantScalarWhereInput | Prisma.RestaurantScalarWhereInput[]
+}
+
+export type RestaurantUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.RestaurantCreateWithoutCreatedByInput, Prisma.RestaurantUncheckedCreateWithoutCreatedByInput> | Prisma.RestaurantCreateWithoutCreatedByInput[] | Prisma.RestaurantUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.RestaurantCreateOrConnectWithoutCreatedByInput | Prisma.RestaurantCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.RestaurantUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.RestaurantUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.RestaurantCreateManyCreatedByInputEnvelope
+  set?: Prisma.RestaurantWhereUniqueInput | Prisma.RestaurantWhereUniqueInput[]
+  disconnect?: Prisma.RestaurantWhereUniqueInput | Prisma.RestaurantWhereUniqueInput[]
+  delete?: Prisma.RestaurantWhereUniqueInput | Prisma.RestaurantWhereUniqueInput[]
+  connect?: Prisma.RestaurantWhereUniqueInput | Prisma.RestaurantWhereUniqueInput[]
+  update?: Prisma.RestaurantUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.RestaurantUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.RestaurantUpdateManyWithWhereWithoutCreatedByInput | Prisma.RestaurantUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.RestaurantScalarWhereInput | Prisma.RestaurantScalarWhereInput[]
 }
 
 export type RestaurantCreateNestedOneWithoutDishesInput = {
@@ -649,6 +725,97 @@ export type RestaurantUpdateOneRequiredWithoutReviewsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RestaurantUpdateToOneWithWhereWithoutReviewsInput, Prisma.RestaurantUpdateWithoutReviewsInput>, Prisma.RestaurantUncheckedUpdateWithoutReviewsInput>
 }
 
+export type RestaurantCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  description?: string | null
+  address: string
+  city: string
+  state: string
+  road: string
+  location: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contact?: string | null
+  images?: Prisma.RestaurantCreateimagesInput | string[]
+  ratingAvg?: number
+  totalReviews?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  dishes?: Prisma.DishCreateNestedManyWithoutRestaurantInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutRestaurantInput
+}
+
+export type RestaurantUncheckedCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  description?: string | null
+  address: string
+  city: string
+  state: string
+  road: string
+  location: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contact?: string | null
+  images?: Prisma.RestaurantCreateimagesInput | string[]
+  ratingAvg?: number
+  totalReviews?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  dishes?: Prisma.DishUncheckedCreateNestedManyWithoutRestaurantInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutRestaurantInput
+}
+
+export type RestaurantCreateOrConnectWithoutCreatedByInput = {
+  where: Prisma.RestaurantWhereUniqueInput
+  create: Prisma.XOR<Prisma.RestaurantCreateWithoutCreatedByInput, Prisma.RestaurantUncheckedCreateWithoutCreatedByInput>
+}
+
+export type RestaurantCreateManyCreatedByInputEnvelope = {
+  data: Prisma.RestaurantCreateManyCreatedByInput | Prisma.RestaurantCreateManyCreatedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type RestaurantUpsertWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.RestaurantWhereUniqueInput
+  update: Prisma.XOR<Prisma.RestaurantUpdateWithoutCreatedByInput, Prisma.RestaurantUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.RestaurantCreateWithoutCreatedByInput, Prisma.RestaurantUncheckedCreateWithoutCreatedByInput>
+}
+
+export type RestaurantUpdateWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.RestaurantWhereUniqueInput
+  data: Prisma.XOR<Prisma.RestaurantUpdateWithoutCreatedByInput, Prisma.RestaurantUncheckedUpdateWithoutCreatedByInput>
+}
+
+export type RestaurantUpdateManyWithWhereWithoutCreatedByInput = {
+  where: Prisma.RestaurantScalarWhereInput
+  data: Prisma.XOR<Prisma.RestaurantUpdateManyMutationInput, Prisma.RestaurantUncheckedUpdateManyWithoutCreatedByInput>
+}
+
+export type RestaurantScalarWhereInput = {
+  AND?: Prisma.RestaurantScalarWhereInput | Prisma.RestaurantScalarWhereInput[]
+  OR?: Prisma.RestaurantScalarWhereInput[]
+  NOT?: Prisma.RestaurantScalarWhereInput | Prisma.RestaurantScalarWhereInput[]
+  id?: Prisma.StringFilter<"Restaurant"> | string
+  name?: Prisma.StringFilter<"Restaurant"> | string
+  description?: Prisma.StringNullableFilter<"Restaurant"> | string | null
+  address?: Prisma.StringFilter<"Restaurant"> | string
+  city?: Prisma.StringFilter<"Restaurant"> | string
+  state?: Prisma.StringFilter<"Restaurant"> | string
+  road?: Prisma.StringFilter<"Restaurant"> | string
+  location?: Prisma.JsonFilter<"Restaurant">
+  createdByUserId?: Prisma.StringFilter<"Restaurant"> | string
+  contact?: Prisma.StringNullableFilter<"Restaurant"> | string | null
+  images?: Prisma.StringNullableListFilter<"Restaurant">
+  ratingAvg?: Prisma.FloatFilter<"Restaurant"> | number
+  totalReviews?: Prisma.IntFilter<"Restaurant"> | number
+  createdAt?: Prisma.DateTimeFilter<"Restaurant"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Restaurant"> | Date | string
+  isDeleted?: Prisma.BoolFilter<"Restaurant"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"Restaurant"> | Date | string | null
+}
+
 export type RestaurantCreateWithoutDishesInput = {
   id?: string
   name: string
@@ -666,6 +833,7 @@ export type RestaurantCreateWithoutDishesInput = {
   updatedAt?: Date | string
   isDeleted?: boolean
   deletedAt?: Date | string | null
+  createdBy: Prisma.UserCreateNestedOneWithoutRestaurantsInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutRestaurantInput
 }
 
@@ -678,6 +846,7 @@ export type RestaurantUncheckedCreateWithoutDishesInput = {
   state: string
   road: string
   location: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdByUserId: string
   contact?: string | null
   images?: Prisma.RestaurantCreateimagesInput | string[]
   ratingAvg?: number
@@ -722,6 +891,7 @@ export type RestaurantUpdateWithoutDishesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutRestaurantsNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutRestaurantNestedInput
 }
 
@@ -734,6 +904,7 @@ export type RestaurantUncheckedUpdateWithoutDishesInput = {
   state?: Prisma.StringFieldUpdateOperationsInput | string
   road?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.RestaurantUpdateimagesInput | string[]
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -762,6 +933,7 @@ export type RestaurantCreateWithoutReviewsInput = {
   updatedAt?: Date | string
   isDeleted?: boolean
   deletedAt?: Date | string | null
+  createdBy: Prisma.UserCreateNestedOneWithoutRestaurantsInput
   dishes?: Prisma.DishCreateNestedManyWithoutRestaurantInput
 }
 
@@ -774,6 +946,7 @@ export type RestaurantUncheckedCreateWithoutReviewsInput = {
   state: string
   road: string
   location: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdByUserId: string
   contact?: string | null
   images?: Prisma.RestaurantCreateimagesInput | string[]
   ratingAvg?: number
@@ -818,10 +991,72 @@ export type RestaurantUpdateWithoutReviewsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdBy?: Prisma.UserUpdateOneRequiredWithoutRestaurantsNestedInput
   dishes?: Prisma.DishUpdateManyWithoutRestaurantNestedInput
 }
 
 export type RestaurantUncheckedUpdateWithoutReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  road?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  images?: Prisma.RestaurantUpdateimagesInput | string[]
+  ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dishes?: Prisma.DishUncheckedUpdateManyWithoutRestaurantNestedInput
+}
+
+export type RestaurantCreateManyCreatedByInput = {
+  id?: string
+  name: string
+  description?: string | null
+  address: string
+  city: string
+  state: string
+  road: string
+  location: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contact?: string | null
+  images?: Prisma.RestaurantCreateimagesInput | string[]
+  ratingAvg?: number
+  totalReviews?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+}
+
+export type RestaurantUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  road?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  images?: Prisma.RestaurantUpdateimagesInput | string[]
+  ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dishes?: Prisma.DishUpdateManyWithoutRestaurantNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutRestaurantNestedInput
+}
+
+export type RestaurantUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -839,6 +1074,26 @@ export type RestaurantUncheckedUpdateWithoutReviewsInput = {
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dishes?: Prisma.DishUncheckedUpdateManyWithoutRestaurantNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutRestaurantNestedInput
+}
+
+export type RestaurantUncheckedUpdateManyWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  road?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  images?: Prisma.RestaurantUpdateimagesInput | string[]
+  ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -890,6 +1145,7 @@ export type RestaurantSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   state?: boolean
   road?: boolean
   location?: boolean
+  createdByUserId?: boolean
   contact?: boolean
   images?: boolean
   ratingAvg?: boolean
@@ -898,6 +1154,7 @@ export type RestaurantSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   updatedAt?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   dishes?: boolean | Prisma.Restaurant$dishesArgs<ExtArgs>
   reviews?: boolean | Prisma.Restaurant$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.RestaurantCountOutputTypeDefaultArgs<ExtArgs>
@@ -912,6 +1169,7 @@ export type RestaurantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   state?: boolean
   road?: boolean
   location?: boolean
+  createdByUserId?: boolean
   contact?: boolean
   images?: boolean
   ratingAvg?: boolean
@@ -920,6 +1178,7 @@ export type RestaurantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   updatedAt?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["restaurant"]>
 
 export type RestaurantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -931,6 +1190,7 @@ export type RestaurantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   state?: boolean
   road?: boolean
   location?: boolean
+  createdByUserId?: boolean
   contact?: boolean
   images?: boolean
   ratingAvg?: boolean
@@ -939,6 +1199,7 @@ export type RestaurantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   updatedAt?: boolean
   isDeleted?: boolean
   deletedAt?: boolean
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["restaurant"]>
 
 export type RestaurantSelectScalar = {
@@ -950,6 +1211,7 @@ export type RestaurantSelectScalar = {
   state?: boolean
   road?: boolean
   location?: boolean
+  createdByUserId?: boolean
   contact?: boolean
   images?: boolean
   ratingAvg?: boolean
@@ -960,18 +1222,24 @@ export type RestaurantSelectScalar = {
   deletedAt?: boolean
 }
 
-export type RestaurantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "city" | "state" | "road" | "location" | "contact" | "images" | "ratingAvg" | "totalReviews" | "createdAt" | "updatedAt" | "isDeleted" | "deletedAt", ExtArgs["result"]["restaurant"]>
+export type RestaurantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "address" | "city" | "state" | "road" | "location" | "createdByUserId" | "contact" | "images" | "ratingAvg" | "totalReviews" | "createdAt" | "updatedAt" | "isDeleted" | "deletedAt", ExtArgs["result"]["restaurant"]>
 export type RestaurantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   dishes?: boolean | Prisma.Restaurant$dishesArgs<ExtArgs>
   reviews?: boolean | Prisma.Restaurant$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.RestaurantCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type RestaurantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type RestaurantIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type RestaurantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type RestaurantIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $RestaurantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Restaurant"
   objects: {
+    createdBy: Prisma.$UserPayload<ExtArgs>
     dishes: Prisma.$DishPayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
   }
@@ -984,6 +1252,7 @@ export type $RestaurantPayload<ExtArgs extends runtime.Types.Extensions.Internal
     state: string
     road: string
     location: runtime.JsonValue
+    createdByUserId: string
     contact: string | null
     images: string[]
     ratingAvg: number
@@ -1386,6 +1655,7 @@ readonly fields: RestaurantFieldRefs;
  */
 export interface Prisma__RestaurantClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  createdBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   dishes<T extends Prisma.Restaurant$dishesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Restaurant$dishesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DishPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.Restaurant$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Restaurant$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1425,6 +1695,7 @@ export interface RestaurantFieldRefs {
   readonly state: Prisma.FieldRef<"Restaurant", 'String'>
   readonly road: Prisma.FieldRef<"Restaurant", 'String'>
   readonly location: Prisma.FieldRef<"Restaurant", 'Json'>
+  readonly createdByUserId: Prisma.FieldRef<"Restaurant", 'String'>
   readonly contact: Prisma.FieldRef<"Restaurant", 'String'>
   readonly images: Prisma.FieldRef<"Restaurant", 'String[]'>
   readonly ratingAvg: Prisma.FieldRef<"Restaurant", 'Float'>
@@ -1687,6 +1958,10 @@ export type RestaurantCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    */
   data: Prisma.RestaurantCreateManyInput | Prisma.RestaurantCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RestaurantIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1757,6 +2032,10 @@ export type RestaurantUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many Restaurants to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RestaurantIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

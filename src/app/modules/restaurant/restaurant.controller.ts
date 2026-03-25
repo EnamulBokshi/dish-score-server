@@ -5,7 +5,7 @@ import { sendResponse } from "../../helpers/sendResponse";
 
 const createRestaurant = catchAsync(async(req: Request, res: Response) => {
     const payload = req.body;
-    const result = await RestaurantService.createRestaurant(payload);
+    const result = await RestaurantService.createRestaurant(payload, req.user.userId);
     sendResponse(res, {
         httpStatusCode: 201,
         success: true,
@@ -20,7 +20,8 @@ const getRestaurants = catchAsync(async(req: Request, res: Response) => {
     sendResponse(res, {
         httpStatusCode: 200,
         success: true,
-        data: result,
+        data: result.data,
+        meta: result.meta,
         message: "Restaurants retrieved successfully"
     })
 });
@@ -28,7 +29,7 @@ const getRestaurants = catchAsync(async(req: Request, res: Response) => {
 const updateRestaurant = catchAsync(async(req: Request, res: Response) => {
     const id = req.params.id;
     const payload = req.body;
-    const result = await RestaurantService.updateRestaurant(id as string, payload);
+    const result = await RestaurantService.updateRestaurant(id as string, payload, req.user);
     sendResponse(res, {
         httpStatusCode: 200,
         success: true,
@@ -39,7 +40,7 @@ const updateRestaurant = catchAsync(async(req: Request, res: Response) => {
 
 const softDeleteRestaurant = catchAsync(async(req: Request, res: Response) => {
     const id = req.params.id;
-    const result = await RestaurantService.softDeleteRestaurant(id as string);
+    const result = await RestaurantService.softDeleteRestaurant(id as string, req.user);
     sendResponse(res, {
         httpStatusCode: 200,
         success: true,
