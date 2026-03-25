@@ -3,12 +3,9 @@ import { dishRoute } from "../modules/dish/dish.route";
 import { reviewRoute } from "../modules/review/review.route";
 import { userRoute } from "../modules/user/user.route";
 import { restaurantRoute } from "../modules/restaurant/restaurant.route";
-
-const router =  Router();
-
+const router = Router();
 router.use("/users", userRoute);
 router.use("/restaurants", restaurantRoute);
 router.use("/dishes", dishRoute);
 router.use("/reviews", reviewRoute);
-
 export const indexRoute = router;
