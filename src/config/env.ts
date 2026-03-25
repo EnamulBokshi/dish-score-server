@@ -38,10 +38,7 @@ interface EnvConfig {
     API_KEY: string;
     API_SECRET: string;
   };
-  STRIPE: {
-    SECRET_KEY: string;
-    WEBHOOK_SECRET: string;
-  }
+
 }
 
 const loadEnvVariables = (): EnvConfig => {
@@ -71,8 +68,6 @@ const loadEnvVariables = (): EnvConfig => {
     "CLOUDINARY_CLOUD_NAME",
     "CLOUDINARY_API_KEY",
     "CLOUDINARY_API_SECRET",
-    "STRIPE_SECRET_KEY",
-    "STRIPE_WEBHOOK_SECRET",
   ];
   for (const envVar of requiredEnvVars) {
     if (!process.env[envVar]) {
@@ -115,10 +110,6 @@ const loadEnvVariables = (): EnvConfig => {
       API_KEY: process.env.CLOUDINARY_API_KEY as string,
       API_SECRET: process.env.CLOUDINARY_API_SECRET as string,
     },
-    STRIPE: {
-      SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
-      WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET as string,
-    }
   };
 };
 

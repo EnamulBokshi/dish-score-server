@@ -1,6 +1,5 @@
 import { Request } from "express";
-import { deleteFileCloudinary } from "../config/cloudinary";
-
+import { deleteFileCloudinary } from "../../config/cloudinary";
 export const deleteFileFromGlobalErrorHandler = async (req: Request) => {
   try {
     const filesToDelete: string[] = [];

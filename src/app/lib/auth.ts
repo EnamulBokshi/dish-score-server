@@ -5,7 +5,6 @@ import prisma from "./prisma";
 import { bearer, emailOTP } from "better-auth/plugins";
 import { sendEmail } from "../utils/email";
 
-import { UserRole, UserStatus } from "../../generated/prisma/enums";
 import { env } from "../../config/env";
 // If your Prisma file is located elsewhere, you can change the path
 
@@ -27,11 +26,7 @@ export const auth = betterAuth({
             required: true,
             defaultValue: "ACTIVE",
         },
-        needPasswordChange: {
-          type: "boolean",
-          required: true,
-          defaultValue: false,
-        },
+        
         isDeleted: {
           type: "boolean",
           required: true,
@@ -57,16 +52,7 @@ export const auth = betterAuth({
       clientId: env.GOOGLE_CLIENT_ID!,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
 
-      mapProfileToUser:()=> {
-        return{
-          role:UserRole.PATIENT,
-          status: UserStatus.ACTIVE,
-          emailVerified: true,
-          needPasswordChange: false,
-          isDeleted: false,
-          deletedAt: null,
-        }
-      },
+     
     }
   },
 
@@ -78,59 +64,59 @@ export const auth = betterAuth({
   },
   plugins: [
     bearer(),
-    emailOTP({
-      overrideDefaultEmailVerification: true,
-      async sendVerificationOTP({email, otp, type}) {
-        console.log("Sending OTP", {email, otp, type});
-        if(type === "email-verification"){
-          const user = await prisma.user.findUnique({
-            where: {
-              email
-            }
-          });
+    // emailOTP({
+    //   overrideDefaultEmailVerification: true,
+    //   async sendVerificationOTP({email, otp, type}) {
+    //     console.log("Sending OTP", {email, otp, type});
+    //     if(type === "email-verification"){
+    //       const user = await prisma.user.findUnique({
+    //         where: {
+    //           email
+    //         }
+    //       });
 
-          if(!user) {
-            console.error(`User with email ${email} not found for sending OTP`);
-            return;
-          }
-          if(user.role === UserRole.SUPER_ADMIN) {
-            console.log(`User with email ${email} is a super admin. Skipping OTP email.`);
-            return;
-          }
+    //       if(!user) {
+    //         console.error(`User with email ${email} not found for sending OTP`);
+    //         return;
+    //       }
+    //       if(user.role === UserRole.SUPER_ADMIN) {
+    //         console.log(`User with email ${email} is a super admin. Skipping OTP email.`);
+    //         return;
+    //       }
 
-          if(user && !user.emailVerified) {
-            sendEmail({
-              to: email,
-              subject: "Verify your email",
-              template: "otp",
-              templateData: {
-                name: user.name,
-                otp,
-              }
-            })
-          }
-        } else if(type === "forget-password"){
-          const user = await prisma.user.findUnique({
-            where: {
-              email
-            }
-          });
-          if(user) {
-            sendEmail({
-              to: email,
-              subject: "Reset your password",
-              template: "reset-password-otp",
-              templateData: {
-                name: user.name,
-                otp,
-              }
-            })
-          }
-        }
-      },
-      expiresIn: 2 * 60, // 2 minutes
-      otpLength: 6,
-    })
+    //       if(user && !user.emailVerified) {
+    //         sendEmail({
+    //           to: email,
+    //           subject: "Verify your email",
+    //           template: "otp",
+    //           templateData: {
+    //             name: user.name,
+    //             otp,
+    //           }
+    //         })
+    //       }
+    //     } else if(type === "forget-password"){
+    //       const user = await prisma.user.findUnique({
+    //         where: {
+    //           email
+    //         }
+    //       });
+    //       if(user) {
+    //         sendEmail({
+    //           to: email,
+    //           subject: "Reset your password",
+    //           template: "reset-password-otp",
+    //           templateData: {
+    //             name: user.name,
+    //             otp,
+    //           }
+    //         })
+    //       }
+    //     }
+    //   },
+    //   expiresIn: 2 * 60, // 2 minutes
+    //   otpLength: 6,
+    // })
   ],
   session: {
     expiresIn: 60*60*60*24*1, // 1 day

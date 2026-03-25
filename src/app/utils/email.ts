@@ -1,7 +1,7 @@
 
 import ejs from 'ejs'
 import nodemailer from 'nodemailer'
-import { env } from '../config/env'
+import { env } from '../../config/env'
 import AppError from '../../errorHelpers/AppError';
 import path from 'node:path';
 
