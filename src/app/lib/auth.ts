@@ -5,6 +5,7 @@ import prisma from "./prisma";
 import { bearer, emailOTP } from "better-auth/plugins";
 import { sendEmail } from "../utils/email";
 
+import { UserRole, UserStatus } from "../../generated/prisma/enums";
 import { env } from "../../config/env";
 // If your Prisma file is located elsewhere, you can change the path
 
@@ -19,12 +20,12 @@ export const auth = betterAuth({
         role: {
             type: "string",
             required: true,
-            defaultValue: "CONSUMER",
+            defaultValue: UserRole.CONSUMER,
         },
         status: {
             type: "string",
             required: true,
-            defaultValue: "ACTIVE",
+            defaultValue: UserStatus.ACTIVE,
         },
         
         isDeleted: {
@@ -52,7 +53,15 @@ export const auth = betterAuth({
       clientId: env.GOOGLE_CLIENT_ID!,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
 
-     
+      mapProfileToUser:()=> {
+        return{
+          role:UserRole.CONSUMER,
+          status: UserStatus.ACTIVE,
+          emailVerified: true,
+          isDeleted: false,
+          deletedAt: null,
+        }
+      },
     }
   },
 

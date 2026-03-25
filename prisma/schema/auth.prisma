@@ -20,6 +20,7 @@ model User {
 
   @@unique([email])
   @@map("user")
+  @@index([email])
 }
 
 model Session {
