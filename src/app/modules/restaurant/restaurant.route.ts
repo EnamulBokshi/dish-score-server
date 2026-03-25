@@ -9,3 +9,6 @@ router.post("/", requestValidator(createRestaurantSchema), RestaurantController.
 router.get("/", RestaurantController.getRestaurants);
 router.patch("/:id", requestValidator(updateRestaurantSchema), RestaurantController.updateRestaurant);
 router.delete("/:id", RestaurantController.softDeleteRestaurant);
+
+export const restaurantRoute = router;
+

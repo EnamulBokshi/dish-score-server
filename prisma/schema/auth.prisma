@@ -9,6 +9,7 @@ model User {
 
   likes         Like[]
   reviews     Review[]
+  admin              Admin?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   role          String    @default("CONSUMER")
