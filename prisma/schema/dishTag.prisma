@@ -1,0 +1,16 @@
+model Tag {
+  id      String @id @default(cuid())
+  name    String @unique
+
+  dishes  DishTag[]
+}
+
+model DishTag {
+  dishId String
+  tagId  String
+
+  dish   Dish @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([dishId, tagId])
+}

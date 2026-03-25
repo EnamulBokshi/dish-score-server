@@ -1,0 +1,25 @@
+model Review {
+  id            String   @id @default(cuid())
+
+  rating        Int      // 1–5
+  comment       String?
+  images        String[]
+
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  restaurantId  String
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  dishId        String?
+  dish          Dish?    @relation(fields: [dishId], references: [id], onDelete: Cascade)
+
+  likes         Like[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([restaurantId])
+  @@index([dishId])
+  @@index([userId])
+}
