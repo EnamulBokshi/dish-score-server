@@ -1,3 +1,4 @@
+import { IQueryConfig, IQueryParams, IQueryResult, PrismaCountArgs, PrismaFindManyArgs, PrismaModelDelegate, PrismaNumberFilter, PrismaStringFilter, PrismaWhereConditions } from "../../interfaces/query.interfaces";
 
 
 // T = Model Type
