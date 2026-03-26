@@ -11,8 +11,8 @@ const router = Router();
 router.post(
   "/",
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  multerUpload.single("image"),
   requestValidator(createDishSchema),
-  multerUpload.single("file"),
   DishController.createDish,
 );
 router.get("/", DishController.getDishes);

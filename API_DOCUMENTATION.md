@@ -7,6 +7,7 @@ This document covers the currently implemented API modules in this project:
 - Restaurants
 - Dishes
 - Reviews
+- Likes
 
 The routes are registered in `src/app/routes/index.ts`.
 
@@ -398,7 +399,55 @@ Depending on module and middleware, common statuses are:
 - `404 Not Found`
 - `500 Internal Server Error`
 
-## 11. Quick Endpoint Summary
+## 11. Like API
+
+Base path: `/likes`
+
+### 11.1 Create Like
+- Method: `POST`
+- Path: `/likes`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Request body:
+
+```json
+{
+  "reviewId": "clx_review_id"
+}
+```
+
+Behavior:
+- Creates one like per `(userId, reviewId)` pair.
+- Returns `400` if the user already liked the review.
+- Returns `404` if review is not found.
+
+### 11.2 Get Likes
+- Method: `GET`
+- Path: `/likes`
+- Auth: Public
+
+Common filters:
+- `id`, `userId`, `reviewId`
+
+### 11.3 Get Review Like Summary
+- Method: `GET`
+- Path: `/likes/reviews/:reviewId`
+- Auth: Public
+
+Behavior:
+- Returns `{ reviewId, totalLikes }`.
+- Returns `404` if review is not found.
+
+### 11.4 Delete Like
+- Method: `DELETE`
+- Path: `/likes/:reviewId`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Deletes the current authenticated user's like for the given review.
+- Returns `404` if no like exists for that user-review pair.
+
+## 12. Quick Endpoint Summary
 
 ### Users/Admins
 - `POST /users/admins`
@@ -427,3 +476,9 @@ Depending on module and middleware, common statuses are:
 - `GET /reviews`
 - `PATCH /reviews/:id`
 - `DELETE /reviews/:id`
+
+### Likes
+- `POST /likes`
+- `GET /likes`
+- `GET /likes/reviews/:reviewId`
+- `DELETE /likes/:reviewId`
