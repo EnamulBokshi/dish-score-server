@@ -126,11 +126,11 @@ export const auth = betterAuth({
     })
   ],
   session: {
-    expiresIn: 60*60*60*24*1, // 1 day
-    updateAge: 60*60*60*24*1, // 1 day
+    expiresIn: env.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN,
+    updateAge: env.BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE,
     cookieCache: {
       enabled: true,
-      maxAge: 60*60*60*24*1, // 1 day
+      maxAge: env.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN,
     }
   },
   redirectURLS:{

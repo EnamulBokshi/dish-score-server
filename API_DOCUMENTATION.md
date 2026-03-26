@@ -92,6 +92,10 @@ Base path: `/users`
 - Path: `/users/admins`
 - Auth: `ADMIN`, `SUPER_ADMIN`
 
+Content types:
+- `application/json`
+- `multipart/form-data` (file field: `profilePhoto`)
+
 Request body:
 
 ```json
@@ -106,7 +110,7 @@ Request body:
 ```
 
 Notes:
-- `password` is required by service logic, but current validator does not enforce it.
+- `password` is required and validated.
 - On success, access and refresh tokens are set as cookies.
 
 ### 6.2 Get All Users
@@ -123,6 +127,10 @@ Notes:
 - Method: `PATCH`
 - Path: `/users/admins/:userId`
 - Auth: `ADMIN`, `SUPER_ADMIN`
+
+Content types:
+- `application/json`
+- `multipart/form-data` (file field: `profilePhoto`)
 
 Request body (all optional):
 
@@ -143,6 +151,46 @@ Request body (all optional):
 
 Behavior:
 - Sets `isDeleted = true`, `deletedAt = now` on `Admin`.
+- Sets related `User` fields to `isDeleted = true`, `status = INACTIVE`, and `image = null`.
+
+### 6.6 Get User by ID
+- Method: `GET`
+- Path: `/users/:userId`
+- Auth: `ADMIN`, `SUPER_ADMIN`
+
+### 6.7 Update User
+- Method: `PATCH`
+- Path: `/users/:userId`
+- Auth: `ADMIN`, `SUPER_ADMIN`
+
+Content types:
+- `application/json`
+- `multipart/form-data` (file field: `profilePhoto`)
+
+Request body (all optional):
+
+```json
+{
+  "name": "Updated User",
+  "image": "https://example.com/new-user-image.jpg",
+  "status": "ACTIVE",
+  "role": "CONSUMER",
+  "isDeleted": false
+}
+```
+
+Notes:
+- If `profilePhoto` file is provided in multipart request, backend stores it into the user's `image` field.
+
+### 6.8 Delete User (Soft)
+- Method: `DELETE`
+- Path: `/users/:userId`
+- Auth: `ADMIN`, `SUPER_ADMIN`
+
+Behavior:
+- Deletes existing user image from Cloudinary (if present).
+- Sets role-specific profile (`Admin` or `OwnerProfile` or `ReviewerProfile`) to `isDeleted = true`, `deletedAt = now`.
+- Sets `User` to `isDeleted = true`, `deletedAt = now`, `status = INACTIVE`, and `image = null`.
 
 ## 7. Restaurant API
 
@@ -358,6 +406,9 @@ Depending on module and middleware, common statuses are:
 - `GET /users/admins/:userId`
 - `PATCH /users/admins/:userId`
 - `DELETE /users/admins/:userId`
+- `GET /users/:userId`
+- `PATCH /users/:userId`
+- `DELETE /users/:userId`
 
 ### Restaurants
 - `POST /restaurants`

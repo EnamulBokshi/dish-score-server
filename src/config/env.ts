@@ -85,10 +85,11 @@ const loadEnvVariables = (): EnvConfig => {
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET as string,
     ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET as string,
     REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET as string,
-    ACCESS_TOKEN_EXPIRES_IN: 60 * 60 * 60 * 24,
-    REFRESH_TOKEN_EXPIRES_IN: 60 * 60 * 60 * 24 * 7,
-    BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN: 60 * 60 * 60 * 24 * 7,
-    BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE: 60 * 60 * 60 * 24 * 1, // 1 day
+    // Values are in seconds for JWT and Better Auth session configuration.
+    ACCESS_TOKEN_EXPIRES_IN: 60 * 60 * 24, // 1 day
+    REFRESH_TOKEN_EXPIRES_IN: 60 * 60 * 24 * 7, // 7 days
+    BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN: 60 * 60 * 24, // 1 day
+    BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE: 60 * 60 * 24, // 1 day
     SUPER_ADMIN_NAME: process.env.SUPER_ADMIN_NAME as string,
     SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
     SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD as string,
