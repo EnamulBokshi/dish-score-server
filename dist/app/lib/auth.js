@@ -1,7 +1,8 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prisma";
-import { bearer } from "better-auth/plugins";
+import { bearer, emailOTP } from "better-auth/plugins";
+import { sendEmail } from "../utils/email";
 import { UserRole, UserStatus } from "../../generated/prisma/enums";
 import { env } from "../../config/env";
 // If your Prisma file is located elsewhere, you can change the path
@@ -61,57 +62,39 @@ export const auth = betterAuth({
     },
     plugins: [
         bearer(),
-        // emailOTP({
-        //   overrideDefaultEmailVerification: true,
-        //   async sendVerificationOTP({email, otp, type}) {
-        //     console.log("Sending OTP", {email, otp, type});
-        //     if(type === "email-verification"){
-        //       const user = await prisma.user.findUnique({
-        //         where: {
-        //           email
-        //         }
-        //       });
-        //       if(!user) {
-        //         console.error(`User with email ${email} not found for sending OTP`);
-        //         return;
-        //       }
-        //       if(user.role === UserRole.SUPER_ADMIN) {
-        //         console.log(`User with email ${email} is a super admin. Skipping OTP email.`);
-        //         return;
-        //       }
-        //       if(user && !user.emailVerified) {
-        //         sendEmail({
-        //           to: email,
-        //           subject: "Verify your email",
-        //           template: "otp",
-        //           templateData: {
-        //             name: user.name,
-        //             otp,
-        //           }
-        //         })
-        //       }
-        //     } else if(type === "forget-password"){
-        //       const user = await prisma.user.findUnique({
-        //         where: {
-        //           email
-        //         }
-        //       });
-        //       if(user) {
-        //         sendEmail({
-        //           to: email,
-        //           subject: "Reset your password",
-        //           template: "reset-password-otp",
-        //           templateData: {
-        //             name: user.name,
-        //             otp,
-        //           }
-        //         })
-        //       }
-        //     }
-        //   },
-        //   expiresIn: 2 * 60, // 2 minutes
-        //   otpLength: 6,
-        // })
+        emailOTP({
+            overrideDefaultEmailVerification: true,
+            async sendVerificationOTP({ email, otp, type }) {
+                if (type !== "email-verification") {
+                    return;
+                }
+                const user = await prisma.user.findUnique({
+                    where: {
+                        email,
+                    },
+                });
+                if (!user) {
+                    return;
+                }
+                // Only send registration verification OTP through this template for consumer accounts.
+                if (user.role !== UserRole.CONSUMER || user.emailVerified) {
+                    return;
+                }
+                await sendEmail({
+                    to: email,
+                    subject: "Verify your email - Dish Score",
+                    template: "otp",
+                    templateData: {
+                        name: user.name,
+                        otp,
+                        appName: "Dish Score",
+                        expiresInMinutes: 2,
+                    },
+                });
+            },
+            expiresIn: 2 * 60,
+            otpLength: 6,
+        })
     ],
     session: {
         expiresIn: 60 * 60 * 60 * 24 * 1, // 1 day

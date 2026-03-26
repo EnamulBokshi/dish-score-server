@@ -63,6 +63,16 @@ export type DishTag = Prisma.DishTagModel
  */
 export type Like = Prisma.LikeModel
 /**
+ * Model OwnerProfile
+ * 
+ */
+export type OwnerProfile = Prisma.OwnerProfileModel
+/**
+ * Model ReviewerProfile
+ * 
+ */
+export type ReviewerProfile = Prisma.ReviewerProfileModel
+/**
  * Model Restaurant
  * 
  */

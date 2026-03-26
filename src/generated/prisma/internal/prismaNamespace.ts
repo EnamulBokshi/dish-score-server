@@ -393,6 +393,8 @@ export const ModelName = {
   Tag: 'Tag',
   DishTag: 'DishTag',
   Like: 'Like',
+  OwnerProfile: 'OwnerProfile',
+  ReviewerProfile: 'ReviewerProfile',
   Restaurant: 'Restaurant',
   Review: 'Review'
 } as const
@@ -410,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "admin" | "user" | "session" | "account" | "verification" | "dish" | "tag" | "dishTag" | "like" | "restaurant" | "review"
+    modelProps: "admin" | "user" | "session" | "account" | "verification" | "dish" | "tag" | "dishTag" | "like" | "ownerProfile" | "reviewerProfile" | "restaurant" | "review"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1080,6 +1082,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OwnerProfile: {
+      payload: Prisma.$OwnerProfilePayload<ExtArgs>
+      fields: Prisma.OwnerProfileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OwnerProfileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OwnerProfileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload>
+        }
+        findFirst: {
+          args: Prisma.OwnerProfileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OwnerProfileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload>
+        }
+        findMany: {
+          args: Prisma.OwnerProfileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload>[]
+        }
+        create: {
+          args: Prisma.OwnerProfileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload>
+        }
+        createMany: {
+          args: Prisma.OwnerProfileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OwnerProfileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload>[]
+        }
+        delete: {
+          args: Prisma.OwnerProfileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload>
+        }
+        update: {
+          args: Prisma.OwnerProfileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload>
+        }
+        deleteMany: {
+          args: Prisma.OwnerProfileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OwnerProfileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OwnerProfileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload>[]
+        }
+        upsert: {
+          args: Prisma.OwnerProfileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OwnerProfilePayload>
+        }
+        aggregate: {
+          args: Prisma.OwnerProfileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOwnerProfile>
+        }
+        groupBy: {
+          args: Prisma.OwnerProfileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OwnerProfileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OwnerProfileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OwnerProfileCountAggregateOutputType> | number
+        }
+      }
+    }
+    ReviewerProfile: {
+      payload: Prisma.$ReviewerProfilePayload<ExtArgs>
+      fields: Prisma.ReviewerProfileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReviewerProfileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReviewerProfileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload>
+        }
+        findFirst: {
+          args: Prisma.ReviewerProfileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReviewerProfileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload>
+        }
+        findMany: {
+          args: Prisma.ReviewerProfileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload>[]
+        }
+        create: {
+          args: Prisma.ReviewerProfileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload>
+        }
+        createMany: {
+          args: Prisma.ReviewerProfileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReviewerProfileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload>[]
+        }
+        delete: {
+          args: Prisma.ReviewerProfileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload>
+        }
+        update: {
+          args: Prisma.ReviewerProfileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload>
+        }
+        deleteMany: {
+          args: Prisma.ReviewerProfileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReviewerProfileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReviewerProfileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload>[]
+        }
+        upsert: {
+          args: Prisma.ReviewerProfileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewerProfilePayload>
+        }
+        aggregate: {
+          args: Prisma.ReviewerProfileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReviewerProfile>
+        }
+        groupBy: {
+          args: Prisma.ReviewerProfileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReviewerProfileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReviewerProfileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReviewerProfileCountAggregateOutputType> | number
+        }
+      }
+    }
     Restaurant: {
       payload: Prisma.$RestaurantPayload<ExtArgs>
       fields: Prisma.RestaurantFieldRefs
@@ -1388,6 +1538,32 @@ export const LikeScalarFieldEnum = {
 export type LikeScalarFieldEnum = (typeof LikeScalarFieldEnum)[keyof typeof LikeScalarFieldEnum]
 
 
+export const OwnerProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  businessName: 'businessName',
+  contactNumber: 'contactNumber',
+  verified: 'verified',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OwnerProfileScalarFieldEnum = (typeof OwnerProfileScalarFieldEnum)[keyof typeof OwnerProfileScalarFieldEnum]
+
+
+export const ReviewerProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  bio: 'bio',
+  totalReviews: 'totalReviews',
+  helpfulVotes: 'helpfulVotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReviewerProfileScalarFieldEnum = (typeof ReviewerProfileScalarFieldEnum)[keyof typeof ReviewerProfileScalarFieldEnum]
+
+
 export const RestaurantScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1518,6 +1694,34 @@ export type EnumAdminRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'AdminRole[]'
  */
 export type ListEnumAdminRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdminRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'UserRole'
+ */
+export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
+    
+
+
+/**
+ * Reference to a field of type 'UserRole[]'
+ */
+export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'UserStatus'
+ */
+export type EnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'UserStatus[]'
+ */
+export type ListEnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus[]'>
     
 
 
@@ -1666,6 +1870,8 @@ export type GlobalOmitConfig = {
   tag?: Prisma.TagOmit
   dishTag?: Prisma.DishTagOmit
   like?: Prisma.LikeOmit
+  ownerProfile?: Prisma.OwnerProfileOmit
+  reviewerProfile?: Prisma.ReviewerProfileOmit
   restaurant?: Prisma.RestaurantOmit
   review?: Prisma.ReviewOmit
 }

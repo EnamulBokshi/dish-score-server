@@ -7,6 +7,9 @@ import cors from "cors";
 import { env } from "./config/env";
 import qs from "qs";
 import logger from "./app/middleware/requestLogger";
+import IndexRoute from "./app/routes";
+import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
+import { NotFoundMiddleware } from "./app/middleware/notFound";
 
 
 const app: Application = express();
@@ -24,11 +27,12 @@ app.use( cors({
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }))
+app.use(logger);
 
-app.use("api/auth", toNodeHandler(auth));
+
+app.use("/api/auth/", toNodeHandler(auth));
 
 // Logger middleware
-app.use(logger);
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -37,4 +41,27 @@ app.use(express.json());
 app.use(cookieParser())
 
 
+
+app.get("/", (req: Request, res:Response) => {
+  res.send("Hello World!");
+});
+
+// cron.schedule("*/25 * * * *", async ()=> {
+//   try {
+    
+//     console.log('Runnng cron job to cancel unpaid appointments');
+//     await AppointmentService.cancelUnpaidAppointments();
+//   } catch (error:any) {
+//     console.error('Error occurred while canceling unpaid appointments:', error);
+
+//   }
+
+// })
+
+
+app.use("/api/v1", IndexRoute);
+
+app.use(globalErrorHandler);
+
+app.use(NotFoundMiddleware)
 export default app;

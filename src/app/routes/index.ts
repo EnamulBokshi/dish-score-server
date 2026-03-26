@@ -11,4 +11,5 @@ router.use("/restaurants", restaurantRoute);
 router.use("/dishes", dishRoute);
 router.use("/reviews", reviewRoute);
 
-export const indexRoute = router;
+ const IndexRoute = router;
+ export default IndexRoute;

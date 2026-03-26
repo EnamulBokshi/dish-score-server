@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Email Verification OTP</title>
+</head>
+<body style="margin:0;padding:0;background-color:#05050a;font-family:Arial,Helvetica,sans-serif;color:#f4f6ff;">
+	<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#05050a;">
+		<tr>
+			<td align="center" style="padding:28px 12px;">
+				<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:620px;background:#080811;border:1px solid #231628;border-radius:18px;overflow:hidden;">
+					<tr>
+						<td style="padding:0;">
+							<div style="background:
+								radial-gradient(circle at 15% 95%, rgba(255,40,120,0.30), rgba(255,40,120,0) 45%),
+								radial-gradient(circle at 85% 10%, rgba(255,90,20,0.22), rgba(255,90,20,0) 45%),
+								linear-gradient(145deg, #0a0a15 0%, #120212 48%, #190312 100%);
+								padding:30px 26px 24px 26px;">
+								<div style="font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:#f1b6cc;font-weight:700;">We Mean It What We Say</div>
+								<h1 style="margin:10px 0 0 0;font-size:34px;line-height:1.08;font-weight:900;letter-spacing:-0.5px;background:linear-gradient(90deg,#f6c6d8 0%,#f441ba 32%,#ff2840 58%,#ffb572 100%);-webkit-background-clip:text;background-clip:text;color:transparent;">
+									Verify Your Email
+								</h1>
+								<p style="margin:12px 0 0 0;font-size:14px;line-height:1.6;color:#f3d7e8;">
+									Hi <strong><%= name || "there" %></strong>, welcome to <strong><%= appName || "Dish Score" %></strong>. Use the OTP below to complete your consumer registration.
+								</p>
+							</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="padding:22px 26px 10px 26px;">
+							<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;border:1px solid #2b1a2d;border-radius:14px;overflow:hidden;">
+								<tr>
+									<td style="padding:22px 14px;background:
+										linear-gradient(0deg, rgba(255,35,95,0.08), rgba(255,35,95,0.08)),
+										repeating-linear-gradient(0deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 1px, transparent 1px, transparent 26px),
+										repeating-linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 1px, transparent 1px, transparent 26px),
+										#0a0a13;
+										text-align:center;">
+										<div style="font-size:12px;color:#d8c4d2;letter-spacing:1.5px;text-transform:uppercase;">Your One-Time Password</div>
+										<div style="margin-top:8px;display:inline-block;padding:12px 22px;border-radius:12px;border:1px solid #3b2b3d;background:#100910;box-shadow:0 0 0 1px rgba(255,53,116,0.15) inset;">
+											<span style="font-family:'Courier New',Consolas,monospace;font-size:36px;line-height:1;font-weight:700;letter-spacing:8px;background:linear-gradient(90deg,#ff6bc0 0%,#ff3268 48%,#ffcb80 100%);-webkit-background-clip:text;background-clip:text;color:transparent;">
+												<%= otp %>
+											</span>
+										</div>
+										<p style="margin:14px 0 0 0;font-size:13px;line-height:1.6;color:#e9d2df;">
+											This OTP expires in <strong><%= expiresInMinutes || 2 %> minutes</strong>.
+										</p>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+
+					<tr>
+						<td style="padding:8px 26px 26px 26px;">
+							<p style="margin:0;font-size:13px;line-height:1.65;color:#d4c7d5;">
+								If you did not create an account, you can safely ignore this email.
+							</p>
+							<p style="margin:14px 0 0 0;font-size:12px;color:#8d7f90;line-height:1.6;">
+								Security tip: Never share this OTP with anyone. <%= appName || "Dish Score" %> support will never ask for it.
+							</p>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

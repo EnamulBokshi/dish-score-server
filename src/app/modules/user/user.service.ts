@@ -60,6 +60,7 @@ const createAdmin = async (adminData: ICreateAdmin) => {
 
     return {
         admin: result,
+        token: userData.token,
         accessToken,
         refreshToken
     }

@@ -50,6 +50,7 @@ const createAdmin = async (adminData) => {
     const refreshToken = tokenUtils.getRefreshToken(tokenPayload);
     return {
         admin: result,
+        token: userData.token,
         accessToken,
         refreshToken
     };

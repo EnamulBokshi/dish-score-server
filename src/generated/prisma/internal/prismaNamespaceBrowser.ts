@@ -60,6 +60,8 @@ export const ModelName = {
   Tag: 'Tag',
   DishTag: 'DishTag',
   Like: 'Like',
+  OwnerProfile: 'OwnerProfile',
+  ReviewerProfile: 'ReviewerProfile',
   Restaurant: 'Restaurant',
   Review: 'Review'
 } as const
@@ -199,6 +201,32 @@ export const LikeScalarFieldEnum = {
 } as const
 
 export type LikeScalarFieldEnum = (typeof LikeScalarFieldEnum)[keyof typeof LikeScalarFieldEnum]
+
+
+export const OwnerProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  businessName: 'businessName',
+  contactNumber: 'contactNumber',
+  verified: 'verified',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OwnerProfileScalarFieldEnum = (typeof OwnerProfileScalarFieldEnum)[keyof typeof OwnerProfileScalarFieldEnum]
+
+
+export const ReviewerProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  bio: 'bio',
+  totalReviews: 'totalReviews',
+  helpfulVotes: 'helpfulVotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReviewerProfileScalarFieldEnum = (typeof ReviewerProfileScalarFieldEnum)[keyof typeof ReviewerProfileScalarFieldEnum]
 
 
 export const RestaurantScalarFieldEnum = {

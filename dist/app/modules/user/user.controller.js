@@ -1,16 +1,24 @@
+import status from "http-status";
+import { UserRole } from "../../../generated/prisma/enums";
 import catchAsync from "../../helpers/catchAsync";
+import AppError from "../../helpers/errorHelpers/AppError";
 import { sendResponse } from "../../helpers/sendResponse";
 import { adminService } from "./user.service";
 import { tokenUtils } from "../../utils/token";
 const createAdmin = catchAsync(async (req, res) => {
+    const requesterRole = req.user?.role;
+    if (requesterRole !== UserRole.ADMIN && requesterRole !== UserRole.SUPER_ADMIN) {
+        throw new AppError(status.FORBIDDEN, "Only admin or super admin can create an admin");
+    }
     const payload = req.body;
     const result = await adminService.createAdmin(payload);
     tokenUtils.setAccessTokenCookie(res, result.accessToken);
     tokenUtils.setRefreshTokenCookie(res, result.refreshToken);
+    tokenUtils.setBetterAuthSessionCookie(res, result.token);
     sendResponse(res, {
         httpStatusCode: 201,
         success: true,
-        data: result.admin,
+        data: result,
         message: "Admin created successfully"
     });
 });

@@ -11,10 +11,12 @@ model User {
   reviews     Review[]
   restaurants   Restaurant[]
   admin              Admin?
+  ownerProfile       OwnerProfile?
+  reviewerProfile    ReviewerProfile?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  role          String    @default("CONSUMER")
-  status        String    @default("ACTIVE")
+  role          UserRole  @default(CONSUMER)
+  status       UserStatus @default(ACTIVE)
   isDeleted     Boolean   @default(false)
   deletedAt     DateTime?
   sessions      Session[]
