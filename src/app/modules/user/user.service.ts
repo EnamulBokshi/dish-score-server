@@ -1,5 +1,5 @@
 import status from "http-status";
-import { Admin, Prisma, UserRole } from "../../../generated/prisma/client";
+import { Admin, Prisma, UserRole, UserStatus } from "../../../generated/prisma/client";
 import { IQueryParams } from "../../../interfaces/query.interfaces";
 import AppError from "../../helpers/errorHelpers/AppError";
 import prisma from "../../lib/prisma";
@@ -167,16 +167,33 @@ const updateAdmin = async (userId: string, updateData: Partial<ICreateAdmin>) =>
 
     await prisma.user.update({
         where: { id: userId },
-        data: { image: null },
+        data: { image: null, isDeleted: true, status: UserStatus.INACTIVE },
     });
 
     return deletedAdmin;
 }
 
-export const adminService = {
+const getUserById = async (userId: string) => {
+    return await prisma.user.findUnique({
+        where: {
+            id: userId
+        },
+        include: {
+            admin: true,
+            reviews: true,
+            likes: true,
+            restaurants: true,
+            reviewerProfile: true,
+            ownerProfile: true,
+        }
+    })
+}
+
+export const UserServices = {
     createAdmin,
     getAdminByUserId,
     updateAdmin,
     deleteAdmin,
-    getAllUsers
+    getAllUsers,
+    getUserById
 }

@@ -14,6 +14,7 @@ router.get("/admins/:userId", userController.getAdminByUserId);
 router.patch("/admins/:userId", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN), multerUpload.single("profilePhoto"), requestValidator(updateAdminSchema), userController.updateAdmin);
 router.delete("/admins/:userId", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN), userController.deleteAdmin);
 
+router.get("/:userId", userController.getUserById);
 
 export const userRoute = router;
 

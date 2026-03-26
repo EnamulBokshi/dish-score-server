@@ -4,7 +4,7 @@ import { UserRole } from "../../../generated/prisma/enums";
 import catchAsync from "../../helpers/catchAsync";
 import AppError from "../../helpers/errorHelpers/AppError";
 import { sendResponse } from "../../helpers/sendResponse";
-import { adminService } from "./user.service";
+import { UserServices } from "./user.service";
 import { tokenUtils } from "../../utils/token";
 
 const createAdmin = catchAsync(async (req: Request, res: Response) => {
@@ -15,7 +15,7 @@ const createAdmin = catchAsync(async (req: Request, res: Response) => {
 
     const payload = req.body;
     const profilePhoto = req.file?.path;
-    const result = await adminService.createAdmin({ ...payload, ...(profilePhoto && { profilePhoto }) });
+    const result = await UserServices.createAdmin({ ...payload, ...(profilePhoto && { profilePhoto }) });
 
     tokenUtils.setAccessTokenCookie(res, result.accessToken);
     tokenUtils.setRefreshTokenCookie(res, result.refreshToken);
@@ -30,7 +30,7 @@ const createAdmin = catchAsync(async (req: Request, res: Response) => {
 
 const getAdminByUserId = catchAsync(async (req: Request, res: Response) => {
     const userId = req.params.userId || req.params.id;
-    const result = await adminService.getAdminByUserId(userId as string);
+    const result = await UserServices.getAdminByUserId(userId as string);
 
     sendResponse(res, {
         httpStatusCode: 200,
@@ -45,7 +45,7 @@ const updateAdmin = catchAsync(async (req: Request, res: Response) => {
     const userId = req.params.userId || req.params.id;
     const payload = req.body;
     const profilePhoto = req.file?.path;
-    const result = await adminService.updateAdmin(userId as string, { ...payload, ...(profilePhoto && { profilePhoto }) });
+    const result = await UserServices.updateAdmin(userId as string, { ...payload, ...(profilePhoto && { profilePhoto }) });
 
     sendResponse(res, {
         httpStatusCode: 200,
@@ -58,7 +58,7 @@ const updateAdmin = catchAsync(async (req: Request, res: Response) => {
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     const query = req.query;
-    const result = await adminService.getAllUsers(query);
+    const result = await UserServices.getAllUsers(query);
 
     sendResponse(res, {
         httpStatusCode: 200,
@@ -71,7 +71,7 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 
 const deleteAdmin = catchAsync(async (req: Request, res: Response) => {
     const userId = req.params.userId || req.params.id;
-    const result = await adminService.deleteAdmin(userId as string);
+    const result = await UserServices.deleteAdmin(userId as string);
 
     sendResponse(res, {
         httpStatusCode: 200,
@@ -81,10 +81,23 @@ const deleteAdmin = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getUserById = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.params.userId || req.params.id;
+    const result = await UserServices.getUserById(userId as string);
+
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "User retrieved successfully"
+    });
+});
+
 export const userController = {
     createAdmin,
     getAdminByUserId,
     updateAdmin,
     getAllUsers,
-    deleteAdmin
+    deleteAdmin,
+    getUserById
 }
