@@ -5,7 +5,13 @@ import { ReviewService } from "./review.service";
 
 const createReview = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
-  const result = await ReviewService.createReview(payload, req.user);
+  const files = (req.files as Express.Multer.File[]) || [];
+  const imagePaths = files.map((file) => file.path);
+
+  const result = await ReviewService.createReview(
+    { ...payload, images: imagePaths.length > 0 ? imagePaths : payload.images },
+    req.user,
+  );
 
   sendResponse(res, {
     httpStatusCode: 201,
@@ -31,7 +37,14 @@ const getReviews = catchAsync(async (req: Request, res: Response) => {
 const updateReview = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const payload = req.body;
-  const result = await ReviewService.updateReview(id as string, payload, req.user);
+  const files = (req.files as Express.Multer.File[]) || [];
+  const imagePaths = files.map((file) => file.path);
+
+  const result = await ReviewService.updateReview(
+    id as string,
+    { ...payload, ...(imagePaths.length > 0 && { images: imagePaths }) },
+    req.user,
+  );
 
   sendResponse(res, {
     httpStatusCode: 200,

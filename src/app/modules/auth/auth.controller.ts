@@ -13,12 +13,13 @@ import { cookieUtils } from "../../utils/cookie";
 
 const registerReviwer = catchAsync(async(req:Request, res: Response) => {
     console.log("Registering reviewer with payload", req.body);
-    const payload = req.body;
+  const payload = req.body?.data ? JSON.parse(req.body.data) : req.body;
+  const imagePath = req.file?.path;
     if(!payload.name || !payload.email || !payload.password) {
         throw new AppError(status.BAD_REQUEST, "Missing required fields: name, email, password");
     }
 
-    const data = await AuthService.registerUser(payload);
+  const data = await AuthService.registerUser({ ...payload, ...(imagePath && { image: imagePath }) });
      const {accessToken, refreshToken, token, ...rest} = data;
     tokenUtils.setAccessTokenCookie(res, accessToken);
     tokenUtils.setRefreshTokenCookie(res, refreshToken);

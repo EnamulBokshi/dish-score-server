@@ -11,7 +11,7 @@ import { IRequestUser } from "../../../interfaces";
 import { IChangePasswordPayload, RegisterUserPayload } from "./auth.interface";
 
 const registerUser = async(payload: RegisterUserPayload) => {
-    const {name,email, password} = payload;
+    const {name,email, password, image} = payload;
     const isUserExist = await prisma.user.findUnique({
         where: {
             email
@@ -24,7 +24,8 @@ const registerUser = async(payload: RegisterUserPayload) => {
         body: {
             name, 
             email, 
-            password
+            password,
+            image,
         }
     })
 

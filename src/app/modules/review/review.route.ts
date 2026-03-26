@@ -4,12 +4,14 @@ import authCheck from "../../middleware/authCheck";
 import requestValidator from "../../middleware/requestValidator";
 import { ReviewController } from "./review.controller";
 import { createReviewSchema, updateReviewSchema } from "./review.validation";
+import { multerUpload } from "../../../config/multerConfig";
 
 const router = Router();
 
 router.post(
   "/",
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  multerUpload.array("images", 5),
   requestValidator(createReviewSchema),
   ReviewController.createReview,
 );
@@ -17,6 +19,7 @@ router.get("/", ReviewController.getReviews);
 router.patch(
   "/:id",
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  multerUpload.array("images", 5),
   requestValidator(updateReviewSchema),
   ReviewController.updateReview,
 );

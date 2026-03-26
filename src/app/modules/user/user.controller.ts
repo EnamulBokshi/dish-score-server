@@ -14,7 +14,8 @@ const createAdmin = catchAsync(async (req: Request, res: Response) => {
     }
 
     const payload = req.body;
-    const result = await adminService.createAdmin(payload);
+    const profilePhoto = req.file?.path;
+    const result = await adminService.createAdmin({ ...payload, ...(profilePhoto && { profilePhoto }) });
 
     tokenUtils.setAccessTokenCookie(res, result.accessToken);
     tokenUtils.setRefreshTokenCookie(res, result.refreshToken);
@@ -43,7 +44,8 @@ const getAdminByUserId = catchAsync(async (req: Request, res: Response) => {
 const updateAdmin = catchAsync(async (req: Request, res: Response) => {
     const userId = req.params.userId || req.params.id;
     const payload = req.body;
-    const result = await adminService.updateAdmin(userId as string, payload);
+    const profilePhoto = req.file?.path;
+    const result = await adminService.updateAdmin(userId as string, { ...payload, ...(profilePhoto && { profilePhoto }) });
 
     sendResponse(res, {
         httpStatusCode: 200,

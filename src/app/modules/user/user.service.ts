@@ -8,6 +8,7 @@ import { ICreateAdmin } from "./user.interface";
 import { auth } from "../../lib/auth";
 import { tokenUtils } from "../../utils/token";
 import { User } from "better-auth";
+import { deleteFileCloudinary } from "../../../config/cloudinary";
 
 const createAdmin = async (adminData: ICreateAdmin) => {
 
@@ -105,24 +106,71 @@ const getAdminByUserId = async (userId: string) => {
 }
 
 const updateAdmin = async (userId: string, updateData: Partial<ICreateAdmin>) => {
-    return await prisma.admin.update({
+    const existingAdmin = await prisma.admin.findUnique({
+        where: { userId },
+        select: { profilePhoto: true },
+    });
+
+    if (!existingAdmin) {
+        throw new AppError(status.NOT_FOUND, "Admin not found");
+    }
+
+    if (updateData.profilePhoto && existingAdmin.profilePhoto) {
+        await deleteFileCloudinary(existingAdmin.profilePhoto).catch((error) => {
+            console.error("Error deleting old admin profile photo:", error);
+        });
+    }
+
+    const updatedAdmin = await prisma.admin.update({
         where: {
             userId
         },
         data: updateData
-    })
+    });
+
+    if (Object.prototype.hasOwnProperty.call(updateData, "profilePhoto")) {
+        await prisma.user.update({
+            where: { id: userId },
+            data: { image: updateData.profilePhoto ?? null },
+        });
+    }
+
+    return updatedAdmin;
 }
 
  const deleteAdmin = async (userId: string) => {
-    return await prisma.admin.update({
+    const existingAdmin = await prisma.admin.findUnique({
+        where: { userId },
+        select: { profilePhoto: true },
+    });
+
+    if (!existingAdmin) {
+        throw new AppError(status.NOT_FOUND, "Admin not found");
+    }
+
+    if (existingAdmin.profilePhoto) {
+        await deleteFileCloudinary(existingAdmin.profilePhoto).catch((error) => {
+            console.error("Error deleting admin profile photo:", error);
+        });
+    }
+
+    const deletedAdmin = await prisma.admin.update({
         where: {
             userId
         },
         data: {
             isDeleted: true,
-            deletedAt: new Date()
+            deletedAt: new Date(),
+            profilePhoto: null,
         }
-    })
+    });
+
+    await prisma.user.update({
+        where: { id: userId },
+        data: { image: null },
+    });
+
+    return deletedAdmin;
 }
 
 export const adminService = {

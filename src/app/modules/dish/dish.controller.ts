@@ -5,8 +5,9 @@ import { DishService } from "./dish.service";
 
 const createDish = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
-  const result = await DishService.createDish(payload);
+  const filePath = req.file?.path;
 
+  const result = await DishService.createDish({...payload, image: filePath});
   sendResponse(res, {
     httpStatusCode: 201,
     success: true,
@@ -31,7 +32,13 @@ const getDishes = catchAsync(async (req: Request, res: Response) => {
 const updateDish = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const payload = req.body;
-  const result = await DishService.updateDish(id as string, payload, req.user);
+  const filePath = req.file?.path;
+
+  const result = await DishService.updateDish(
+    id as string,
+    { ...payload, ...(filePath && { image: filePath }) },
+    req.user
+  );
 
   sendResponse(res, {
     httpStatusCode: 200,

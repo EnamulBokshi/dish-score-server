@@ -3,6 +3,7 @@ import { Prisma, Review } from "../../../generated/prisma/client";
 import { UserRole } from "../../../generated/prisma/enums";
 import { IQueryParams } from "../../../interfaces/query.interfaces";
 import AppError from "../../helpers/errorHelpers/AppError";
+import { deleteFileCloudinary } from "../../../config/cloudinary";
 import prisma from "../../lib/prisma";
 import { QueryBuilder } from "../../utils/QueryBuilder";
 import { ICreateReviewPayload, IUpdateReviewPayload } from "./review.interface";
@@ -52,6 +53,7 @@ const assertCanMutateReview = async (reviewId: string, requester: IReviewRequest
       userId: true,
       restaurantId: true,
       dishId: true,
+      images: true,
     },
   });
 
@@ -171,6 +173,23 @@ const updateReview = async (id: string, payload: IUpdateReviewPayload & { userId
     throw new AppError(status.BAD_REQUEST, "Review ownership and target references cannot be changed");
   }
 
+  if (payload.images && payload.images.length > 0) {
+    const existingReview = await prisma.review.findUnique({
+      where: { id },
+      select: { images: true },
+    });
+
+    if (existingReview?.images && existingReview.images.length > 0) {
+      await Promise.all(
+        existingReview.images.map((imageUrl) =>
+          deleteFileCloudinary(imageUrl).catch((error) => {
+            console.error(`Error deleting image ${imageUrl}:`, error);
+          }),
+        ),
+      );
+    }
+  }
+
   const result = await prisma.review.update({
     where: { id },
     data: payload,
@@ -186,6 +205,16 @@ const updateReview = async (id: string, payload: IUpdateReviewPayload & { userId
 
 const deleteReview = async (id: string, requester: IReviewRequester) => {
   const review = await assertCanMutateReview(id, requester);
+
+  if (review.images && review.images.length > 0) {
+    await Promise.all(
+      review.images.map((imageUrl) =>
+        deleteFileCloudinary(imageUrl).catch((error) => {
+          console.error(`Error deleting image ${imageUrl}:`, error);
+        }),
+      ),
+    );
+  }
 
   const result = await prisma.review.delete({
     where: { id },

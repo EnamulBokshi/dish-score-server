@@ -6,6 +6,7 @@ import AppError from "../../helpers/errorHelpers/AppError";
 import prisma from "../../lib/prisma";
 import { QueryBuilder } from "../../utils/QueryBuilder";
 import { restaurantEnumFields, restaurantFilterableFields, restaurantSearchableExactFields, restaurantSearchableFields } from "./restaurant.constats";
+import { deleteFileCloudinary } from "../../../config/cloudinary";
 import { ICreateRestaurantPayload } from "./restaurant.interface";
 
 interface IRestaurantRequester {
@@ -108,6 +109,29 @@ const getRestaurants = async (query: IQueryParams) => {
 const updateRestaurant = async (id: string, payload: Partial<ICreateRestaurantPayload>, requester: IRestaurantRequester) => {
     await assertCanModifyRestaurant(id, requester);
 
+    // If new images are provided, delete old images from Cloudinary
+    if (payload.images && payload.images.length > 0) {
+        const existingRestaurant = await prisma.restaurant.findFirst({
+            where: { id },
+            select: { images: true },
+        });
+
+        if (existingRestaurant?.images && existingRestaurant.images.length > 0) {
+            try {
+                await Promise.all(
+                    existingRestaurant.images.map((imageUrl) =>
+                        deleteFileCloudinary(imageUrl).catch((error) => {
+                            console.error(`Error deleting image ${imageUrl}:`, error);
+                        })
+                    )
+                );
+            } catch (error) {
+                console.error("Error deleting old images from Cloudinary:", error);
+                // Continue with update even if deletion fails
+            }
+        }
+    }
+
     return await prisma.restaurant.update({
         where: { id },
         data: payload
@@ -116,6 +140,28 @@ const updateRestaurant = async (id: string, payload: Partial<ICreateRestaurantPa
 
 const softDeleteRestaurant = async (id: string, requester: IRestaurantRequester) => {
     await assertCanModifyRestaurant(id, requester);
+
+    // Fetch restaurant to get all images
+    const restaurant = await prisma.restaurant.findFirst({
+        where: { id },
+        select: { images: true },
+    });
+
+    // Delete all images from Cloudinary
+    if (restaurant?.images && restaurant.images.length > 0) {
+        try {
+            await Promise.all(
+                restaurant.images.map((imageUrl) =>
+                    deleteFileCloudinary(imageUrl).catch((error) => {
+                        console.error(`Error deleting image ${imageUrl}:`, error);
+                    })
+                )
+            );
+        } catch (error) {
+            console.error("Error deleting images from Cloudinary:", error);
+            // Continue with delete even if image deletion fails
+        }
+    }
 
     return await prisma.restaurant.update({
         where: { id },

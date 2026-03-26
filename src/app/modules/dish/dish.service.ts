@@ -5,6 +5,7 @@ import { IQueryParams } from "../../../interfaces/query.interfaces";
 import AppError from "../../helpers/errorHelpers/AppError";
 import prisma from "../../lib/prisma";
 import { QueryBuilder } from "../../utils/QueryBuilder";
+import { deleteFileCloudinary } from "../../../config/cloudinary";
 import { ICreateDishPayload, IUpdateDishPayload } from "./dish.interface";
 
 interface IDishRequester {
@@ -131,6 +132,23 @@ const updateDish = async (
     throw new AppError(status.BAD_REQUEST, "Dish restaurant cannot be changed");
   }
 
+  // If a new image is provided, delete the old image from Cloudinary
+  if (payload.image) {
+    const existingDish = await prisma.dish.findFirst({
+      where: { id },
+      select: { image: true },
+    });
+
+    if (existingDish?.image) {
+      try {
+        await deleteFileCloudinary(existingDish.image);
+      } catch (error) {
+        console.error("Error deleting old image from Cloudinary:", error);
+        // Continue with update even if deletion fails
+      }
+    }
+  }
+
   return await prisma.dish.update({
     where: { id },
     data: payload,
@@ -139,6 +157,22 @@ const updateDish = async (
 
 const deleteDish = async (id: string, requester: IDishRequester) => {
   await assertCanMutateDish(id, requester);
+
+  // Fetch the dish to get the image URL
+  const dish = await prisma.dish.findFirst({
+    where: { id },
+    select: { image: true },
+  });
+
+  // Delete the image from Cloudinary if it exists
+  if (dish?.image) {
+    try {
+      await deleteFileCloudinary(dish.image);
+    } catch (error) {
+      console.error("Error deleting image from Cloudinary:", error);
+      // Continue with delete even if image deletion fails
+    }
+  }
 
   return await prisma.dish.delete({
     where: { id },
