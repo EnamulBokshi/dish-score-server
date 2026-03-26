@@ -93,11 +93,41 @@ const getUserById = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const updateUser = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.params.userId || req.params.id;
+    const payload = req.body.data? JSON.parse(req.body.data) : req.body;
+    const profilePhoto = req.file?.path;
+    const result = await UserServices.updateUser(userId as string, { ...payload, ...(profilePhoto && { profilePhoto }) });
+
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "User updated successfully"
+    });
+
+});
+
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.params.userId || req.params.id;
+    const result = await UserServices.deleteUser(userId as string);
+
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "User deleted successfully"
+    });
+});
+
+
 export const userController = {
     createAdmin,
     getAdminByUserId,
     updateAdmin,
     getAllUsers,
     deleteAdmin,
-    getUserById
+    getUserById,
+    updateUser,
+    deleteUser,
 }

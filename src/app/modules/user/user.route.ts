@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { userController } from "./user.controller";
 import requestValidator from "../../middleware/requestValidator";
-import { createAdminSchema, updateAdminSchema } from "./user.validation";
+import { createAdminSchema, updateAdminSchema, userUpdateSchema } from "./user.validation";
 import authCheck from "../../middleware/authCheck";
 import { UserRole } from "../../../generated/prisma/enums";
 import { multerUpload } from "../../../config/multerConfig";
@@ -15,6 +15,8 @@ router.patch("/admins/:userId", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN),
 router.delete("/admins/:userId", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN), userController.deleteAdmin);
 
 router.get("/:userId", userController.getUserById);
+router.patch("/:userId", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN), multerUpload.single("profilePhoto"), requestValidator(userUpdateSchema), userController.updateUser);
+router.delete("/:userId", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN), userController.deleteUser);
 
 export const userRoute = router;
 

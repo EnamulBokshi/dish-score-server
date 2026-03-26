@@ -30,6 +30,8 @@ export type OwnerProfileMinAggregateOutputType = {
   businessName: string | null
   contactNumber: string | null
   verified: boolean | null
+  isDeleted: boolean | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -40,6 +42,8 @@ export type OwnerProfileMaxAggregateOutputType = {
   businessName: string | null
   contactNumber: string | null
   verified: boolean | null
+  isDeleted: boolean | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,6 +54,8 @@ export type OwnerProfileCountAggregateOutputType = {
   businessName: number
   contactNumber: number
   verified: number
+  isDeleted: number
+  deletedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -62,6 +68,8 @@ export type OwnerProfileMinAggregateInputType = {
   businessName?: true
   contactNumber?: true
   verified?: true
+  isDeleted?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -72,6 +80,8 @@ export type OwnerProfileMaxAggregateInputType = {
   businessName?: true
   contactNumber?: true
   verified?: true
+  isDeleted?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +92,8 @@ export type OwnerProfileCountAggregateInputType = {
   businessName?: true
   contactNumber?: true
   verified?: true
+  isDeleted?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -165,6 +177,8 @@ export type OwnerProfileGroupByOutputType = {
   businessName: string | null
   contactNumber: string | null
   verified: boolean
+  isDeleted: boolean
+  deletedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: OwnerProfileCountAggregateOutputType | null
@@ -196,6 +210,8 @@ export type OwnerProfileWhereInput = {
   businessName?: Prisma.StringNullableFilter<"OwnerProfile"> | string | null
   contactNumber?: Prisma.StringNullableFilter<"OwnerProfile"> | string | null
   verified?: Prisma.BoolFilter<"OwnerProfile"> | boolean
+  isDeleted?: Prisma.BoolFilter<"OwnerProfile"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"OwnerProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OwnerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OwnerProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -207,6 +223,8 @@ export type OwnerProfileOrderByWithRelationInput = {
   businessName?: Prisma.SortOrderInput | Prisma.SortOrder
   contactNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   verified?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -221,6 +239,8 @@ export type OwnerProfileWhereUniqueInput = Prisma.AtLeast<{
   businessName?: Prisma.StringNullableFilter<"OwnerProfile"> | string | null
   contactNumber?: Prisma.StringNullableFilter<"OwnerProfile"> | string | null
   verified?: Prisma.BoolFilter<"OwnerProfile"> | boolean
+  isDeleted?: Prisma.BoolFilter<"OwnerProfile"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"OwnerProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OwnerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OwnerProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -232,6 +252,8 @@ export type OwnerProfileOrderByWithAggregationInput = {
   businessName?: Prisma.SortOrderInput | Prisma.SortOrder
   contactNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   verified?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.OwnerProfileCountOrderByAggregateInput
@@ -248,6 +270,8 @@ export type OwnerProfileScalarWhereWithAggregatesInput = {
   businessName?: Prisma.StringNullableWithAggregatesFilter<"OwnerProfile"> | string | null
   contactNumber?: Prisma.StringNullableWithAggregatesFilter<"OwnerProfile"> | string | null
   verified?: Prisma.BoolWithAggregatesFilter<"OwnerProfile"> | boolean
+  isDeleted?: Prisma.BoolWithAggregatesFilter<"OwnerProfile"> | boolean
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OwnerProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OwnerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"OwnerProfile"> | Date | string
 }
@@ -257,6 +281,8 @@ export type OwnerProfileCreateInput = {
   businessName?: string | null
   contactNumber?: string | null
   verified?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutOwnerProfileInput
@@ -268,6 +294,8 @@ export type OwnerProfileUncheckedCreateInput = {
   businessName?: string | null
   contactNumber?: string | null
   verified?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -277,6 +305,8 @@ export type OwnerProfileUpdateInput = {
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutOwnerProfileNestedInput
@@ -288,6 +318,8 @@ export type OwnerProfileUncheckedUpdateInput = {
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -298,6 +330,8 @@ export type OwnerProfileCreateManyInput = {
   businessName?: string | null
   contactNumber?: string | null
   verified?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -307,6 +341,8 @@ export type OwnerProfileUpdateManyMutationInput = {
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -317,6 +353,8 @@ export type OwnerProfileUncheckedUpdateManyInput = {
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -332,6 +370,8 @@ export type OwnerProfileCountOrderByAggregateInput = {
   businessName?: Prisma.SortOrder
   contactNumber?: Prisma.SortOrder
   verified?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -342,6 +382,8 @@ export type OwnerProfileMaxOrderByAggregateInput = {
   businessName?: Prisma.SortOrder
   contactNumber?: Prisma.SortOrder
   verified?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -352,6 +394,8 @@ export type OwnerProfileMinOrderByAggregateInput = {
   businessName?: Prisma.SortOrder
   contactNumber?: Prisma.SortOrder
   verified?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -393,6 +437,8 @@ export type OwnerProfileCreateWithoutUserInput = {
   businessName?: string | null
   contactNumber?: string | null
   verified?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -402,6 +448,8 @@ export type OwnerProfileUncheckedCreateWithoutUserInput = {
   businessName?: string | null
   contactNumber?: string | null
   verified?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -427,6 +475,8 @@ export type OwnerProfileUpdateWithoutUserInput = {
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -436,6 +486,8 @@ export type OwnerProfileUncheckedUpdateWithoutUserInput = {
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -448,6 +500,8 @@ export type OwnerProfileSelect<ExtArgs extends runtime.Types.Extensions.Internal
   businessName?: boolean
   contactNumber?: boolean
   verified?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -459,6 +513,8 @@ export type OwnerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   businessName?: boolean
   contactNumber?: boolean
   verified?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -470,6 +526,8 @@ export type OwnerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   businessName?: boolean
   contactNumber?: boolean
   verified?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -481,11 +539,13 @@ export type OwnerProfileSelectScalar = {
   businessName?: boolean
   contactNumber?: boolean
   verified?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OwnerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "businessName" | "contactNumber" | "verified" | "createdAt" | "updatedAt", ExtArgs["result"]["ownerProfile"]>
+export type OwnerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "businessName" | "contactNumber" | "verified" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["ownerProfile"]>
 export type OwnerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -507,6 +567,8 @@ export type $OwnerProfilePayload<ExtArgs extends runtime.Types.Extensions.Intern
     businessName: string | null
     contactNumber: string | null
     verified: boolean
+    isDeleted: boolean
+    deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["ownerProfile"]>
@@ -938,6 +1000,8 @@ export interface OwnerProfileFieldRefs {
   readonly businessName: Prisma.FieldRef<"OwnerProfile", 'String'>
   readonly contactNumber: Prisma.FieldRef<"OwnerProfile", 'String'>
   readonly verified: Prisma.FieldRef<"OwnerProfile", 'Boolean'>
+  readonly isDeleted: Prisma.FieldRef<"OwnerProfile", 'Boolean'>
+  readonly deletedAt: Prisma.FieldRef<"OwnerProfile", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"OwnerProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"OwnerProfile", 'DateTime'>
 }

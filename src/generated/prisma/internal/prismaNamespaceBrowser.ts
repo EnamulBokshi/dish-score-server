@@ -209,6 +209,8 @@ export const OwnerProfileScalarFieldEnum = {
   businessName: 'businessName',
   contactNumber: 'contactNumber',
   verified: 'verified',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -222,6 +224,8 @@ export const ReviewerProfileScalarFieldEnum = {
   bio: 'bio',
   totalReviews: 'totalReviews',
   helpfulVotes: 'helpfulVotes',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

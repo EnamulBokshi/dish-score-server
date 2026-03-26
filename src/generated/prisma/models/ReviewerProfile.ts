@@ -42,6 +42,8 @@ export type ReviewerProfileMinAggregateOutputType = {
   bio: string | null
   totalReviews: number | null
   helpfulVotes: number | null
+  isDeleted: boolean | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,6 +54,8 @@ export type ReviewerProfileMaxAggregateOutputType = {
   bio: string | null
   totalReviews: number | null
   helpfulVotes: number | null
+  isDeleted: boolean | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +66,8 @@ export type ReviewerProfileCountAggregateOutputType = {
   bio: number
   totalReviews: number
   helpfulVotes: number
+  isDeleted: number
+  deletedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -84,6 +90,8 @@ export type ReviewerProfileMinAggregateInputType = {
   bio?: true
   totalReviews?: true
   helpfulVotes?: true
+  isDeleted?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +102,8 @@ export type ReviewerProfileMaxAggregateInputType = {
   bio?: true
   totalReviews?: true
   helpfulVotes?: true
+  isDeleted?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -104,6 +114,8 @@ export type ReviewerProfileCountAggregateInputType = {
   bio?: true
   totalReviews?: true
   helpfulVotes?: true
+  isDeleted?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -201,6 +213,8 @@ export type ReviewerProfileGroupByOutputType = {
   bio: string | null
   totalReviews: number
   helpfulVotes: number
+  isDeleted: boolean
+  deletedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: ReviewerProfileCountAggregateOutputType | null
@@ -234,6 +248,8 @@ export type ReviewerProfileWhereInput = {
   bio?: Prisma.StringNullableFilter<"ReviewerProfile"> | string | null
   totalReviews?: Prisma.IntFilter<"ReviewerProfile"> | number
   helpfulVotes?: Prisma.IntFilter<"ReviewerProfile"> | number
+  isDeleted?: Prisma.BoolFilter<"ReviewerProfile"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"ReviewerProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"ReviewerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ReviewerProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -245,6 +261,8 @@ export type ReviewerProfileOrderByWithRelationInput = {
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
   helpfulVotes?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -259,6 +277,8 @@ export type ReviewerProfileWhereUniqueInput = Prisma.AtLeast<{
   bio?: Prisma.StringNullableFilter<"ReviewerProfile"> | string | null
   totalReviews?: Prisma.IntFilter<"ReviewerProfile"> | number
   helpfulVotes?: Prisma.IntFilter<"ReviewerProfile"> | number
+  isDeleted?: Prisma.BoolFilter<"ReviewerProfile"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"ReviewerProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"ReviewerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ReviewerProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -270,6 +290,8 @@ export type ReviewerProfileOrderByWithAggregationInput = {
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
   helpfulVotes?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ReviewerProfileCountOrderByAggregateInput
@@ -288,6 +310,8 @@ export type ReviewerProfileScalarWhereWithAggregatesInput = {
   bio?: Prisma.StringNullableWithAggregatesFilter<"ReviewerProfile"> | string | null
   totalReviews?: Prisma.IntWithAggregatesFilter<"ReviewerProfile"> | number
   helpfulVotes?: Prisma.IntWithAggregatesFilter<"ReviewerProfile"> | number
+  isDeleted?: Prisma.BoolWithAggregatesFilter<"ReviewerProfile"> | boolean
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ReviewerProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ReviewerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ReviewerProfile"> | Date | string
 }
@@ -297,6 +321,8 @@ export type ReviewerProfileCreateInput = {
   bio?: string | null
   totalReviews?: number
   helpfulVotes?: number
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutReviewerProfileInput
@@ -308,6 +334,8 @@ export type ReviewerProfileUncheckedCreateInput = {
   bio?: string | null
   totalReviews?: number
   helpfulVotes?: number
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -317,6 +345,8 @@ export type ReviewerProfileUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   helpfulVotes?: Prisma.IntFieldUpdateOperationsInput | number
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutReviewerProfileNestedInput
@@ -328,6 +358,8 @@ export type ReviewerProfileUncheckedUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   helpfulVotes?: Prisma.IntFieldUpdateOperationsInput | number
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -338,6 +370,8 @@ export type ReviewerProfileCreateManyInput = {
   bio?: string | null
   totalReviews?: number
   helpfulVotes?: number
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -347,6 +381,8 @@ export type ReviewerProfileUpdateManyMutationInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   helpfulVotes?: Prisma.IntFieldUpdateOperationsInput | number
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -357,6 +393,8 @@ export type ReviewerProfileUncheckedUpdateManyInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   helpfulVotes?: Prisma.IntFieldUpdateOperationsInput | number
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -372,6 +410,8 @@ export type ReviewerProfileCountOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
   helpfulVotes?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -387,6 +427,8 @@ export type ReviewerProfileMaxOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
   helpfulVotes?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -397,6 +439,8 @@ export type ReviewerProfileMinOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
   helpfulVotes?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -443,6 +487,8 @@ export type ReviewerProfileCreateWithoutUserInput = {
   bio?: string | null
   totalReviews?: number
   helpfulVotes?: number
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -452,6 +498,8 @@ export type ReviewerProfileUncheckedCreateWithoutUserInput = {
   bio?: string | null
   totalReviews?: number
   helpfulVotes?: number
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -477,6 +525,8 @@ export type ReviewerProfileUpdateWithoutUserInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   helpfulVotes?: Prisma.IntFieldUpdateOperationsInput | number
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -486,6 +536,8 @@ export type ReviewerProfileUncheckedUpdateWithoutUserInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   helpfulVotes?: Prisma.IntFieldUpdateOperationsInput | number
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -498,6 +550,8 @@ export type ReviewerProfileSelect<ExtArgs extends runtime.Types.Extensions.Inter
   bio?: boolean
   totalReviews?: boolean
   helpfulVotes?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -509,6 +563,8 @@ export type ReviewerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   bio?: boolean
   totalReviews?: boolean
   helpfulVotes?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -520,6 +576,8 @@ export type ReviewerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   bio?: boolean
   totalReviews?: boolean
   helpfulVotes?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -531,11 +589,13 @@ export type ReviewerProfileSelectScalar = {
   bio?: boolean
   totalReviews?: boolean
   helpfulVotes?: boolean
+  isDeleted?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ReviewerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "bio" | "totalReviews" | "helpfulVotes" | "createdAt" | "updatedAt", ExtArgs["result"]["reviewerProfile"]>
+export type ReviewerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "bio" | "totalReviews" | "helpfulVotes" | "isDeleted" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["reviewerProfile"]>
 export type ReviewerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -557,6 +617,8 @@ export type $ReviewerProfilePayload<ExtArgs extends runtime.Types.Extensions.Int
     bio: string | null
     totalReviews: number
     helpfulVotes: number
+    isDeleted: boolean
+    deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["reviewerProfile"]>
@@ -988,6 +1050,8 @@ export interface ReviewerProfileFieldRefs {
   readonly bio: Prisma.FieldRef<"ReviewerProfile", 'String'>
   readonly totalReviews: Prisma.FieldRef<"ReviewerProfile", 'Int'>
   readonly helpfulVotes: Prisma.FieldRef<"ReviewerProfile", 'Int'>
+  readonly isDeleted: Prisma.FieldRef<"ReviewerProfile", 'Boolean'>
+  readonly deletedAt: Prisma.FieldRef<"ReviewerProfile", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"ReviewerProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ReviewerProfile", 'DateTime'>
 }
