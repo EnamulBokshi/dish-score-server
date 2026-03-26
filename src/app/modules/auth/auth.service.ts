@@ -8,76 +8,80 @@ import { env } from "../../../config/env";
 import { JwtPayload } from "jsonwebtoken";
 import AppError from "../../helpers/errorHelpers/AppError";
 import { IRequestUser } from "../../../interfaces";
-import { IChangePasswordPayload } from "./auth.interface";
+import { IChangePasswordPayload, RegisterUserPayload } from "./auth.interface";
 
-// const registerPatient = async(payload: RegisterUserPayload) => {
-//     const {name,email, password} = payload;
+const registerUser = async(payload: RegisterUserPayload) => {
+    const {name,email, password} = payload;
+    const isUserExist = await prisma.user.findUnique({
+        where: {
+            email
+        }
+    });
+    if(isUserExist) {
+        throw new AppError(status.BAD_REQUEST, "User with this email already exists");
+    }
+    const data = await auth.api.signUpEmail({
+        body: {
+            name, 
+            email, 
+            password
+        }
+    })
 
-//     const data = await auth.api.signUpEmail({
-//         body: {
-//             name, 
-//             email, 
-//             password
-//         }
-//     })
+    if(!data.user) {
+       throw new AppError(status.INTERNAL_SERVER_ERROR, "Failed to register user");
+    }
 
-//     if(!data.user) {
-//        throw new AppError(status.INTERNAL_SERVER_ERROR, "Failed to register user");
-//     }
-
-    
-//     //TODO: create patient profile after user is created
-
-//    try {
-//      const patient = await prisma.$transaction(async (tx)=> {
-//          const createdPatient = await tx.patient.create({
-//              data: {
-//                  userId: data.user.id,
-//                  name: data.user.name,
-//                  email: data.user.email,
+   try {
+     const reviwer = await prisma.$transaction(async (tx)=> {
+         const createdReviewerProfile = await tx.reviewerProfile.create({
+             data: {
+                 userId: data.user.id,
+                 bio: "",
  
-//              }
-//          })
-//          return createdPatient;
-//      })
-//      const accessToken = tokenUtils.getAccessToken({
-//         userId: data.user.id,
-//         email: data.user.email,
-//         name: data.user.name,
-//         role: data.user.role,
-//         emailVerified: data.user.emailVerified,
-//         isDeleted: data.user.isDeleted,
-//         status: data.user.status
-//     })
+             }
+         })
+         return createdReviewerProfile;
+     })
+     const accessToken = tokenUtils.getAccessToken({
+        userId: data.user.id,
+        email: data.user.email,
+        name: data.user.name,
+        role: data.user.role,
+        emailVerified: data.user.emailVerified,
+        isDeleted: data.user.isDeleted,
+        status: data.user.status
+    })
 
-//     const refreshToken = tokenUtils.getRefreshToken({
-//         userId: data.user.id,
-//         email: data.user.email,
-//         name: data.user.name,
-//         role: data.user.role,
-//         emailVerified: data.user.emailVerified,
-//         isDeleted: data.user.isDeleted,
-//         status: data.user.status
-//     })
+    const refreshToken = tokenUtils.getRefreshToken({
+        userId: data.user.id,
+        email: data.user.email,
+        name: data.user.name,
+        role: data.user.role,
+        emailVerified: data.user.emailVerified,
+        isDeleted: data.user.isDeleted,
+        status: data.user.status
+    })
 
-//      return {
-//          ...data,
-//          accessToken,
-//          refreshToken,
-//          patient
-//      }
-//    } catch (error) {
-//     console.error("Error creating patient profile:", error);
-//     await prisma.user.delete({
-//         where: {
-//             id: data.user.id
-//         }
-//     })
-//     throw error;
-//    }
+     return {
+         ...data,
+         accessToken,
+         refreshToken,
+         reviwer
+         
+     }
+   } catch (error) {
+    console.error("Error creating reviwer profile:", error);
+    await prisma.user.delete({
+        where: {
+            id: data.user.id
+        }
+    })
+    throw error;
+   }
 
 
-// }
+}
 
 const loginUser = async(payload: {email: string, password: string}) => {
     const {email, password} = payload;
@@ -151,6 +155,8 @@ const getMe = async(user:IRequestUser)=> {
                     updatedAt: true,
                 }
             },
+            reviewerProfile: true,
+            ownerProfile: true,
             admin: true,
          }
     });
@@ -310,6 +316,33 @@ const verifyEmail = async( otp: string,email: string) => {
     } 
 }
 
+const resendVerificationOtp = async (email: string) => {
+    const isUserExist = await prisma.user.findUnique({
+        where: {
+            email,
+        },
+    });
+
+    if (!isUserExist) {
+        throw new AppError(status.NOT_FOUND, "User not found");
+    }
+
+    if (isUserExist.emailVerified) {
+        throw new AppError(status.BAD_REQUEST, "Email is already verified");
+    }
+
+    if (isUserExist.status === UserStatus.BANNED || isUserExist.status === UserStatus.DELETED) {
+        throw new AppError(status.FORBIDDEN, "Your account is not active. Please contact support.");
+    }
+
+    await auth.api.sendVerificationOTP({
+        body: {
+            email,
+            type: "email-verification",
+        },
+    });
+}
+
 const forgetPassword = async(email: string) => {
     const isUserExist = await prisma.user.findUnique({  
         where: {
@@ -380,50 +413,52 @@ const resetPassword = async(payload: {email: string, otp: string, newPassword: s
      })
 }
 
-// const googleSignInSuccess = async(session: Record<string, any>) => {
-//     const isPatientExist = await prisma.user.findUnique({
-//         where: {
-//             id: session.user.id,
-//         }
-//     });
-//     if(!isPatientExist){
-//         const user = await auth.api.signInEmail({
-//             body: {
-//                 email: session.user.email,
-//             }
-//         })
-//     };
+const googleSignInSuccess = async(session: Record<string, any>) => {
+    const isReviewerExist = await prisma.user.findUnique({
+        where: {
+            id: session.user.id,
+        }
+    });
+    if(!isReviewerExist){
+        const user = await prisma.reviewerProfile.create({
+            data: {
+                userId: session.user.id,
+                bio: "",
+            }
+        })
+    };
 
-//     const accessToken = tokenUtils.getAccessToken({
-//         userId: session.user.id,
-//         name: session.user.name,
-//         role: session.user.role,
-//     });
-//     const refreshToken = tokenUtils.getRefreshToken({
-//         userId: session.user.id,
-//         name: session.user.name,
-//         role: session.user.role,
-//     });
+    const accessToken = tokenUtils.getAccessToken({
+        userId: session.user.id,
+        name: session.user.name,
+        role: session.user.role,
+    });
+    const refreshToken = tokenUtils.getRefreshToken({
+        userId: session.user.id,
+        name: session.user.name,
+        role: session.user.role,
+    });
 
-//     return {
-//         accessToken,
-//         refreshToken,
+    return {
+        accessToken,
+        refreshToken,
 
-//     }
+    }
 
 
-// }
+}
 
 
 export const AuthService = {
-    // registerPatient,
+    registerUser,
     loginUser,
     getMe,
     getNewToken,
     changePassword,
     logoutUser,
     verifyEmail,
+    resendVerificationOtp,
     forgetPassword,
     resetPassword,
-    // googleSignInSuccess,
+    googleSignInSuccess,
 }
