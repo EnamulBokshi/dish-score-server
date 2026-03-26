@@ -11,15 +11,19 @@ interface ILikeRequester {
   role: UserRole;
 }
 
-const createLike = async (payload: ICreateLikePayload, requester: ILikeRequester) => {
+const assertReviewExists = async (reviewId: string) => {
   const review = await prisma.review.findUnique({
-    where: { id: payload.reviewId },
+    where: { id: reviewId },
     select: { id: true },
   });
 
   if (!review) {
     throw new AppError(status.NOT_FOUND, "Review not found");
   }
+};
+
+const createLike = async (payload: ICreateLikePayload, requester: ILikeRequester) => {
+  await assertReviewExists(payload.reviewId);
 
   const existingLike = await prisma.like.findUnique({
     where: {
@@ -62,6 +66,55 @@ const createLike = async (payload: ICreateLikePayload, requester: ILikeRequester
   return result;
 };
 
+const toggleLike = async (payload: ICreateLikePayload, requester: ILikeRequester) => {
+  await assertReviewExists(payload.reviewId);
+
+  const existingLike = await prisma.like.findUnique({
+    where: {
+      userId_reviewId: {
+        userId: requester.userId,
+        reviewId: payload.reviewId,
+      },
+    },
+  });
+
+  if (existingLike) {
+    await prisma.like.delete({
+      where: { id: existingLike.id },
+    });
+
+    const totalLikes = await prisma.like.count({
+      where: { reviewId: payload.reviewId },
+    });
+
+    return {
+      action: "UNLIKED",
+      liked: false,
+      reviewId: payload.reviewId,
+      totalLikes,
+    };
+  }
+
+  const createdLike = await prisma.like.create({
+    data: {
+      userId: requester.userId,
+      reviewId: payload.reviewId,
+    },
+  });
+
+  const totalLikes = await prisma.like.count({
+    where: { reviewId: payload.reviewId },
+  });
+
+  return {
+    action: "LIKED",
+    liked: true,
+    reviewId: payload.reviewId,
+    totalLikes,
+    like: createdLike,
+  };
+};
+
 const getLikes = async (query: IQueryParams) => {
   const queryBuilder = new QueryBuilder<Like, Prisma.LikeWhereInput, Prisma.LikeInclude>(
     prisma.like,
@@ -101,14 +154,7 @@ const getLikes = async (query: IQueryParams) => {
 };
 
 const getReviewLikeSummary = async (reviewId: string) => {
-  const review = await prisma.review.findUnique({
-    where: { id: reviewId },
-    select: { id: true },
-  });
-
-  if (!review) {
-    throw new AppError(status.NOT_FOUND, "Review not found");
-  }
+  await assertReviewExists(reviewId);
 
   const totalLikes = await prisma.like.count({
     where: { reviewId },
@@ -143,6 +189,7 @@ const deleteLike = async (reviewId: string, requester: ILikeRequester) => {
 
 export const LikeService = {
   createLike,
+  toggleLike,
   getLikes,
   getReviewLikeSummary,
   deleteLike,

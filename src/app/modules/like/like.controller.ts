@@ -15,6 +15,18 @@ const createLike = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const toggleLike = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+  const result = await LikeService.toggleLike(payload, req.user);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    data: result,
+    message: "Like toggled successfully",
+  });
+});
+
 const getLikes = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
   const result = await LikeService.getLikes(query);
@@ -54,6 +66,7 @@ const deleteLike = catchAsync(async (req: Request, res: Response) => {
 
 export const LikeController = {
   createLike,
+  toggleLike,
   getLikes,
   getReviewLikeSummary,
   deleteLike,

@@ -13,6 +13,12 @@ router.post(
   requestValidator(createLikeSchema),
   LikeController.createLike,
 );
+router.post(
+  "/toggle",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  requestValidator(createLikeSchema),
+  LikeController.toggleLike,
+);
 router.get("/", LikeController.getLikes);
 router.get("/reviews/:reviewId", LikeController.getReviewLikeSummary);
 router.delete(

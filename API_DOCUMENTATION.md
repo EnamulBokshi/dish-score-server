@@ -429,7 +429,25 @@ Behavior:
 Common filters:
 - `id`, `userId`, `reviewId`
 
-### 11.3 Get Review Like Summary
+### 11.3 Toggle Like
+- Method: `POST`
+- Path: `/likes/toggle`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Request body:
+
+```json
+{
+  "reviewId": "clx_review_id"
+}
+```
+
+Behavior:
+- If user already liked the review, it removes the like and returns `action: "UNLIKED"`.
+- If user has not liked the review yet, it creates the like and returns `action: "LIKED"`.
+- Response includes current `totalLikes` for the review.
+
+### 11.4 Get Review Like Summary
 - Method: `GET`
 - Path: `/likes/reviews/:reviewId`
 - Auth: Public
@@ -438,7 +456,7 @@ Behavior:
 - Returns `{ reviewId, totalLikes }`.
 - Returns `404` if review is not found.
 
-### 11.4 Delete Like
+### 11.5 Delete Like
 - Method: `DELETE`
 - Path: `/likes/:reviewId`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -479,6 +497,7 @@ Behavior:
 
 ### Likes
 - `POST /likes`
+- `POST /likes/toggle`
 - `GET /likes`
 - `GET /likes/reviews/:reviewId`
 - `DELETE /likes/:reviewId`
