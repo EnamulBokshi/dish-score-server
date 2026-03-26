@@ -97,7 +97,10 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
     const userId = req.params.userId || req.params.id;
     const payload = req.body.data? JSON.parse(req.body.data) : req.body;
     const profilePhoto = req.file?.path;
-    const result = await UserServices.updateUser(userId as string, { ...payload, ...(profilePhoto && { profilePhoto }) });
+    const result = await UserServices.updateUser(userId as string, {
+        ...payload,
+        ...(profilePhoto && { image: profilePhoto }),
+    });
 
     sendResponse(res, {
         httpStatusCode: 200,

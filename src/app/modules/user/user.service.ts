@@ -278,12 +278,13 @@ const deleteUser = async (userId: string) => {
           data: { isDeleted: true, deletedAt: new Date() },
         });
       }
-      const deletedUser = await prisma.user.update({
+      const deletedUser = await tx.user.update({
         where: {
             id: userId
         },
         data: {
             isDeleted: true,
+            deletedAt: new Date(),
             status: UserStatus.INACTIVE,
             image: null,
         }
