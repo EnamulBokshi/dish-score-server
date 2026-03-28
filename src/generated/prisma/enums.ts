@@ -64,6 +64,15 @@ export const LikeStatus = {
 export type LikeStatus = (typeof LikeStatus)[keyof typeof LikeStatus]
 
 
+export const ContactMessageStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  RESOLVED: 'RESOLVED'
+} as const
+
+export type ContactMessageStatus = (typeof ContactMessageStatus)[keyof typeof ContactMessageStatus]
+
+
 export const Gender = {
   MALE: 'MALE',
   FEMALE: 'FEMALE',

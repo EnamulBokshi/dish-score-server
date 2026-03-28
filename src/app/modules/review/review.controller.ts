@@ -34,6 +34,33 @@ const getReviews = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getReviewsByUserId = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const query = req.query;
+  const result = await ReviewService.getReviewsByUserId(userId as string, query);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    data: result.data,
+    meta: result.meta,
+    message: "User reviews retrieved successfully",
+  });
+});
+
+const getMyReviews = catchAsync(async (req: Request, res: Response) => {
+  const query = req.query;
+  const result = await ReviewService.getReviewsByUserId(req.user.userId, query);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    data: result.data,
+    meta: result.meta,
+    message: "My reviews retrieved successfully",
+  });
+});
+
 const updateReview = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const payload = req.body;
@@ -66,9 +93,45 @@ const deleteReview = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateMyReview = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const payload = req.body;
+  const files = (req.files as Express.Multer.File[]) || [];
+  const imagePaths = files.map((file) => file.path);
+
+  const result = await ReviewService.updateReview(
+    id as string,
+    { ...payload, ...(imagePaths.length > 0 && { images: imagePaths }) },
+    req.user,
+  );
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    data: result,
+    message: "My review updated successfully",
+  });
+});
+
+const deleteMyReview = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await ReviewService.deleteReview(id as string, req.user);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    data: result,
+    message: "My review deleted successfully",
+  });
+});
+
 export const ReviewController = {
   createReview,
   getReviews,
+  getReviewsByUserId,
+  getMyReviews,
   updateReview,
   deleteReview,
+  updateMyReview,
+  deleteMyReview,
 };

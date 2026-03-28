@@ -10,8 +10,14 @@ const router = Router();
 
 router.post("/", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER), multerUpload.array("images"), requestValidator(createRestaurantSchema), RestaurantController.createRestaurant);
 router.get("/", RestaurantController.getRestaurants);
+router.get("/me", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER), RestaurantController.getMyRestaurants);
+router.get("/top-rated", RestaurantController.getTopRatedRestaurants);
+router.patch("/me/:id", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER), multerUpload.array("images"), requestValidator(updateRestaurantSchema), RestaurantController.updateMyRestaurant);
+router.delete("/me/:id", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER), RestaurantController.softDeleteMyRestaurant);
 router.patch("/:id", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER), multerUpload.array("images"), requestValidator(updateRestaurantSchema), RestaurantController.updateRestaurant);
 router.delete("/:id", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER), RestaurantController.softDeleteRestaurant);
+
+
 
 export const restaurantRoute = router;
 

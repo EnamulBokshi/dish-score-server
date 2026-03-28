@@ -166,6 +166,70 @@ const getReviews = async (query: IQueryParams) => {
   return result;
 };
 
+const getReviewsByUserId = async (userId: string, query: IQueryParams) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      role: true,
+      isDeleted: true,
+    },
+  });
+
+  if (!user || user.isDeleted) {
+    throw new AppError(status.NOT_FOUND, "User not found");
+  }
+
+  const queryBuilder = new QueryBuilder<Review, Prisma.ReviewWhereInput, Prisma.ReviewInclude>(
+    prisma.review,
+    query,
+    {
+      searchableFields: ["comment", "restaurant.name", "dish.name"],
+      filterableFields: ["restaurantId", "dishId", "rating"],
+    },
+  );
+
+  const result = await queryBuilder
+    .search()
+    .filter()
+    .where({ userId })
+    .include({
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      restaurant: {
+        select: {
+          id: true,
+          name: true,
+          city: true,
+          state: true,
+        },
+      },
+      dish: {
+        select: {
+          id: true,
+          name: true,
+          restaurantId: true,
+        },
+      },
+      likes: {
+        select: {
+          id: true,
+          userId: true,
+        },
+      },
+    })
+    .paginate()
+    .sort()
+    .execute();
+
+  return result;
+};
+
 const updateReview = async (id: string, payload: IUpdateReviewPayload & { userId?: string; restaurantId?: string; dishId?: string }, requester: IReviewRequester) => {
   const review = await assertCanMutateReview(id, requester);
 
@@ -231,6 +295,7 @@ const deleteReview = async (id: string, requester: IReviewRequester) => {
 export const ReviewService = {
   createReview,
   getReviews,
+  getReviewsByUserId,
   updateReview,
   deleteReview,
 };

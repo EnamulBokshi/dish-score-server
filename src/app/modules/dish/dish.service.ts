@@ -121,6 +121,164 @@ const getDishes = async (query: IQueryParams) => {
   return result;
 };
 
+const getDishesByUserId = async (userId: string, query: IQueryParams) => {
+  const queryBuilder = new QueryBuilder<Dish, Prisma.DishWhereInput, Prisma.DishInclude>(
+    prisma.dish,
+    query,
+    {
+      searchableFields: ["name", "description", "restaurant.name"],
+      filterableFields: ["name", "restaurantId", "price", "ratingAvg"],
+    },
+  );
+
+  const result = await queryBuilder
+    .search()
+    .filter()
+    .where({
+      restaurant: {
+        isDeleted: false,
+        createdByUserId: userId,
+      },
+    })
+    .include({
+      restaurant: {
+        select: {
+          id: true,
+          name: true,
+          city: true,
+          state: true,
+        },
+      },
+      dishTags: {
+        select: {
+          tag: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+      reviews: {
+        select: {
+          id: true,
+          rating: true,
+          comment: true,
+        },
+      },
+    })
+    .paginate()
+    .sort()
+    .execute();
+
+  return result;
+};
+
+const getTrendingDishes = async () => {
+  const result = await prisma.dish.findMany({
+    where: {
+      ratingAvg: {
+        gt: 2.5,
+      },
+      restaurant: {
+        isDeleted: false,
+      },
+    },
+    orderBy: [
+      {
+        totalReviews: "desc",
+      },
+      {
+        ratingAvg: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+    take: 10,
+    include: {
+      restaurant: {
+        select: {
+          id: true,
+          name: true,
+          city: true,
+          state: true,
+        },
+      },
+      reviews: {
+        select: {
+          id: true,
+          rating: true,
+        },
+      },
+    },
+  });
+
+  return result;
+};
+
+const getTrendingDishesByRestaurant = async (restaurantId: string) => {
+  const restaurant = await prisma.restaurant.findFirst({
+    where: {
+      id: restaurantId,
+      isDeleted: false,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
+  if (!restaurant) {
+    throw new AppError(status.NOT_FOUND, "Restaurant not found");
+  }
+
+  const result = await prisma.dish.findMany({
+    where: {
+      restaurantId,
+      ratingAvg: {
+        gt: 2.5,
+      },
+      restaurant: {
+        isDeleted: false,
+      },
+    },
+    orderBy: [
+      {
+        totalReviews: "desc",
+      },
+      {
+        ratingAvg: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+    take: 10,
+    include: {
+      restaurant: {
+        select: {
+          id: true,
+          name: true,
+          city: true,
+          state: true,
+        },
+      },
+      reviews: {
+        select: {
+          id: true,
+          rating: true,
+        },
+      },
+    },
+  });
+
+  return {
+    restaurant,
+    dishes: result,
+  };
+};
+
 const updateDish = async (
   id: string,
   payload: IUpdateDishPayload & { restaurantId?: string },
@@ -182,6 +340,9 @@ const deleteDish = async (id: string, requester: IDishRequester) => {
 export const DishService = {
   createDish,
   getDishes,
+  getDishesByUserId,
+  getTrendingDishes,
+  getTrendingDishesByRestaurant,
   updateDish,
   deleteDish,
 };

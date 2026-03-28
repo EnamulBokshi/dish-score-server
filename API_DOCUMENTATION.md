@@ -8,6 +8,7 @@ This document covers the currently implemented API modules in this project:
 - Dishes
 - Reviews
 - Likes
+- Contact Us
 
 The routes are registered in `src/app/routes/index.ts`.
 
@@ -238,13 +239,47 @@ Note:
 Common filters:
 - `name`, `city`, `state`, `ratingAvg`
 
-### 7.3 Update Restaurant
+### 7.3 Get Top Rated Restaurants
+- Method: `GET`
+- Path: `/restaurants/top-rated`
+- Auth: Public
+
+Rule:
+- Sort by `ratingAvg DESC`
+- Tie-breaker: `totalReviews DESC`
+- Return top `10`
+
+### 7.4 My Restaurant APIs
+- Method: `GET`
+- Path: `/restaurants/me`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Returns restaurants created by the currently authenticated user (`req.user.userId`).
+
+- Method: `PATCH`
+- Path: `/restaurants/me/:id`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Updates the specified restaurant if requester has permission.
+- `OWNER` and `CONSUMER` can update only their own restaurants.
+
+- Method: `DELETE`
+- Path: `/restaurants/me/:id`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Soft deletes the specified restaurant if requester has permission.
+- `OWNER` and `CONSUMER` can delete only their own restaurants.
+
+### 7.5 Update Restaurant
 - Method: `PATCH`
 - Path: `/restaurants/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
 - Ownership enforced in service.
 
-### 7.4 Delete Restaurant (Soft)
+### 7.6 Delete Restaurant (Soft)
 - Method: `DELETE`
 - Path: `/restaurants/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -295,7 +330,50 @@ Behavior:
 Common filters:
 - `name`, `restaurantId`, `price`, `ratingAvg`
 
-### 8.3 Update Dish
+### 8.3 Get Trending Dishes (Global)
+- Method: `GET`
+- Path: `/dishes/trending`
+- Auth: Public
+
+Trending rule:
+- `ratingAvg > 2.5`
+- Sort by `totalReviews DESC`, then `ratingAvg DESC`
+- Return top `10`
+
+### 8.4 Get Trending Dishes by Restaurant
+- Method: `GET`
+- Path: `/dishes/restaurants/:restaurantId/trending`
+- Auth: Public
+
+Trending rule:
+- Same rule as global, scoped to one restaurant
+- Returns `404` if restaurant does not exist or is soft-deleted
+
+### 8.5 My Dish APIs
+- Method: `GET`
+- Path: `/dishes/me`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Returns dishes that belong to restaurants created by the currently authenticated user (`req.user.userId`).
+
+- Method: `PATCH`
+- Path: `/dishes/me/:id`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Updates the specified dish if requester has permission.
+- `OWNER` and `CONSUMER` can update only dishes under their own restaurants.
+
+- Method: `DELETE`
+- Path: `/dishes/me/:id`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Deletes the specified dish if requester has permission.
+- `OWNER` and `CONSUMER` can delete only dishes under their own restaurants.
+
+### 8.6 Update Dish
 - Method: `PATCH`
 - Path: `/dishes/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -314,7 +392,7 @@ Request body (all optional):
 Behavior:
 - Returns `400` if `restaurantId` is attempted in payload.
 
-### 8.4 Delete Dish
+### 8.7 Delete Dish
 - Method: `DELETE`
 - Path: `/dishes/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -364,7 +442,37 @@ Behavior:
 Common filters:
 - `restaurantId`, `dishId`, `userId`, `rating`
 
-### 9.3 Update Review
+### 9.3 Get Reviews by User ID
+- Method: `GET`
+- Path: `/reviews/users/:userId`
+- Auth: Public
+
+Common filters:
+- `restaurantId`, `dishId`, `rating`
+
+### 9.4 My Review APIs
+- Method: `GET`
+- Path: `/reviews/my`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Returns reviews for the currently authenticated user (`req.user.userId`).
+
+- Method: `PATCH`
+- Path: `/reviews/my/:id`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Updates the specified review if it belongs to the authenticated user.
+
+- Method: `DELETE`
+- Path: `/reviews/my/:id`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Deletes the specified review if it belongs to the authenticated user.
+
+### 9.5 Update Review
 - Method: `PATCH`
 - Path: `/reviews/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -382,7 +490,7 @@ Request body (all optional):
 Behavior:
 - Changing `userId`, `restaurantId`, or `dishId` is blocked with `400`.
 
-### 9.4 Delete Review
+### 9.6 Delete Review
 - Method: `DELETE`
 - Path: `/reviews/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -465,7 +573,64 @@ Behavior:
 - Deletes the current authenticated user's like for the given review.
 - Returns `404` if no like exists for that user-review pair.
 
-## 12. Quick Endpoint Summary
+## 12. Contact Us API
+
+Base path: `/contact-us`
+
+### 12.1 Create Contact Request
+- Method: `POST`
+- Path: `/contact-us`
+- Auth: Public
+
+Request body:
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "01700000000",
+  "subject": "Need help with an order",
+  "message": "I need support regarding my recent restaurant order."
+}
+```
+
+Behavior:
+- Creates a new contact request.
+- Sends a thank-you confirmation email to the requester's email.
+- Confirmation email includes super-admin details from environment variables.
+
+### 12.2 Get Contact Requests
+- Method: `GET`
+- Path: `/contact-us`
+- Auth: `ADMIN`, `SUPER_ADMIN`
+
+Common filters:
+- `id`, `email`, `status`, `createdAt`
+
+### 12.3 Get Contact Request by ID
+- Method: `GET`
+- Path: `/contact-us/:id`
+- Auth: `ADMIN`, `SUPER_ADMIN`
+
+### 12.4 Update Contact Request Status
+- Method: `PATCH`
+- Path: `/contact-us/:id/status`
+- Auth: `ADMIN`, `SUPER_ADMIN`
+
+Request body:
+
+```json
+{
+  "status": "IN_PROGRESS"
+}
+```
+
+Allowed status values:
+- `PENDING`
+- `IN_PROGRESS`
+- `RESOLVED`
+
+## 13. Quick Endpoint Summary
 
 ### Users/Admins
 - `POST /users/admins`
@@ -480,18 +645,31 @@ Behavior:
 ### Restaurants
 - `POST /restaurants`
 - `GET /restaurants`
+- `GET /restaurants/me`
+- `GET /restaurants/top-rated`
+- `PATCH /restaurants/me/:id`
+- `DELETE /restaurants/me/:id`
 - `PATCH /restaurants/:id`
 - `DELETE /restaurants/:id`
 
 ### Dishes
 - `POST /dishes`
 - `GET /dishes`
+- `GET /dishes/me`
+- `GET /dishes/trending`
+- `GET /dishes/restaurants/:restaurantId/trending`
+- `PATCH /dishes/me/:id`
+- `DELETE /dishes/me/:id`
 - `PATCH /dishes/:id`
 - `DELETE /dishes/:id`
 
 ### Reviews
 - `POST /reviews`
 - `GET /reviews`
+- `GET /reviews/users/:userId`
+- `GET /reviews/my`
+- `PATCH /reviews/my/:id`
+- `DELETE /reviews/my/:id`
 - `PATCH /reviews/:id`
 - `DELETE /reviews/:id`
 
@@ -501,3 +679,9 @@ Behavior:
 - `GET /likes`
 - `GET /likes/reviews/:reviewId`
 - `DELETE /likes/:reviewId`
+
+### Contact Us
+- `POST /contact-us`
+- `GET /contact-us`
+- `GET /contact-us/:id`
+- `PATCH /contact-us/:id/status`

@@ -67,6 +67,11 @@ export type Account = Prisma.AccountModel
  */
 export type Verification = Prisma.VerificationModel
 /**
+ * Model ContactUs
+ * 
+ */
+export type ContactUs = Prisma.ContactUsModel
+/**
  * Model Dish
  * 
  */

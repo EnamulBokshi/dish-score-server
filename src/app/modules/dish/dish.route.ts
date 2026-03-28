@@ -16,6 +16,25 @@ router.post(
   DishController.createDish,
 );
 router.get("/", DishController.getDishes);
+router.get(
+  "/me",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  DishController.getMyDishes,
+);
+router.get("/trending", DishController.getTrendingDishes);
+router.get("/restaurants/:restaurantId/trending", DishController.getTrendingDishesByRestaurant);
+router.patch(
+  "/me/:id",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  requestValidator(updateDishSchema),
+  multerUpload.single("image"),
+  DishController.updateMyDish,
+);
+router.delete(
+  "/me/:id",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  DishController.deleteMyDish,
+);
 router.patch(
   "/:id",
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),

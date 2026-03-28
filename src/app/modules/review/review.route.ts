@@ -16,6 +16,7 @@ router.post(
   ReviewController.createReview,
 );
 router.get("/", ReviewController.getReviews);
+
 router.patch(
   "/:id",
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
@@ -28,5 +29,28 @@ router.delete(
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
   ReviewController.deleteReview,
 );
+
+
+// user specific reviews
+
+router.get(
+  "/my",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  ReviewController.getMyReviews,
+);
+
+router.patch(
+  "/my/:id",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  multerUpload.array("images", 5),
+  requestValidator(updateReviewSchema),
+  ReviewController.updateMyReview,
+);
+router.delete(
+  "/my/:id",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  ReviewController.deleteMyReview,
+);
+
 
 export const reviewRoute = router;

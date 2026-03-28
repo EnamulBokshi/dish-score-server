@@ -29,6 +29,12 @@ enum LikeStatus {
     INACTIVE
 }
 
+enum ContactMessageStatus {
+    PENDING
+    IN_PROGRESS
+    RESOLVED
+}
+
 enum Gender {
     MALE
     FEMALE

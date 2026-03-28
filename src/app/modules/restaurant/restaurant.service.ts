@@ -106,6 +106,94 @@ const getRestaurants = async (query: IQueryParams) => {
 
 }
 
+const getRestaurantsByUserId = async (userId: string, query: IQueryParams) => {
+    const qeuryBuilder = new QueryBuilder<Restaurant, Prisma.RestaurantWhereInput, Prisma.RestaurantInclude>(
+        prisma.restaurant,
+        query,
+        {
+            searchableFields: restaurantSearchableFields,
+            filterableFields: restaurantFilterableFields,
+            searchableEnumFields: restaurantEnumFields,
+            searchableExactFields: restaurantSearchableExactFields,
+        }
+
+    );
+
+    const result = await qeuryBuilder
+    .search()
+    .filter()
+    .where({
+        isDeleted: false,
+        createdByUserId: userId,
+    })
+    .include({
+        dishes: {
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                price: true,
+                image: true,
+            }
+        },
+        reviews: {
+            select: {
+                id: true,
+                rating: true,
+                comment: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                    }
+                }
+            }
+        }
+    })
+    .paginate()
+    .sort()
+    .execute();
+
+    return result;
+}
+
+const getTopRatedRestaurants = async () => {
+    const result = await prisma.restaurant.findMany({
+        where: {
+            isDeleted: false,
+        },
+        orderBy: [
+            {
+                ratingAvg: "desc",
+            },
+            {
+                totalReviews: "desc",
+            },
+            {
+                createdAt: "desc",
+            },
+        ],
+        take: 10,
+        include: {
+            dishes: {
+                select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                },
+            },
+            reviews: {
+                select: {
+                    id: true,
+                    rating: true,
+                },
+            },
+        },
+    });
+
+    return result;
+}
+
 const updateRestaurant = async (id: string, payload: Partial<ICreateRestaurantPayload>, requester: IRestaurantRequester) => {
     await assertCanModifyRestaurant(id, requester);
 
@@ -176,5 +264,7 @@ export const RestaurantService = {
     createRestaurant,
     updateRestaurant,
     softDeleteRestaurant,
-    getRestaurants
+    getRestaurants,
+    getRestaurantsByUserId,
+    getTopRatedRestaurants,
 }

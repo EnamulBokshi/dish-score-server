@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>We Received Your Message</title>
+  </head>
+  <body style="margin:0;padding:0;background:#f8fafc;font-family:Arial,sans-serif;color:#0f172a;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding:24px;">
+      <tr>
+        <td align="center">
+          <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:10px;padding:24px;">
+            <tr>
+              <td>
+                <h2 style="margin:0 0 12px 0;">Thank you for contacting <%= appName %></h2>
+                <p style="margin:0 0 12px 0;line-height:1.6;">Hi <strong><%= name %></strong>,</p>
+                <p style="margin:0 0 12px 0;line-height:1.6;">We have received your message about <strong><%= subject %></strong>. Our team will review it and get back to you shortly.</p>
+                <p style="margin:0 0 16px 0;line-height:1.6;">This confirmation is sent on behalf of <strong><%= superAdminName %></strong> (Super Admin).</p>
+                <p style="margin:0 0 20px 0;line-height:1.6;">For urgent matters, you can write to: <a href="mailto:<%= superAdminEmail %>"><%= superAdminEmail %></a></p>
+                <p style="margin:0;line-height:1.6;">Regards,<br/><strong><%= appName %> Support Team</strong></p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -199,6 +199,23 @@ export type EnumUserStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumUserStatusFilter<$PrismaModel>
 }
 
+export type EnumContactMessageStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ContactMessageStatus | Prisma.EnumContactMessageStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ContactMessageStatus[] | Prisma.ListEnumContactMessageStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ContactMessageStatus[] | Prisma.ListEnumContactMessageStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumContactMessageStatusFilter<$PrismaModel> | $Enums.ContactMessageStatus
+}
+
+export type EnumContactMessageStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ContactMessageStatus | Prisma.EnumContactMessageStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ContactMessageStatus[] | Prisma.ListEnumContactMessageStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ContactMessageStatus[] | Prisma.ListEnumContactMessageStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumContactMessageStatusWithAggregatesFilter<$PrismaModel> | $Enums.ContactMessageStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumContactMessageStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumContactMessageStatusFilter<$PrismaModel>
+}
+
 export type FloatNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -527,6 +544,23 @@ export type NestedEnumUserStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumUserStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumUserStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumContactMessageStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.ContactMessageStatus | Prisma.EnumContactMessageStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ContactMessageStatus[] | Prisma.ListEnumContactMessageStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ContactMessageStatus[] | Prisma.ListEnumContactMessageStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumContactMessageStatusFilter<$PrismaModel> | $Enums.ContactMessageStatus
+}
+
+export type NestedEnumContactMessageStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ContactMessageStatus | Prisma.EnumContactMessageStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.ContactMessageStatus[] | Prisma.ListEnumContactMessageStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ContactMessageStatus[] | Prisma.ListEnumContactMessageStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumContactMessageStatusWithAggregatesFilter<$PrismaModel> | $Enums.ContactMessageStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumContactMessageStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumContactMessageStatusFilter<$PrismaModel>
 }
 
 export type NestedFloatNullableFilter<$PrismaModel = never> = {

@@ -389,6 +389,7 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
+  ContactUs: 'ContactUs',
   Dish: 'Dish',
   Tag: 'Tag',
   DishTag: 'DishTag',
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "admin" | "user" | "session" | "account" | "verification" | "dish" | "tag" | "dishTag" | "like" | "ownerProfile" | "reviewerProfile" | "restaurant" | "review"
+    modelProps: "admin" | "user" | "session" | "account" | "verification" | "contactUs" | "dish" | "tag" | "dishTag" | "like" | "ownerProfile" | "reviewerProfile" | "restaurant" | "review"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -783,6 +784,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.VerificationCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.VerificationCountAggregateOutputType> | number
+        }
+      }
+    }
+    ContactUs: {
+      payload: Prisma.$ContactUsPayload<ExtArgs>
+      fields: Prisma.ContactUsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContactUsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContactUsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload>
+        }
+        findFirst: {
+          args: Prisma.ContactUsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContactUsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload>
+        }
+        findMany: {
+          args: Prisma.ContactUsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload>[]
+        }
+        create: {
+          args: Prisma.ContactUsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload>
+        }
+        createMany: {
+          args: Prisma.ContactUsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ContactUsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload>[]
+        }
+        delete: {
+          args: Prisma.ContactUsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload>
+        }
+        update: {
+          args: Prisma.ContactUsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload>
+        }
+        deleteMany: {
+          args: Prisma.ContactUsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContactUsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ContactUsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload>[]
+        }
+        upsert: {
+          args: Prisma.ContactUsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactUsPayload>
+        }
+        aggregate: {
+          args: Prisma.ContactUsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContactUs>
+        }
+        groupBy: {
+          args: Prisma.ContactUsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContactUsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ContactUsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContactUsCountAggregateOutputType> | number
         }
       }
     }
@@ -1496,6 +1571,22 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
+export const ContactUsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  subject: 'subject',
+  message: 'message',
+  status: 'status',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContactUsScalarFieldEnum = (typeof ContactUsScalarFieldEnum)[keyof typeof ContactUsScalarFieldEnum]
+
+
 export const DishScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1730,6 +1821,20 @@ export type ListEnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'ContactMessageStatus'
+ */
+export type EnumContactMessageStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContactMessageStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ContactMessageStatus[]'
+ */
+export type ListEnumContactMessageStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContactMessageStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1870,6 +1975,7 @@ export type GlobalOmitConfig = {
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
+  contactUs?: Prisma.ContactUsOmit
   dish?: Prisma.DishOmit
   tag?: Prisma.TagOmit
   dishTag?: Prisma.DishTagOmit

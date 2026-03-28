@@ -56,6 +56,7 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
+  ContactUs: 'ContactUs',
   Dish: 'Dish',
   Tag: 'Tag',
   DishTag: 'DishTag',
@@ -159,6 +160,22 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const ContactUsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  subject: 'subject',
+  message: 'message',
+  status: 'status',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContactUsScalarFieldEnum = (typeof ContactUsScalarFieldEnum)[keyof typeof ContactUsScalarFieldEnum]
 
 
 export const DishScalarFieldEnum = {

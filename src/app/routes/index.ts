@@ -6,6 +6,7 @@ import { userRoute } from "../modules/user/user.route";
 import { restaurantRoute } from "../modules/restaurant/restaurant.route";
 import { authRoute } from "../modules/auth/auth.route";
 import { likeRoute } from "../modules/like/like.route";
+import { contactRoute } from "../modules/contact/contact.route";
 
 const router =  Router();
 
@@ -16,6 +17,7 @@ router.use("/restaurants", restaurantRoute);
 router.use("/dishes", dishRoute);
 router.use("/reviews", reviewRoute);
 router.use("/likes", likeRoute);
+router.use("/contact-us", contactRoute);
 
  const IndexRoute = router;
  export default IndexRoute;
