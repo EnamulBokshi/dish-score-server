@@ -71,6 +71,7 @@ export type DishCountAggregateOutputType = {
   price: number
   image: number
   ingredients: number
+  tags: number
   restaurantId: number
   ratingAvg: number
   totalReviews: number
@@ -125,6 +126,7 @@ export type DishCountAggregateInputType = {
   price?: true
   image?: true
   ingredients?: true
+  tags?: true
   restaurantId?: true
   ratingAvg?: true
   totalReviews?: true
@@ -226,6 +228,7 @@ export type DishGroupByOutputType = {
   price: number | null
   image: string | null
   ingredients: string[]
+  tags: string[]
   restaurantId: string
   ratingAvg: number
   totalReviews: number
@@ -263,6 +266,7 @@ export type DishWhereInput = {
   price?: Prisma.FloatNullableFilter<"Dish"> | number | null
   image?: Prisma.StringNullableFilter<"Dish"> | string | null
   ingredients?: Prisma.StringNullableListFilter<"Dish">
+  tags?: Prisma.StringNullableListFilter<"Dish">
   restaurantId?: Prisma.StringFilter<"Dish"> | string
   ratingAvg?: Prisma.FloatFilter<"Dish"> | number
   totalReviews?: Prisma.IntFilter<"Dish"> | number
@@ -270,7 +274,6 @@ export type DishWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Dish"> | Date | string
   restaurant?: Prisma.XOR<Prisma.RestaurantScalarRelationFilter, Prisma.RestaurantWhereInput>
   reviews?: Prisma.ReviewListRelationFilter
-  dishTags?: Prisma.DishTagListRelationFilter
 }
 
 export type DishOrderByWithRelationInput = {
@@ -280,6 +283,7 @@ export type DishOrderByWithRelationInput = {
   price?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   ingredients?: Prisma.SortOrder
+  tags?: Prisma.SortOrder
   restaurantId?: Prisma.SortOrder
   ratingAvg?: Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
@@ -287,7 +291,6 @@ export type DishOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   restaurant?: Prisma.RestaurantOrderByWithRelationInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
-  dishTags?: Prisma.DishTagOrderByRelationAggregateInput
 }
 
 export type DishWhereUniqueInput = Prisma.AtLeast<{
@@ -300,6 +303,7 @@ export type DishWhereUniqueInput = Prisma.AtLeast<{
   price?: Prisma.FloatNullableFilter<"Dish"> | number | null
   image?: Prisma.StringNullableFilter<"Dish"> | string | null
   ingredients?: Prisma.StringNullableListFilter<"Dish">
+  tags?: Prisma.StringNullableListFilter<"Dish">
   restaurantId?: Prisma.StringFilter<"Dish"> | string
   ratingAvg?: Prisma.FloatFilter<"Dish"> | number
   totalReviews?: Prisma.IntFilter<"Dish"> | number
@@ -307,7 +311,6 @@ export type DishWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Dish"> | Date | string
   restaurant?: Prisma.XOR<Prisma.RestaurantScalarRelationFilter, Prisma.RestaurantWhereInput>
   reviews?: Prisma.ReviewListRelationFilter
-  dishTags?: Prisma.DishTagListRelationFilter
 }, "id">
 
 export type DishOrderByWithAggregationInput = {
@@ -317,6 +320,7 @@ export type DishOrderByWithAggregationInput = {
   price?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   ingredients?: Prisma.SortOrder
+  tags?: Prisma.SortOrder
   restaurantId?: Prisma.SortOrder
   ratingAvg?: Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
@@ -339,6 +343,7 @@ export type DishScalarWhereWithAggregatesInput = {
   price?: Prisma.FloatNullableWithAggregatesFilter<"Dish"> | number | null
   image?: Prisma.StringNullableWithAggregatesFilter<"Dish"> | string | null
   ingredients?: Prisma.StringNullableListFilter<"Dish">
+  tags?: Prisma.StringNullableListFilter<"Dish">
   restaurantId?: Prisma.StringWithAggregatesFilter<"Dish"> | string
   ratingAvg?: Prisma.FloatWithAggregatesFilter<"Dish"> | number
   totalReviews?: Prisma.IntWithAggregatesFilter<"Dish"> | number
@@ -353,13 +358,13 @@ export type DishCreateInput = {
   price?: number | null
   image?: string | null
   ingredients?: Prisma.DishCreateingredientsInput | string[]
+  tags?: Prisma.DishCreatetagsInput | string[]
   ratingAvg?: number
   totalReviews?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   restaurant: Prisma.RestaurantCreateNestedOneWithoutDishesInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutDishInput
-  dishTags?: Prisma.DishTagCreateNestedManyWithoutDishInput
 }
 
 export type DishUncheckedCreateInput = {
@@ -369,13 +374,13 @@ export type DishUncheckedCreateInput = {
   price?: number | null
   image?: string | null
   ingredients?: Prisma.DishCreateingredientsInput | string[]
+  tags?: Prisma.DishCreatetagsInput | string[]
   restaurantId: string
   ratingAvg?: number
   totalReviews?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDishInput
-  dishTags?: Prisma.DishTagUncheckedCreateNestedManyWithoutDishInput
 }
 
 export type DishUpdateInput = {
@@ -385,13 +390,13 @@ export type DishUpdateInput = {
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ingredients?: Prisma.DishUpdateingredientsInput | string[]
+  tags?: Prisma.DishUpdatetagsInput | string[]
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutDishesNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutDishNestedInput
-  dishTags?: Prisma.DishTagUpdateManyWithoutDishNestedInput
 }
 
 export type DishUncheckedUpdateInput = {
@@ -401,13 +406,13 @@ export type DishUncheckedUpdateInput = {
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ingredients?: Prisma.DishUpdateingredientsInput | string[]
+  tags?: Prisma.DishUpdatetagsInput | string[]
   restaurantId?: Prisma.StringFieldUpdateOperationsInput | string
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDishNestedInput
-  dishTags?: Prisma.DishTagUncheckedUpdateManyWithoutDishNestedInput
 }
 
 export type DishCreateManyInput = {
@@ -417,6 +422,7 @@ export type DishCreateManyInput = {
   price?: number | null
   image?: string | null
   ingredients?: Prisma.DishCreateingredientsInput | string[]
+  tags?: Prisma.DishCreatetagsInput | string[]
   restaurantId: string
   ratingAvg?: number
   totalReviews?: number
@@ -431,6 +437,7 @@ export type DishUpdateManyMutationInput = {
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ingredients?: Prisma.DishUpdateingredientsInput | string[]
+  tags?: Prisma.DishUpdatetagsInput | string[]
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -444,6 +451,7 @@ export type DishUncheckedUpdateManyInput = {
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ingredients?: Prisma.DishUpdateingredientsInput | string[]
+  tags?: Prisma.DishUpdatetagsInput | string[]
   restaurantId?: Prisma.StringFieldUpdateOperationsInput | string
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
@@ -466,6 +474,7 @@ export type DishCountOrderByAggregateInput = {
   price?: Prisma.SortOrder
   image?: Prisma.SortOrder
   ingredients?: Prisma.SortOrder
+  tags?: Prisma.SortOrder
   restaurantId?: Prisma.SortOrder
   ratingAvg?: Prisma.SortOrder
   totalReviews?: Prisma.SortOrder
@@ -526,12 +535,11 @@ export type DishNullableScalarRelationFilter = {
   isNot?: Prisma.DishWhereInput | null
 }
 
-export type DishScalarRelationFilter = {
-  is?: Prisma.DishWhereInput
-  isNot?: Prisma.DishWhereInput
+export type DishCreateingredientsInput = {
+  set: string[]
 }
 
-export type DishCreateingredientsInput = {
+export type DishCreatetagsInput = {
   set: string[]
 }
 
@@ -544,6 +552,11 @@ export type NullableFloatFieldUpdateOperationsInput = {
 }
 
 export type DishUpdateingredientsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type DishUpdatetagsInput = {
   set?: string[]
   push?: string | string[]
 }
@@ -622,20 +635,6 @@ export type DishUpdateOneWithoutReviewsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DishUpdateToOneWithWhereWithoutReviewsInput, Prisma.DishUpdateWithoutReviewsInput>, Prisma.DishUncheckedUpdateWithoutReviewsInput>
 }
 
-export type DishCreateNestedOneWithoutDishTagsInput = {
-  create?: Prisma.XOR<Prisma.DishCreateWithoutDishTagsInput, Prisma.DishUncheckedCreateWithoutDishTagsInput>
-  connectOrCreate?: Prisma.DishCreateOrConnectWithoutDishTagsInput
-  connect?: Prisma.DishWhereUniqueInput
-}
-
-export type DishUpdateOneRequiredWithoutDishTagsNestedInput = {
-  create?: Prisma.XOR<Prisma.DishCreateWithoutDishTagsInput, Prisma.DishUncheckedCreateWithoutDishTagsInput>
-  connectOrCreate?: Prisma.DishCreateOrConnectWithoutDishTagsInput
-  upsert?: Prisma.DishUpsertWithoutDishTagsInput
-  connect?: Prisma.DishWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.DishUpdateToOneWithWhereWithoutDishTagsInput, Prisma.DishUpdateWithoutDishTagsInput>, Prisma.DishUncheckedUpdateWithoutDishTagsInput>
-}
-
 export type DishCreateWithoutRestaurantInput = {
   id?: string
   name: string
@@ -643,12 +642,12 @@ export type DishCreateWithoutRestaurantInput = {
   price?: number | null
   image?: string | null
   ingredients?: Prisma.DishCreateingredientsInput | string[]
+  tags?: Prisma.DishCreatetagsInput | string[]
   ratingAvg?: number
   totalReviews?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.ReviewCreateNestedManyWithoutDishInput
-  dishTags?: Prisma.DishTagCreateNestedManyWithoutDishInput
 }
 
 export type DishUncheckedCreateWithoutRestaurantInput = {
@@ -658,12 +657,12 @@ export type DishUncheckedCreateWithoutRestaurantInput = {
   price?: number | null
   image?: string | null
   ingredients?: Prisma.DishCreateingredientsInput | string[]
+  tags?: Prisma.DishCreatetagsInput | string[]
   ratingAvg?: number
   totalReviews?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDishInput
-  dishTags?: Prisma.DishTagUncheckedCreateNestedManyWithoutDishInput
 }
 
 export type DishCreateOrConnectWithoutRestaurantInput = {
@@ -702,6 +701,7 @@ export type DishScalarWhereInput = {
   price?: Prisma.FloatNullableFilter<"Dish"> | number | null
   image?: Prisma.StringNullableFilter<"Dish"> | string | null
   ingredients?: Prisma.StringNullableListFilter<"Dish">
+  tags?: Prisma.StringNullableListFilter<"Dish">
   restaurantId?: Prisma.StringFilter<"Dish"> | string
   ratingAvg?: Prisma.FloatFilter<"Dish"> | number
   totalReviews?: Prisma.IntFilter<"Dish"> | number
@@ -716,12 +716,12 @@ export type DishCreateWithoutReviewsInput = {
   price?: number | null
   image?: string | null
   ingredients?: Prisma.DishCreateingredientsInput | string[]
+  tags?: Prisma.DishCreatetagsInput | string[]
   ratingAvg?: number
   totalReviews?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   restaurant: Prisma.RestaurantCreateNestedOneWithoutDishesInput
-  dishTags?: Prisma.DishTagCreateNestedManyWithoutDishInput
 }
 
 export type DishUncheckedCreateWithoutReviewsInput = {
@@ -731,12 +731,12 @@ export type DishUncheckedCreateWithoutReviewsInput = {
   price?: number | null
   image?: string | null
   ingredients?: Prisma.DishCreateingredientsInput | string[]
+  tags?: Prisma.DishCreatetagsInput | string[]
   restaurantId: string
   ratingAvg?: number
   totalReviews?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  dishTags?: Prisma.DishTagUncheckedCreateNestedManyWithoutDishInput
 }
 
 export type DishCreateOrConnectWithoutReviewsInput = {
@@ -762,12 +762,12 @@ export type DishUpdateWithoutReviewsInput = {
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ingredients?: Prisma.DishUpdateingredientsInput | string[]
+  tags?: Prisma.DishUpdatetagsInput | string[]
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutDishesNestedInput
-  dishTags?: Prisma.DishTagUpdateManyWithoutDishNestedInput
 }
 
 export type DishUncheckedUpdateWithoutReviewsInput = {
@@ -777,88 +777,12 @@ export type DishUncheckedUpdateWithoutReviewsInput = {
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ingredients?: Prisma.DishUpdateingredientsInput | string[]
+  tags?: Prisma.DishUpdatetagsInput | string[]
   restaurantId?: Prisma.StringFieldUpdateOperationsInput | string
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dishTags?: Prisma.DishTagUncheckedUpdateManyWithoutDishNestedInput
-}
-
-export type DishCreateWithoutDishTagsInput = {
-  id?: string
-  name: string
-  description?: string | null
-  price?: number | null
-  image?: string | null
-  ingredients?: Prisma.DishCreateingredientsInput | string[]
-  ratingAvg?: number
-  totalReviews?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  restaurant: Prisma.RestaurantCreateNestedOneWithoutDishesInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutDishInput
-}
-
-export type DishUncheckedCreateWithoutDishTagsInput = {
-  id?: string
-  name: string
-  description?: string | null
-  price?: number | null
-  image?: string | null
-  ingredients?: Prisma.DishCreateingredientsInput | string[]
-  restaurantId: string
-  ratingAvg?: number
-  totalReviews?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDishInput
-}
-
-export type DishCreateOrConnectWithoutDishTagsInput = {
-  where: Prisma.DishWhereUniqueInput
-  create: Prisma.XOR<Prisma.DishCreateWithoutDishTagsInput, Prisma.DishUncheckedCreateWithoutDishTagsInput>
-}
-
-export type DishUpsertWithoutDishTagsInput = {
-  update: Prisma.XOR<Prisma.DishUpdateWithoutDishTagsInput, Prisma.DishUncheckedUpdateWithoutDishTagsInput>
-  create: Prisma.XOR<Prisma.DishCreateWithoutDishTagsInput, Prisma.DishUncheckedCreateWithoutDishTagsInput>
-  where?: Prisma.DishWhereInput
-}
-
-export type DishUpdateToOneWithWhereWithoutDishTagsInput = {
-  where?: Prisma.DishWhereInput
-  data: Prisma.XOR<Prisma.DishUpdateWithoutDishTagsInput, Prisma.DishUncheckedUpdateWithoutDishTagsInput>
-}
-
-export type DishUpdateWithoutDishTagsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ingredients?: Prisma.DishUpdateingredientsInput | string[]
-  ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
-  totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutDishesNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutDishNestedInput
-}
-
-export type DishUncheckedUpdateWithoutDishTagsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ingredients?: Prisma.DishUpdateingredientsInput | string[]
-  restaurantId?: Prisma.StringFieldUpdateOperationsInput | string
-  ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
-  totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDishNestedInput
 }
 
 export type DishCreateManyRestaurantInput = {
@@ -868,6 +792,7 @@ export type DishCreateManyRestaurantInput = {
   price?: number | null
   image?: string | null
   ingredients?: Prisma.DishCreateingredientsInput | string[]
+  tags?: Prisma.DishCreatetagsInput | string[]
   ratingAvg?: number
   totalReviews?: number
   createdAt?: Date | string
@@ -881,12 +806,12 @@ export type DishUpdateWithoutRestaurantInput = {
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ingredients?: Prisma.DishUpdateingredientsInput | string[]
+  tags?: Prisma.DishUpdatetagsInput | string[]
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.ReviewUpdateManyWithoutDishNestedInput
-  dishTags?: Prisma.DishTagUpdateManyWithoutDishNestedInput
 }
 
 export type DishUncheckedUpdateWithoutRestaurantInput = {
@@ -896,12 +821,12 @@ export type DishUncheckedUpdateWithoutRestaurantInput = {
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ingredients?: Prisma.DishUpdateingredientsInput | string[]
+  tags?: Prisma.DishUpdatetagsInput | string[]
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDishNestedInput
-  dishTags?: Prisma.DishTagUncheckedUpdateManyWithoutDishNestedInput
 }
 
 export type DishUncheckedUpdateManyWithoutRestaurantInput = {
@@ -911,6 +836,7 @@ export type DishUncheckedUpdateManyWithoutRestaurantInput = {
   price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ingredients?: Prisma.DishUpdateingredientsInput | string[]
+  tags?: Prisma.DishUpdatetagsInput | string[]
   ratingAvg?: Prisma.FloatFieldUpdateOperationsInput | number
   totalReviews?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -924,12 +850,10 @@ export type DishUncheckedUpdateManyWithoutRestaurantInput = {
 
 export type DishCountOutputType = {
   reviews: number
-  dishTags: number
 }
 
 export type DishCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reviews?: boolean | DishCountOutputTypeCountReviewsArgs
-  dishTags?: boolean | DishCountOutputTypeCountDishTagsArgs
 }
 
 /**
@@ -949,13 +873,6 @@ export type DishCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.ReviewWhereInput
 }
 
-/**
- * DishCountOutputType without action
- */
-export type DishCountOutputTypeCountDishTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DishTagWhereInput
-}
-
 
 export type DishSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -964,6 +881,7 @@ export type DishSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   price?: boolean
   image?: boolean
   ingredients?: boolean
+  tags?: boolean
   restaurantId?: boolean
   ratingAvg?: boolean
   totalReviews?: boolean
@@ -971,7 +889,6 @@ export type DishSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   restaurant?: boolean | Prisma.RestaurantDefaultArgs<ExtArgs>
   reviews?: boolean | Prisma.Dish$reviewsArgs<ExtArgs>
-  dishTags?: boolean | Prisma.Dish$dishTagsArgs<ExtArgs>
   _count?: boolean | Prisma.DishCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["dish"]>
 
@@ -982,6 +899,7 @@ export type DishSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   price?: boolean
   image?: boolean
   ingredients?: boolean
+  tags?: boolean
   restaurantId?: boolean
   ratingAvg?: boolean
   totalReviews?: boolean
@@ -997,6 +915,7 @@ export type DishSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   price?: boolean
   image?: boolean
   ingredients?: boolean
+  tags?: boolean
   restaurantId?: boolean
   ratingAvg?: boolean
   totalReviews?: boolean
@@ -1012,6 +931,7 @@ export type DishSelectScalar = {
   price?: boolean
   image?: boolean
   ingredients?: boolean
+  tags?: boolean
   restaurantId?: boolean
   ratingAvg?: boolean
   totalReviews?: boolean
@@ -1019,11 +939,10 @@ export type DishSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DishOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "image" | "ingredients" | "restaurantId" | "ratingAvg" | "totalReviews" | "createdAt" | "updatedAt", ExtArgs["result"]["dish"]>
+export type DishOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "image" | "ingredients" | "tags" | "restaurantId" | "ratingAvg" | "totalReviews" | "createdAt" | "updatedAt", ExtArgs["result"]["dish"]>
 export type DishInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   restaurant?: boolean | Prisma.RestaurantDefaultArgs<ExtArgs>
   reviews?: boolean | Prisma.Dish$reviewsArgs<ExtArgs>
-  dishTags?: boolean | Prisma.Dish$dishTagsArgs<ExtArgs>
   _count?: boolean | Prisma.DishCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DishIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1038,7 +957,6 @@ export type $DishPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     restaurant: Prisma.$RestaurantPayload<ExtArgs>
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
-    dishTags: Prisma.$DishTagPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1047,6 +965,7 @@ export type $DishPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     price: number | null
     image: string | null
     ingredients: string[]
+    tags: string[]
     restaurantId: string
     ratingAvg: number
     totalReviews: number
@@ -1448,7 +1367,6 @@ export interface Prisma__DishClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   restaurant<T extends Prisma.RestaurantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RestaurantDefaultArgs<ExtArgs>>): Prisma.Prisma__RestaurantClient<runtime.Types.Result.GetResult<Prisma.$RestaurantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   reviews<T extends Prisma.Dish$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Dish$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  dishTags<T extends Prisma.Dish$dishTagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Dish$dishTagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DishTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1484,6 +1402,7 @@ export interface DishFieldRefs {
   readonly price: Prisma.FieldRef<"Dish", 'Float'>
   readonly image: Prisma.FieldRef<"Dish", 'String'>
   readonly ingredients: Prisma.FieldRef<"Dish", 'String[]'>
+  readonly tags: Prisma.FieldRef<"Dish", 'String[]'>
   readonly restaurantId: Prisma.FieldRef<"Dish", 'String'>
   readonly ratingAvg: Prisma.FieldRef<"Dish", 'Float'>
   readonly totalReviews: Prisma.FieldRef<"Dish", 'Int'>
@@ -1911,30 +1830,6 @@ export type Dish$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[]
-}
-
-/**
- * Dish.dishTags
- */
-export type Dish$dishTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the DishTag
-   */
-  select?: Prisma.DishTagSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the DishTag
-   */
-  omit?: Prisma.DishTagOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DishTagInclude<ExtArgs> | null
-  where?: Prisma.DishTagWhereInput
-  orderBy?: Prisma.DishTagOrderByWithRelationInput | Prisma.DishTagOrderByWithRelationInput[]
-  cursor?: Prisma.DishTagWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DishTagScalarFieldEnum | Prisma.DishTagScalarFieldEnum[]
 }
 
 /**

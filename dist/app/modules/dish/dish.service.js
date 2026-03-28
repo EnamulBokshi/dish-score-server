@@ -73,16 +73,6 @@ const getDishes = async (query) => {
                 state: true,
             },
         },
-        dishTags: {
-            select: {
-                tag: {
-                    select: {
-                        id: true,
-                        name: true,
-                    },
-                },
-            },
-        },
         reviews: {
             select: {
                 id: true,
@@ -113,16 +103,6 @@ const getDishById = async (id) => {
                     state: true,
                 },
             },
-            dishTags: {
-                select: {
-                    tag: {
-                        select: {
-                            id: true,
-                            name: true,
-                        },
-                    },
-                },
-            },
             reviews: {
                 select: {
                     id: true,
@@ -139,7 +119,7 @@ const getDishById = async (id) => {
 };
 const getDishesByUserId = async (userId, query) => {
     const queryBuilder = new QueryBuilder(prisma.dish, query, {
-        searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "dishTags.tag.name", "ingredients", "price", "ratingAvg"],
+        searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "tags", "ingredients", "price", "ratingAvg"],
         filterableFields: ["name", "restaurantId", "price", "ratingAvg"],
     });
     const result = await queryBuilder
@@ -158,16 +138,6 @@ const getDishesByUserId = async (userId, query) => {
                 name: true,
                 city: true,
                 state: true,
-            },
-        },
-        dishTags: {
-            select: {
-                tag: {
-                    select: {
-                        id: true,
-                        name: true,
-                    },
-                },
             },
         },
         reviews: {

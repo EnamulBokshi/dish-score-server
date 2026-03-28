@@ -21,6 +21,7 @@ const updateReviewSchema = z.object({
     .max(5, "Rating must be at most 5")
     .optional(),
   comment: z.string().optional(),
+  images: z.array(z.string()).optional(),
   tags: z.array(z.string().min(1, "Tag cannot be empty")).optional(),
 });
 

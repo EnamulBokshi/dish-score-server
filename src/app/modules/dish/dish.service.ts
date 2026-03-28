@@ -75,7 +75,7 @@ const getDishes = async (query: IQueryParams) => {
     prisma.dish,
     query,
     {
-      searchableFields: ["name", "description", "restaurant.name"],
+      searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "tags", "ingredients", "price", "ratingAvg"],
       filterableFields: ["name", "restaurantId", "price", "ratingAvg"],
     },
   );
@@ -95,16 +95,6 @@ const getDishes = async (query: IQueryParams) => {
           name: true,
           city: true,
           state: true,
-        },
-      },
-      dishTags: {
-        select: {
-          tag: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
         },
       },
       reviews: {
@@ -139,16 +129,6 @@ const getDishById = async (id: string) => {
           state: true,
         },
       },
-      dishTags: {
-        select: {
-          tag: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
       reviews: {
         select: {
           id: true,
@@ -171,7 +151,7 @@ const getDishesByUserId = async (userId: string, query: IQueryParams) => {
     prisma.dish,
     query,
     {
-      searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "dishTags.tag.name", "ingredients", "price", "ratingAvg"],
+      searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "tags", "ingredients", "price", "ratingAvg"],
       filterableFields: ["name", "restaurantId", "price", "ratingAvg" ],
     },
   );
@@ -192,16 +172,6 @@ const getDishesByUserId = async (userId: string, query: IQueryParams) => {
           name: true,
           city: true,
           state: true,
-        },
-      },
-      dishTags: {
-        select: {
-          tag: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
         },
       },
       reviews: {

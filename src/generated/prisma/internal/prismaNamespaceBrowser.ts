@@ -62,11 +62,7 @@ export const ModelName = {
   OwnerProfile: 'OwnerProfile',
   ReviewerProfile: 'ReviewerProfile',
   Restaurant: 'Restaurant',
-  Review: 'Review',
-  Tag: 'Tag',
-  DishTag: 'DishTag',
-  RestaurantTag: 'RestaurantTag',
-  ReviewTag: 'ReviewTag'
+  Review: 'Review'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -187,6 +183,7 @@ export const DishScalarFieldEnum = {
   price: 'price',
   image: 'image',
   ingredients: 'ingredients',
+  tags: 'tags',
   restaurantId: 'restaurantId',
   ratingAvg: 'ratingAvg',
   totalReviews: 'totalReviews',
@@ -246,6 +243,7 @@ export const RestaurantScalarFieldEnum = {
   state: 'state',
   road: 'road',
   location: 'location',
+  tags: 'tags',
   createdByUserId: 'createdByUserId',
   contact: 'contact',
   images: 'images',
@@ -266,6 +264,7 @@ export const ReviewScalarFieldEnum = {
   comment: 'comment',
   images: 'images',
   userId: 'userId',
+  tags: 'tags',
   restaurantId: 'restaurantId',
   dishId: 'dishId',
   createdAt: 'createdAt',
@@ -273,38 +272,6 @@ export const ReviewScalarFieldEnum = {
 } as const
 
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
-
-
-export const TagScalarFieldEnum = {
-  id: 'id',
-  name: 'name'
-} as const
-
-export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
-
-
-export const DishTagScalarFieldEnum = {
-  dishId: 'dishId',
-  tagId: 'tagId'
-} as const
-
-export type DishTagScalarFieldEnum = (typeof DishTagScalarFieldEnum)[keyof typeof DishTagScalarFieldEnum]
-
-
-export const RestaurantTagScalarFieldEnum = {
-  restaurantId: 'restaurantId',
-  tagId: 'tagId'
-} as const
-
-export type RestaurantTagScalarFieldEnum = (typeof RestaurantTagScalarFieldEnum)[keyof typeof RestaurantTagScalarFieldEnum]
-
-
-export const ReviewTagScalarFieldEnum = {
-  reviewId: 'reviewId',
-  tagId: 'tagId'
-} as const
-
-export type ReviewTagScalarFieldEnum = (typeof ReviewTagScalarFieldEnum)[keyof typeof ReviewTagScalarFieldEnum]
 
 
 export const SortOrder = {

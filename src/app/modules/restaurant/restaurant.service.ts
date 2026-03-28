@@ -47,27 +47,12 @@ const assertCanModifyRestaurant = async (restaurantId: string, requester: IResta
 
 
 const createRestaurant = async (payload: ICreateRestaurantPayload, createdByUserId: string) => {
-    const { tagIds, ...restaurantData } = payload;
-
-    const restaurant = await prisma.restaurant.create({
+    return await prisma.restaurant.create({
         data: {
-            ...restaurantData,
+            ...payload,
             createdByUserId,
         }
     });
-
-    // Create restaurant tags if tagIds are provided
-    if (tagIds && tagIds.length > 0) {
-        await prisma.restaurantTag.createMany({
-            data: tagIds.map(tagId => ({
-                restaurantId: restaurant.id,
-                tagId,
-            })),
-            skipDuplicates: true,
-        });
-    }
-
-    return restaurant;
 }
 
 
@@ -251,10 +236,8 @@ const getRestaurantById = async (id: string) => {
 const updateRestaurant = async (id: string, payload: Partial<ICreateRestaurantPayload>, requester: IRestaurantRequester) => {
     await assertCanModifyRestaurant(id, requester);
 
-    const { tagIds, ...restaurantData } = payload;
-
     // If new images are provided, delete old images from Cloudinary
-    if (restaurantData.images && restaurantData.images.length > 0) {
+    if (payload.images && payload.images.length > 0) {
         const existingRestaurant = await prisma.restaurant.findFirst({
             where: { id },
             select: { images: true },
@@ -276,31 +259,10 @@ const updateRestaurant = async (id: string, payload: Partial<ICreateRestaurantPa
         }
     }
 
-    const updatedRestaurant = await prisma.restaurant.update({
+    return await prisma.restaurant.update({
         where: { id },
-        data: restaurantData
+        data: payload
     });
-
-    // Update tags if tagIds are provided
-    if (tagIds) {
-        // Delete existing tags
-        await prisma.restaurantTag.deleteMany({
-            where: { restaurantId: id },
-        });
-
-        // Create new tags
-        if (tagIds.length > 0) {
-            await prisma.restaurantTag.createMany({
-                data: tagIds.map(tagId => ({
-                    restaurantId: id,
-                    tagId,
-                })),
-                skipDuplicates: true,
-            });
-        }
-    }
-
-    return updatedRestaurant;
 }
 
 const softDeleteRestaurant = async (id: string, requester: IRestaurantRequester) => {
