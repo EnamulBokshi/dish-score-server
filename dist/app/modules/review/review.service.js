@@ -94,8 +94,8 @@ const createReview = async (payload, requester) => {
 };
 const getReviews = async (query) => {
     const queryBuilder = new QueryBuilder(prisma.review, query, {
-        searchableFields: ["comment", "user.name", "restaurant.name", "dish.name"],
-        filterableFields: ["restaurantId", "dishId", "userId", "rating"],
+        searchableFields: ["comment", "user.name", "restaurant.name", "dish.name", "tags", "rating", "createdAt"],
+        filterableFields: ["restaurantId", "dishId", "userId", "rating", "createdAt"],
     });
     const result = await queryBuilder
         .search()
@@ -148,8 +148,8 @@ const getReviewsByUserId = async (userId, query) => {
         throw new AppError(status.NOT_FOUND, "User not found");
     }
     const queryBuilder = new QueryBuilder(prisma.review, query, {
-        searchableFields: ["comment", "restaurant.name", "dish.name", "likes.user.name", 'tags'],
-        filterableFields: ["restaurantId", "dishId", "rating"],
+        searchableFields: ["comment", "restaurant.name", "dish.name", "likes.user.name", 'tags', "rating", "createdAt"],
+        filterableFields: ["restaurantId", "dishId", "rating", "createdAt"],
     });
     const result = await queryBuilder
         .search()

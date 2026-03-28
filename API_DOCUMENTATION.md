@@ -657,7 +657,97 @@ Allowed status values:
 - `IN_PROGRESS`
 - `RESOLVED`
 
-## 13. Quick Endpoint Summary
+## 13. Stats API
+
+Base path: `/stats`
+
+### 13.1 Get Dashboard Stats
+- Method: `GET`
+- Path: `/stats`
+- Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
+
+Behavior:
+- Returns role-specific dashboard data.
+- `ADMIN` and `SUPER_ADMIN` receive platform-wide summary and chart datasets.
+- `OWNER` receives owner-scoped dish/rating insights.
+- `CONSUMER` receives reviewer-focused review/like insights.
+
+## 14. Unified Create API (Restaurant + Dish + Review)
+
+Base path: `/unified`
+
+### 14.1 Create Restaurant, Dish, and Review in One Transaction
+- Method: `POST`
+- Path: `/unified/create-all`
+- Auth:  `CONSUMER`
+- Content-Type: `multipart/form-data`
+
+Behavior:
+- Creates records in order: `Restaurant -> Dish -> Review`.
+- Uses one Prisma transaction, so if any step fails, all are rolled back.
+
+#### Form-data fields
+- `data` (text, JSON string)
+- `restaurantImages` (file, multiple)
+- `dishImages` (file, multiple)
+- `reviewImages` (file, multiple)
+
+#### `data` JSON example
+
+```json
+{
+  "restaurant": {
+    "data": {
+      "name": "Food Hub",
+      "description": "Family restaurant",
+      "address": "Road 12, House 3",
+      "city": "Dhaka",
+      "state": "Dhaka",
+      "road": "Dhanmondi 12",
+      "location": {
+        "lat": "23.746",
+        "lng": "90.376"
+      },
+      "contact": "01800000000",
+      "tags": ["family", "bbq"]
+    }
+  },
+  "dish": {
+    "data": {
+      "name": "Chicken Burger",
+      "description": "Spicy grilled burger",
+      "price": 249,
+      "ingredients": ["chicken", "bun", "lettuce"],
+      "tags": ["spicy", "popular"]
+    }
+  },
+  "review": {
+    "data": {
+      "rating": 5,
+      "comment": "Excellent combo",
+      "tags": ["must-try"]
+    }
+  }
+}
+```
+
+#### Postman quick setup
+- Method: `POST`
+- URL: `{{baseUrl}}/api/v1/unified/create-all`
+- Authorization/Cookies: same as your protected endpoints
+- Body: `form-data`
+- Add one text key:
+  - `data` -> paste the JSON above as plain text
+- Add file keys:
+  - `restaurantImages` -> select one or more files
+  - `dishImages` -> select one or more files
+  - `reviewImages` -> select one or more files
+
+Notes:
+- `dishImages` first file is used as `dish.image`.
+- If no files are provided for a section, corresponding payload image arrays are used if present.
+
+## 15. Quick Endpoint Summary
 
 ### Users/Admins
 - `POST /users/admins`
@@ -715,3 +805,9 @@ Allowed status values:
 - `GET /contact-us`
 - `GET /contact-us/:id`
 - `PATCH /contact-us/:id/status`
+
+### Stats
+- `GET /stats`
+
+### Unified
+- `POST /unified/create-all`

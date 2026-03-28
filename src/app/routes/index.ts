@@ -7,6 +7,8 @@ import { restaurantRoute } from "../modules/restaurant/restaurant.route";
 import { authRoute } from "../modules/auth/auth.route";
 import { likeRoute } from "../modules/like/like.route";
 import { contactRoute } from "../modules/contact/contact.route";
+import { statsRoute } from "../modules/stats/stats.route";
+import { unifiedRoute } from "../modules/unified/unified.route";
 
 const router =  Router();
 
@@ -18,6 +20,8 @@ router.use("/dishes", dishRoute);
 router.use("/reviews", reviewRoute);
 router.use("/likes", likeRoute);
 router.use("/contact-us", contactRoute);
+router.use("/stats", statsRoute);
+router.use("/unified", unifiedRoute);
 
  const IndexRoute = router;
  export default IndexRoute;

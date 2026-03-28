@@ -21,35 +21,6 @@ const updateAdminSchema = z.object({
 });
 
 
-/*
-model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-
-  likes         Like[]
-  reviews     Review[]
-  restaurants   Restaurant[]
-  admin              Admin?
-  ownerProfile       OwnerProfile?
-  reviewerProfile    ReviewerProfile?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          UserRole  @default(CONSUMER)
-  status       UserStatus @default(ACTIVE)
-  isDeleted     Boolean   @default(false)
-  deletedAt     DateTime?
-  sessions      Session[]
-  accounts      Account[]
-
-  @@unique([email])
-  @@map("user")
-  @@index([email])
-}
-*/
-
 const userUpdateSchema = z.object({
     name: z.string().min(1, "Name is required").optional(),
     image: z.url("Invalid image URL").optional(),
