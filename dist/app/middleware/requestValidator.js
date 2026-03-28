@@ -6,7 +6,7 @@ const requestValidator = (zodSchema) => {
         }
         const parsedResult = zodSchema.safeParse(req.body);
         if (!parsedResult.success) {
-            next(parsedResult.error);
+            return next(parsedResult.error);
         }
         req.body = parsedResult.data;
         console.log("Validated doctor creation data:", req.body);

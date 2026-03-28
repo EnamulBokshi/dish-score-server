@@ -16,6 +16,7 @@ router.post(
   ReviewController.createReview,
 );
 router.get("/", ReviewController.getReviews);
+router.get("/:id", ReviewController.getReviewById);
 
 router.patch(
   "/:id",

@@ -14,7 +14,8 @@ const setAccessTokenCookie = (res, token) => {
         httpOnly: true,
         secure: env.NODE_ENV === "production",
         sameSite: "none",
-        maxAge: env.ACCESS_TOKEN_EXPIRES_IN,
+        // Express cookie maxAge expects milliseconds.
+        maxAge: env.ACCESS_TOKEN_EXPIRES_IN * 1000,
         path: "/"
     });
 };
@@ -24,7 +25,7 @@ const setRefreshTokenCookie = (res, token) => {
         secure: env.NODE_ENV === "production",
         sameSite: "none",
         // 7d
-        maxAge: env.REFRESH_TOKEN_EXPIRES_IN,
+        maxAge: env.REFRESH_TOKEN_EXPIRES_IN * 1000,
         path: "/"
     });
 };
@@ -33,7 +34,7 @@ const setBetterAuthSessionCookie = (res, token) => {
         httpOnly: true,
         secure: env.NODE_ENV === "production",
         sameSite: "none",
-        maxAge: env.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN,
+        maxAge: env.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN * 1000,
         path: "/"
     });
 };

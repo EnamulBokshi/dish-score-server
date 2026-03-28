@@ -34,6 +34,18 @@ const getReviews = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getReviewById = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await ReviewService.getReviewById(id as string);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    data: result,
+    message: "Review retrieved successfully",
+  });
+});
+
 const getReviewsByUserId = catchAsync(async (req: Request, res: Response) => {
   const userId = req.params.userId;
   const query = req.query;
@@ -128,6 +140,7 @@ const deleteMyReview = catchAsync(async (req: Request, res: Response) => {
 export const ReviewController = {
   createReview,
   getReviews,
+  getReviewById,
   getReviewsByUserId,
   getMyReviews,
   updateReview,

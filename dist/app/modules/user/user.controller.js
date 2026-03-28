@@ -3,7 +3,7 @@ import { UserRole } from "../../../generated/prisma/enums";
 import catchAsync from "../../helpers/catchAsync";
 import AppError from "../../helpers/errorHelpers/AppError";
 import { sendResponse } from "../../helpers/sendResponse";
-import { adminService } from "./user.service";
+import { UserServices } from "./user.service";
 import { tokenUtils } from "../../utils/token";
 const createAdmin = catchAsync(async (req, res) => {
     const requesterRole = req.user?.role;
@@ -11,7 +11,8 @@ const createAdmin = catchAsync(async (req, res) => {
         throw new AppError(status.FORBIDDEN, "Only admin or super admin can create an admin");
     }
     const payload = req.body;
-    const result = await adminService.createAdmin(payload);
+    const profilePhoto = req.file?.path;
+    const result = await UserServices.createAdmin({ ...payload, ...(profilePhoto && { profilePhoto }) });
     tokenUtils.setAccessTokenCookie(res, result.accessToken);
     tokenUtils.setRefreshTokenCookie(res, result.refreshToken);
     tokenUtils.setBetterAuthSessionCookie(res, result.token);
@@ -24,7 +25,7 @@ const createAdmin = catchAsync(async (req, res) => {
 });
 const getAdminByUserId = catchAsync(async (req, res) => {
     const userId = req.params.userId || req.params.id;
-    const result = await adminService.getAdminByUserId(userId);
+    const result = await UserServices.getAdminByUserId(userId);
     sendResponse(res, {
         httpStatusCode: 200,
         success: true,
@@ -35,7 +36,8 @@ const getAdminByUserId = catchAsync(async (req, res) => {
 const updateAdmin = catchAsync(async (req, res) => {
     const userId = req.params.userId || req.params.id;
     const payload = req.body;
-    const result = await adminService.updateAdmin(userId, payload);
+    const profilePhoto = req.file?.path;
+    const result = await UserServices.updateAdmin(userId, { ...payload, ...(profilePhoto && { profilePhoto }) });
     sendResponse(res, {
         httpStatusCode: 200,
         success: true,
@@ -45,7 +47,7 @@ const updateAdmin = catchAsync(async (req, res) => {
 });
 const getAllUsers = catchAsync(async (req, res) => {
     const query = req.query;
-    const result = await adminService.getAllUsers(query);
+    const result = await UserServices.getAllUsers(query);
     sendResponse(res, {
         httpStatusCode: 200,
         success: true,
@@ -56,7 +58,7 @@ const getAllUsers = catchAsync(async (req, res) => {
 });
 const deleteAdmin = catchAsync(async (req, res) => {
     const userId = req.params.userId || req.params.id;
-    const result = await adminService.deleteAdmin(userId);
+    const result = await UserServices.deleteAdmin(userId);
     sendResponse(res, {
         httpStatusCode: 200,
         success: true,
@@ -64,10 +66,48 @@ const deleteAdmin = catchAsync(async (req, res) => {
         message: "Admin deleted successfully"
     });
 });
+const getUserById = catchAsync(async (req, res) => {
+    const userId = req.params.userId || req.params.id;
+    const result = await UserServices.getUserById(userId);
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "User retrieved successfully"
+    });
+});
+const updateUser = catchAsync(async (req, res) => {
+    const userId = req.params.userId || req.params.id;
+    const payload = req.body.data ? JSON.parse(req.body.data) : req.body;
+    const profilePhoto = req.file?.path;
+    const result = await UserServices.updateUser(userId, {
+        ...payload,
+        ...(profilePhoto && { image: profilePhoto }),
+    });
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "User updated successfully"
+    });
+});
+const deleteUser = catchAsync(async (req, res) => {
+    const userId = req.params.userId || req.params.id;
+    const result = await UserServices.deleteUser(userId);
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "User deleted successfully"
+    });
+});
 export const userController = {
     createAdmin,
     getAdminByUserId,
     updateAdmin,
     getAllUsers,
-    deleteAdmin
+    deleteAdmin,
+    getUserById,
+    updateUser,
+    deleteUser,
 };

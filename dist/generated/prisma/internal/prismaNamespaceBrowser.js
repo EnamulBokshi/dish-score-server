@@ -44,10 +44,13 @@ export const ModelName = {
     Session: 'Session',
     Account: 'Account',
     Verification: 'Verification',
+    ContactUs: 'ContactUs',
     Dish: 'Dish',
     Tag: 'Tag',
     DishTag: 'DishTag',
     Like: 'Like',
+    OwnerProfile: 'OwnerProfile',
+    ReviewerProfile: 'ReviewerProfile',
     Restaurant: 'Restaurant',
     Review: 'Review'
 };
@@ -119,6 +122,18 @@ export const VerificationScalarFieldEnum = {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
+export const ContactUsScalarFieldEnum = {
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    phone: 'phone',
+    subject: 'subject',
+    message: 'message',
+    status: 'status',
+    respondedAt: 'respondedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
 export const DishScalarFieldEnum = {
     id: 'id',
     name: 'name',
@@ -144,6 +159,28 @@ export const LikeScalarFieldEnum = {
     userId: 'userId',
     reviewId: 'reviewId',
     createdAt: 'createdAt'
+};
+export const OwnerProfileScalarFieldEnum = {
+    id: 'id',
+    userId: 'userId',
+    businessName: 'businessName',
+    contactNumber: 'contactNumber',
+    verified: 'verified',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const ReviewerProfileScalarFieldEnum = {
+    id: 'id',
+    userId: 'userId',
+    bio: 'bio',
+    totalReviews: 'totalReviews',
+    helpfulVotes: 'helpfulVotes',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 export const RestaurantScalarFieldEnum = {
     id: 'id',

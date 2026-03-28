@@ -16,7 +16,7 @@ router.patch("/me/:id", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole
 router.delete("/me/:id", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER), RestaurantController.softDeleteMyRestaurant);
 router.patch("/:id", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER), multerUpload.array("images"), requestValidator(updateRestaurantSchema), RestaurantController.updateRestaurant);
 router.delete("/:id", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER), RestaurantController.softDeleteRestaurant);
-
+router.get("/:id", RestaurantController.getRestaurantById);
 
 
 export const restaurantRoute = router;

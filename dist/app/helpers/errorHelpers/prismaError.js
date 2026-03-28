@@ -83,7 +83,7 @@ export const handlePrismaClientKnownRequestError = (error) => {
     // Remove the "Invalid `prisma.user.create()` invocation: " part from the message for better readability
     cleanMessage = cleanMessage.replace(/Invalid `.*?` invocation:?\s*/i, "");
     // split by new line and take the first line as the main message, rest can be added to error sources
-    const lines = cleanMessage.split("\n").filter(line => line.trim());
+    const lines = cleanMessage.split("\n").filter((line) => line.trim());
     const mainMessage = lines[0] || "An error occurred with the database operation.";
     const errorSources = [
         {
@@ -108,7 +108,7 @@ export const handlePrismaClientUnknownError = (error) => {
     let cleanMessage = error.message;
     // Remove the "Invalid `prisma.user.create()` invocation: " part from the message for better readability
     cleanMessage = cleanMessage.replace(/Invalid `.*?` invocation:?\s*/i, "");
-    const lines = cleanMessage.split("\n").filter(line => line.trim());
+    const lines = cleanMessage.split("\n").filter((line) => line.trim());
     const mainMessage = lines[0] || "An unknown error occurred with the database operation.";
     const errorSources = [
         {
@@ -127,14 +127,14 @@ export const handlePrismaClientValidationError = (error) => {
     let cleanMessage = error.message;
     // Remove the "Invalid `prisma.user.create()` invocation: " part from the message for better readability
     cleanMessage = cleanMessage.replace(/Invalid `.*?` invocation:?\s*/i, "");
-    const lines = cleanMessage.split("\n").filter(line => line.trim());
+    const lines = cleanMessage.split("\n").filter((line) => line.trim());
     const errorSources = [];
     // extract field name for field-specific validation errors
     // Example message: "Argument `data.email`: Got invalid value `invalid-email` on prisma.user.create()"
     const fieldMatch = cleanMessage.match(/Argument `(\w+)`/i);
     const fieldName = fieldMatch ? fieldMatch[1] : "Unknown Field";
     //main message
-    const mainMessage = lines.find(line => !line.includes("Argument") &&
+    const mainMessage = lines.find((line) => !line.includes("Argument") &&
         !line.includes("→") &&
         line.length > 10) || lines[0] || "Invalid query parameters provided to the database operation.";
     errorSources.push({
@@ -152,7 +152,7 @@ export const handlerPrismaClientInitializationError = (error) => {
     const statusCode = error.errorCode ? getStatusCodeFromPrismaError(error.errorCode) : status.SERVICE_UNAVAILABLE;
     const cleanMessage = error.message;
     cleanMessage.replace(/Invalid `.*?` invocation:?\s*/i, "");
-    const lines = cleanMessage.split("\n").filter(line => line.trim());
+    const lines = cleanMessage.split("\n").filter((line) => line.trim());
     const mainMessage = lines[0] || "An error occurred while initializing the Prisma Client.";
     const errorSources = [
         {

@@ -65,15 +65,29 @@ export const auth = betterAuth({
         emailOTP({
             overrideDefaultEmailVerification: true,
             async sendVerificationOTP({ email, otp, type }) {
-                if (type !== "email-verification") {
-                    return;
-                }
                 const user = await prisma.user.findUnique({
                     where: {
                         email,
                     },
                 });
                 if (!user) {
+                    return;
+                }
+                if (type === "forget-password") {
+                    await sendEmail({
+                        to: email,
+                        subject: "Reset your password OTP - Dish Score",
+                        template: "reset-password-otp",
+                        templateData: {
+                            name: user.name,
+                            otp,
+                            appName: "Dish Score",
+                            expiresInMinutes: 2,
+                        },
+                    });
+                    return;
+                }
+                if (type !== "email-verification") {
                     return;
                 }
                 // Only send registration verification OTP through this template for consumer accounts.
@@ -97,11 +111,11 @@ export const auth = betterAuth({
         })
     ],
     session: {
-        expiresIn: 60 * 60 * 60 * 24 * 1, // 1 day
-        updateAge: 60 * 60 * 60 * 24 * 1, // 1 day
+        expiresIn: env.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN,
+        updateAge: env.BETTER_AUTH_SESSION_TOKEN_UPDATE_AGE,
         cookieCache: {
             enabled: true,
-            maxAge: 60 * 60 * 60 * 24 * 1, // 1 day
+            maxAge: env.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN,
         }
     },
     redirectURLS: {

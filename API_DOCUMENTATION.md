@@ -249,7 +249,16 @@ Rule:
 - Tie-breaker: `totalReviews DESC`
 - Return top `10`
 
-### 7.4 My Restaurant APIs
+### 7.4 Get Restaurant By ID
+- Method: `GET`
+- Path: `/restaurants/:id`
+- Auth: Public
+
+Behavior:
+- Returns single restaurant details by id.
+- Returns `404` if restaurant is not found or is soft-deleted.
+
+### 7.5 My Restaurant APIs
 - Method: `GET`
 - Path: `/restaurants/me`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -273,13 +282,13 @@ Behavior:
 - Soft deletes the specified restaurant if requester has permission.
 - `OWNER` and `CONSUMER` can delete only their own restaurants.
 
-### 7.5 Update Restaurant
+### 7.6 Update Restaurant
 - Method: `PATCH`
 - Path: `/restaurants/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
 - Ownership enforced in service.
 
-### 7.6 Delete Restaurant (Soft)
+### 7.7 Delete Restaurant (Soft)
 - Method: `DELETE`
 - Path: `/restaurants/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -330,7 +339,16 @@ Behavior:
 Common filters:
 - `name`, `restaurantId`, `price`, `ratingAvg`
 
-### 8.3 Get Trending Dishes (Global)
+### 8.3 Get Dish By ID
+- Method: `GET`
+- Path: `/dishes/:id`
+- Auth: Public
+
+Behavior:
+- Returns single dish details by id.
+- Returns `404` if dish is not found or its restaurant is soft-deleted.
+
+### 8.4 Get Trending Dishes (Global)
 - Method: `GET`
 - Path: `/dishes/trending`
 - Auth: Public
@@ -340,7 +358,7 @@ Trending rule:
 - Sort by `totalReviews DESC`, then `ratingAvg DESC`
 - Return top `10`
 
-### 8.4 Get Trending Dishes by Restaurant
+### 8.5 Get Trending Dishes by Restaurant
 - Method: `GET`
 - Path: `/dishes/restaurants/:restaurantId/trending`
 - Auth: Public
@@ -349,7 +367,7 @@ Trending rule:
 - Same rule as global, scoped to one restaurant
 - Returns `404` if restaurant does not exist or is soft-deleted
 
-### 8.5 My Dish APIs
+### 8.6 My Dish APIs
 - Method: `GET`
 - Path: `/dishes/me`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -373,7 +391,7 @@ Behavior:
 - Deletes the specified dish if requester has permission.
 - `OWNER` and `CONSUMER` can delete only dishes under their own restaurants.
 
-### 8.6 Update Dish
+### 8.7 Update Dish
 - Method: `PATCH`
 - Path: `/dishes/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -392,7 +410,7 @@ Request body (all optional):
 Behavior:
 - Returns `400` if `restaurantId` is attempted in payload.
 
-### 8.7 Delete Dish
+### 8.8 Delete Dish
 - Method: `DELETE`
 - Path: `/dishes/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -442,7 +460,16 @@ Behavior:
 Common filters:
 - `restaurantId`, `dishId`, `userId`, `rating`
 
-### 9.3 Get Reviews by User ID
+### 9.3 Get Review By ID
+- Method: `GET`
+- Path: `/reviews/:id`
+- Auth: Public
+
+Behavior:
+- Returns single review details by id.
+- Returns `404` if review is not found.
+
+### 9.4 Get Reviews by User ID
 - Method: `GET`
 - Path: `/reviews/users/:userId`
 - Auth: Public
@@ -450,7 +477,7 @@ Common filters:
 Common filters:
 - `restaurantId`, `dishId`, `rating`
 
-### 9.4 My Review APIs
+### 9.5 My Review APIs
 - Method: `GET`
 - Path: `/reviews/my`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -472,7 +499,7 @@ Behavior:
 Behavior:
 - Deletes the specified review if it belongs to the authenticated user.
 
-### 9.5 Update Review
+### 9.6 Update Review
 - Method: `PATCH`
 - Path: `/reviews/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -490,7 +517,7 @@ Request body (all optional):
 Behavior:
 - Changing `userId`, `restaurantId`, or `dishId` is blocked with `400`.
 
-### 9.6 Delete Review
+### 9.7 Delete Review
 - Method: `DELETE`
 - Path: `/reviews/:id`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -645,6 +672,7 @@ Allowed status values:
 ### Restaurants
 - `POST /restaurants`
 - `GET /restaurants`
+- `GET /restaurants/:id`
 - `GET /restaurants/me`
 - `GET /restaurants/top-rated`
 - `PATCH /restaurants/me/:id`
@@ -655,6 +683,7 @@ Allowed status values:
 ### Dishes
 - `POST /dishes`
 - `GET /dishes`
+- `GET /dishes/:id`
 - `GET /dishes/me`
 - `GET /dishes/trending`
 - `GET /dishes/restaurants/:restaurantId/trending`
@@ -666,6 +695,7 @@ Allowed status values:
 ### Reviews
 - `POST /reviews`
 - `GET /reviews`
+- `GET /reviews/:id`
 - `GET /reviews/users/:userId`
 - `GET /reviews/my`
 - `PATCH /reviews/my/:id`

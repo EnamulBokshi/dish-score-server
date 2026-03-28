@@ -29,6 +29,18 @@ const getDishes = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getDishById = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await DishService.getDishById(id as string);
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    data: result,
+    message: "Dish retrieved successfully",
+  });
+});
+
 const getMyDishes = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
   const result = await DishService.getDishesByUserId(req.user.userId, query);
@@ -130,6 +142,7 @@ const deleteMyDish = catchAsync(async (req: Request, res: Response) => {
 export const DishController = {
   createDish,
   getDishes,
+  getDishById,
   getMyDishes,
   getTrendingDishes,
   getTrendingDishesByRestaurant,

@@ -194,6 +194,45 @@ const getTopRatedRestaurants = async () => {
     return result;
 }
 
+const getRestaurantById = async (id: string) => {
+    const result = await prisma.restaurant.findFirst({
+        where: {
+            id,
+            isDeleted: false,
+        },
+        include: {
+            dishes: {
+                select: {
+                    id: true,
+                    name: true,
+                    description: true,
+                    price: true,
+                    image: true,
+                },
+            },
+            reviews: {
+                select: {
+                    id: true,
+                    rating: true,
+                    comment: true,
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    if (!result) {
+        throw new AppError(status.NOT_FOUND, "Restaurant not found");
+    }
+
+    return result;
+}
+
 const updateRestaurant = async (id: string, payload: Partial<ICreateRestaurantPayload>, requester: IRestaurantRequester) => {
     await assertCanModifyRestaurant(id, requester);
 
@@ -267,4 +306,5 @@ export const RestaurantService = {
     getRestaurants,
     getRestaurantsByUserId,
     getTopRatedRestaurants,
+    getRestaurantById,
 }

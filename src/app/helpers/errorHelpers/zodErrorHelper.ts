@@ -1,5 +1,5 @@
 import z from "zod";
-import { IErrorResponse, IErrorSource } from "../interfaces/error.interface";
+import { IErrorResponse, IErrorSource } from "../../../interfaces/error.interface";
 import status from "http-status";
 
 const zodErrorHelper = (err: z.ZodError):IErrorResponse => {

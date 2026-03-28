@@ -55,6 +55,18 @@ const getTopRatedRestaurants = catchAsync(async(_req: Request, res: Response) =>
     })
 });
 
+const getRestaurantById = catchAsync(async(req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await RestaurantService.getRestaurantById(id as string);
+
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "Restaurant retrieved successfully"
+    })
+});
+
 const updateRestaurant = catchAsync(async(req: Request, res: Response) => {
     const id = req.params.id;
     const payload = req.body;
@@ -121,6 +133,7 @@ export const RestaurantController = {
     getRestaurants,
     getMyRestaurants,
     getTopRatedRestaurants,
+    getRestaurantById,
     updateRestaurant,
     softDeleteRestaurant,
     updateMyRestaurant,

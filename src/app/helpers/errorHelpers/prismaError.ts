@@ -1,6 +1,6 @@
 import status from "http-status"
-import { TErrorResponse, TErrorSources } from "../interfaces/error.interface"
-import { Prisma } from "../generated/prisma/client"
+import { TErrorResponse, TErrorSources } from "../../../interfaces/error.interface"
+import { Prisma } from "../../../generated/prisma/client"
 
 const getStatusCodeFromPrismaError = (errorCode: string): number => {
 
@@ -113,7 +113,7 @@ export const handlePrismaClientKnownRequestError = (error: Prisma.PrismaClientKn
 
     // split by new line and take the first line as the main message, rest can be added to error sources
 
-    const lines = cleanMessage.split("\n").filter(line => line.trim());
+    const lines = cleanMessage.split("\n").filter((line: string) => line.trim());
     const mainMessage = lines[0] || "An error occurred with the database operation."
 
     const errorSources : TErrorSources[] = [
@@ -144,7 +144,7 @@ export const handlePrismaClientUnknownError = (error: Prisma.PrismaClientUnknown
     // Remove the "Invalid `prisma.user.create()` invocation: " part from the message for better readability
     cleanMessage = cleanMessage.replace(/Invalid `.*?` invocation:?\s*/i, "")
 
-    const lines = cleanMessage.split("\n").filter(line => line.trim());
+    const lines = cleanMessage.split("\n").filter((line: string) => line.trim());
     const mainMessage = lines[0] || "An unknown error occurred with the database operation."
 
     const errorSources : TErrorSources[] = [
@@ -168,7 +168,7 @@ export const handlePrismaClientValidationError = (error: Prisma.PrismaClientVali
     // Remove the "Invalid `prisma.user.create()` invocation: " part from the message for better readability
     cleanMessage = cleanMessage.replace(/Invalid `.*?` invocation:?\s*/i, "")
 
-    const lines = cleanMessage.split("\n").filter(line => line.trim());
+    const lines = cleanMessage.split("\n").filter((line: string) => line.trim());
 
     const errorSources : TErrorSources[] = [];
 
@@ -179,7 +179,7 @@ export const handlePrismaClientValidationError = (error: Prisma.PrismaClientVali
 
     //main message
 
-    const mainMessage = lines.find(line => 
+    const mainMessage = lines.find((line: string) => 
         !line.includes("Argument") &&
         !line.includes("→") &&
         line.length > 10
@@ -205,7 +205,7 @@ export const handlerPrismaClientInitializationError = (error: Prisma.PrismaClien
 
     cleanMessage.replace(/Invalid `.*?` invocation:?\s*/i, "")
 
-    const lines = cleanMessage.split("\n").filter(line => line.trim());
+    const lines = cleanMessage.split("\n").filter((line: string) => line.trim());
 
     const mainMessage = lines[0] || "An error occurred while initializing the Prisma Client."
 

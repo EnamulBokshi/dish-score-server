@@ -23,6 +23,7 @@ router.get(
 );
 router.get("/trending", DishController.getTrendingDishes);
 router.get("/restaurants/:restaurantId/trending", DishController.getTrendingDishesByRestaurant);
+router.get("/:id", DishController.getDishById);
 router.patch(
   "/me/:id",
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),

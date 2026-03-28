@@ -292,9 +292,52 @@ const deleteReview = async (id: string, requester: IReviewRequester) => {
   return result;
 };
 
+const getReviewById = async (id: string) => {
+  const result = await prisma.review.findUnique({
+    where: { id },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      restaurant: {
+        select: {
+          id: true,
+          name: true,
+          city: true,
+          state: true,
+        },
+      },
+      dish: {
+        select: {
+          id: true,
+          name: true,
+          restaurantId: true,
+        },
+      },
+      likes: {
+        select: {
+          id: true,
+          userId: true,
+        },
+      },
+    },
+  });
+
+  if (!result) {
+    throw new AppError(status.NOT_FOUND, "Review not found");
+  }
+
+  return result;
+};
+
 export const ReviewService = {
   createReview,
   getReviews,
+  getReviewById,
   getReviewsByUserId,
   updateReview,
   deleteReview,

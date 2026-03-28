@@ -38,6 +38,11 @@ export const LikeStatus = {
     ACTIVE: 'ACTIVE',
     INACTIVE: 'INACTIVE'
 };
+export const ContactMessageStatus = {
+    PENDING: 'PENDING',
+    IN_PROGRESS: 'IN_PROGRESS',
+    RESOLVED: 'RESOLVED'
+};
 export const Gender = {
     MALE: 'MALE',
     FEMALE: 'FEMALE',

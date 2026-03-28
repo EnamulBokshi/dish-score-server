@@ -121,6 +121,50 @@ const getDishes = async (query: IQueryParams) => {
   return result;
 };
 
+const getDishById = async (id: string) => {
+  const result = await prisma.dish.findFirst({
+    where: {
+      id,
+      restaurant: {
+        isDeleted: false,
+      },
+    },
+    include: {
+      restaurant: {
+        select: {
+          id: true,
+          name: true,
+          city: true,
+          state: true,
+        },
+      },
+      dishTags: {
+        select: {
+          tag: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+      reviews: {
+        select: {
+          id: true,
+          rating: true,
+          comment: true,
+        },
+      },
+    },
+  });
+
+  if (!result) {
+    throw new AppError(status.NOT_FOUND, "Dish not found");
+  }
+
+  return result;
+};
+
 const getDishesByUserId = async (userId: string, query: IQueryParams) => {
   const queryBuilder = new QueryBuilder<Dish, Prisma.DishWhereInput, Prisma.DishInclude>(
     prisma.dish,
@@ -340,6 +384,7 @@ const deleteDish = async (id: string, requester: IDishRequester) => {
 export const DishService = {
   createDish,
   getDishes,
+  getDishById,
   getDishesByUserId,
   getTrendingDishes,
   getTrendingDishesByRestaurant,
