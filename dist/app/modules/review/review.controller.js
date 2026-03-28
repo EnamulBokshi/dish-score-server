@@ -48,6 +48,8 @@ const getReviewsByUserId = catchAsync(async (req, res) => {
 });
 const getMyReviews = catchAsync(async (req, res) => {
     const query = req.query;
+    console.log("Getting my reviews with query:", query);
+    console.log("User ID:", req.user.userId);
     const result = await ReviewService.getReviewsByUserId(req.user.userId, query);
     sendResponse(res, {
         httpStatusCode: 200,

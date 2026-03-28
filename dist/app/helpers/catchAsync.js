@@ -8,8 +8,8 @@ const catchAsync = (fn) => {
             res.status(500).json({
                 success: false,
                 data: null,
-                error: error instanceof Error ? error.message : "An unknown error occured",
-                message: "An error occurred while processing the request"
+                message: error instanceof Error ? error.message : "An unknown error occured",
+                error: "An error occurred while processing the request"
             });
         }
     };

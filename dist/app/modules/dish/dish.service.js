@@ -53,7 +53,7 @@ const createDish = async (payload) => {
 };
 const getDishes = async (query) => {
     const queryBuilder = new QueryBuilder(prisma.dish, query, {
-        searchableFields: ["name", "description", "restaurant.name"],
+        searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "tags", "ingredients", "price", "ratingAvg"],
         filterableFields: ["name", "restaurantId", "price", "ratingAvg"],
     });
     const result = await queryBuilder

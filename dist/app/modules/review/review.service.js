@@ -148,7 +148,7 @@ const getReviewsByUserId = async (userId, query) => {
         throw new AppError(status.NOT_FOUND, "User not found");
     }
     const queryBuilder = new QueryBuilder(prisma.review, query, {
-        searchableFields: ["comment", "restaurant.name", "dish.name"],
+        searchableFields: ["comment", "restaurant.name", "dish.name", "likes.user.name", 'tags'],
         filterableFields: ["restaurantId", "dishId", "rating"],
     });
     const result = await queryBuilder

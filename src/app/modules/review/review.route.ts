@@ -16,22 +16,6 @@ router.post(
   ReviewController.createReview,
 );
 router.get("/", ReviewController.getReviews);
-router.get("/:id", ReviewController.getReviewById);
-
-router.patch(
-  "/:id",
-  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
-  multerUpload.array("images", 5),
-  requestValidator(updateReviewSchema),
-  ReviewController.updateReview,
-);
-router.delete(
-  "/:id",
-  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
-  ReviewController.deleteReview,
-);
-
-
 // user specific reviews
 
 router.get(
@@ -51,6 +35,21 @@ router.delete(
   "/my/:id",
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
   ReviewController.deleteMyReview,
+);
+
+router.get("/:id", ReviewController.getReviewById);
+
+router.patch(
+  "/:id",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  multerUpload.array("images", 5),
+  requestValidator(updateReviewSchema),
+  ReviewController.updateReview,
+);
+router.delete(
+  "/:id",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
+  ReviewController.deleteReview,
 );
 
 
