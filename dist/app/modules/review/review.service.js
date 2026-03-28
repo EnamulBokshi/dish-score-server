@@ -53,6 +53,7 @@ const assertCanMutateReview = async (reviewId, requester) => {
     throw new AppError(status.FORBIDDEN, "You can only modify your own reviews");
 };
 const createReview = async (payload, requester) => {
+    const { tagIds, ...reviewData } = payload;
     const restaurant = await prisma.restaurant.findFirst({
         where: {
             id: payload.restaurantId,
@@ -77,14 +78,24 @@ const createReview = async (payload, requester) => {
     }
     const result = await prisma.review.create({
         data: {
-            rating: payload.rating,
-            comment: payload.comment,
-            images: payload.images ?? [],
-            restaurantId: payload.restaurantId,
-            dishId: payload.dishId,
+            rating: reviewData.rating,
+            comment: reviewData.comment,
+            images: reviewData.images ?? [],
+            restaurantId: reviewData.restaurantId,
+            dishId: reviewData.dishId,
             userId: requester.userId,
         },
     });
+    // Create review tags if tagIds are provided
+    if (tagIds && tagIds.length > 0) {
+        await prisma.reviewTag.createMany({
+            data: tagIds.map(tagId => ({
+                reviewId: result.id,
+                tagId,
+            })),
+            skipDuplicates: true,
+        });
+    }
     await recalculateRestaurantRatings(payload.restaurantId);
     if (payload.dishId) {
         await recalculateDishRatings(payload.dishId);
@@ -194,7 +205,8 @@ const updateReview = async (id, payload, requester) => {
     if (payload.userId || payload.restaurantId || payload.dishId) {
         throw new AppError(status.BAD_REQUEST, "Review ownership and target references cannot be changed");
     }
-    if (payload.images && payload.images.length > 0) {
+    const { tagIds, ...reviewData } = payload;
+    if (reviewData.images && reviewData.images.length > 0) {
         const existingReview = await prisma.review.findUnique({
             where: { id },
             select: { images: true },
@@ -207,8 +219,25 @@ const updateReview = async (id, payload, requester) => {
     }
     const result = await prisma.review.update({
         where: { id },
-        data: payload,
+        data: reviewData,
     });
+    // Update tags if tagIds are provided
+    if (tagIds) {
+        // Delete existing tags
+        await prisma.reviewTag.deleteMany({
+            where: { reviewId: id },
+        });
+        // Create new tags
+        if (tagIds.length > 0) {
+            await prisma.reviewTag.createMany({
+                data: tagIds.map(tagId => ({
+                    reviewId: id,
+                    tagId,
+                })),
+                skipDuplicates: true,
+            });
+        }
+    }
     await recalculateRestaurantRatings(review.restaurantId);
     if (review.dishId) {
         await recalculateDishRatings(review.dishId);

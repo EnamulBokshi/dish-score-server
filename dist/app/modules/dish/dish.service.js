@@ -139,7 +139,7 @@ const getDishById = async (id) => {
 };
 const getDishesByUserId = async (userId, query) => {
     const queryBuilder = new QueryBuilder(prisma.dish, query, {
-        searchableFields: ["name", "description", "restaurant.name"],
+        searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "dishTags.tag.name", "ingredients", "price", "ratingAvg"],
         filterableFields: ["name", "restaurantId", "price", "ratingAvg"],
     });
     const result = await queryBuilder

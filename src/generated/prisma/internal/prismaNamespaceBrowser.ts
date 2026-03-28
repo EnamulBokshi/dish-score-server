@@ -58,13 +58,15 @@ export const ModelName = {
   Verification: 'Verification',
   ContactUs: 'ContactUs',
   Dish: 'Dish',
-  Tag: 'Tag',
-  DishTag: 'DishTag',
   Like: 'Like',
   OwnerProfile: 'OwnerProfile',
   ReviewerProfile: 'ReviewerProfile',
   Restaurant: 'Restaurant',
-  Review: 'Review'
+  Review: 'Review',
+  Tag: 'Tag',
+  DishTag: 'DishTag',
+  RestaurantTag: 'RestaurantTag',
+  ReviewTag: 'ReviewTag'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -184,6 +186,7 @@ export const DishScalarFieldEnum = {
   description: 'description',
   price: 'price',
   image: 'image',
+  ingredients: 'ingredients',
   restaurantId: 'restaurantId',
   ratingAvg: 'ratingAvg',
   totalReviews: 'totalReviews',
@@ -192,22 +195,6 @@ export const DishScalarFieldEnum = {
 } as const
 
 export type DishScalarFieldEnum = (typeof DishScalarFieldEnum)[keyof typeof DishScalarFieldEnum]
-
-
-export const TagScalarFieldEnum = {
-  id: 'id',
-  name: 'name'
-} as const
-
-export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
-
-
-export const DishTagScalarFieldEnum = {
-  dishId: 'dishId',
-  tagId: 'tagId'
-} as const
-
-export type DishTagScalarFieldEnum = (typeof DishTagScalarFieldEnum)[keyof typeof DishTagScalarFieldEnum]
 
 
 export const LikeScalarFieldEnum = {
@@ -286,6 +273,38 @@ export const ReviewScalarFieldEnum = {
 } as const
 
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const TagScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
+
+
+export const DishTagScalarFieldEnum = {
+  dishId: 'dishId',
+  tagId: 'tagId'
+} as const
+
+export type DishTagScalarFieldEnum = (typeof DishTagScalarFieldEnum)[keyof typeof DishTagScalarFieldEnum]
+
+
+export const RestaurantTagScalarFieldEnum = {
+  restaurantId: 'restaurantId',
+  tagId: 'tagId'
+} as const
+
+export type RestaurantTagScalarFieldEnum = (typeof RestaurantTagScalarFieldEnum)[keyof typeof RestaurantTagScalarFieldEnum]
+
+
+export const ReviewTagScalarFieldEnum = {
+  reviewId: 'reviewId',
+  tagId: 'tagId'
+} as const
+
+export type ReviewTagScalarFieldEnum = (typeof ReviewTagScalarFieldEnum)[keyof typeof ReviewTagScalarFieldEnum]
 
 
 export const SortOrder = {

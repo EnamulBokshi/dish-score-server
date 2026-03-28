@@ -248,6 +248,7 @@ export type ReviewWhereInput = {
   restaurant?: Prisma.XOR<Prisma.RestaurantScalarRelationFilter, Prisma.RestaurantWhereInput>
   dish?: Prisma.XOR<Prisma.DishNullableScalarRelationFilter, Prisma.DishWhereInput> | null
   likes?: Prisma.LikeListRelationFilter
+  reviewTags?: Prisma.ReviewTagListRelationFilter
 }
 
 export type ReviewOrderByWithRelationInput = {
@@ -264,6 +265,7 @@ export type ReviewOrderByWithRelationInput = {
   restaurant?: Prisma.RestaurantOrderByWithRelationInput
   dish?: Prisma.DishOrderByWithRelationInput
   likes?: Prisma.LikeOrderByRelationAggregateInput
+  reviewTags?: Prisma.ReviewTagOrderByRelationAggregateInput
 }
 
 export type ReviewWhereUniqueInput = Prisma.AtLeast<{
@@ -283,6 +285,7 @@ export type ReviewWhereUniqueInput = Prisma.AtLeast<{
   restaurant?: Prisma.XOR<Prisma.RestaurantScalarRelationFilter, Prisma.RestaurantWhereInput>
   dish?: Prisma.XOR<Prisma.DishNullableScalarRelationFilter, Prisma.DishWhereInput> | null
   likes?: Prisma.LikeListRelationFilter
+  reviewTags?: Prisma.ReviewTagListRelationFilter
 }, "id">
 
 export type ReviewOrderByWithAggregationInput = {
@@ -328,6 +331,7 @@ export type ReviewCreateInput = {
   restaurant: Prisma.RestaurantCreateNestedOneWithoutReviewsInput
   dish?: Prisma.DishCreateNestedOneWithoutReviewsInput
   likes?: Prisma.LikeCreateNestedManyWithoutReviewInput
+  reviewTags?: Prisma.ReviewTagCreateNestedManyWithoutReviewInput
 }
 
 export type ReviewUncheckedCreateInput = {
@@ -341,6 +345,7 @@ export type ReviewUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   likes?: Prisma.LikeUncheckedCreateNestedManyWithoutReviewInput
+  reviewTags?: Prisma.ReviewTagUncheckedCreateNestedManyWithoutReviewInput
 }
 
 export type ReviewUpdateInput = {
@@ -354,6 +359,7 @@ export type ReviewUpdateInput = {
   restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutReviewsNestedInput
   dish?: Prisma.DishUpdateOneWithoutReviewsNestedInput
   likes?: Prisma.LikeUpdateManyWithoutReviewNestedInput
+  reviewTags?: Prisma.ReviewTagUpdateManyWithoutReviewNestedInput
 }
 
 export type ReviewUncheckedUpdateInput = {
@@ -367,6 +373,7 @@ export type ReviewUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   likes?: Prisma.LikeUncheckedUpdateManyWithoutReviewNestedInput
+  reviewTags?: Prisma.ReviewTagUncheckedUpdateManyWithoutReviewNestedInput
 }
 
 export type ReviewCreateManyInput = {
@@ -608,6 +615,20 @@ export type ReviewUpdateimagesInput = {
   push?: string | string[]
 }
 
+export type ReviewCreateNestedOneWithoutReviewTagsInput = {
+  create?: Prisma.XOR<Prisma.ReviewCreateWithoutReviewTagsInput, Prisma.ReviewUncheckedCreateWithoutReviewTagsInput>
+  connectOrCreate?: Prisma.ReviewCreateOrConnectWithoutReviewTagsInput
+  connect?: Prisma.ReviewWhereUniqueInput
+}
+
+export type ReviewUpdateOneRequiredWithoutReviewTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.ReviewCreateWithoutReviewTagsInput, Prisma.ReviewUncheckedCreateWithoutReviewTagsInput>
+  connectOrCreate?: Prisma.ReviewCreateOrConnectWithoutReviewTagsInput
+  upsert?: Prisma.ReviewUpsertWithoutReviewTagsInput
+  connect?: Prisma.ReviewWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ReviewUpdateToOneWithWhereWithoutReviewTagsInput, Prisma.ReviewUpdateWithoutReviewTagsInput>, Prisma.ReviewUncheckedUpdateWithoutReviewTagsInput>
+}
+
 export type ReviewCreateWithoutUserInput = {
   id?: string
   rating: number
@@ -618,6 +639,7 @@ export type ReviewCreateWithoutUserInput = {
   restaurant: Prisma.RestaurantCreateNestedOneWithoutReviewsInput
   dish?: Prisma.DishCreateNestedOneWithoutReviewsInput
   likes?: Prisma.LikeCreateNestedManyWithoutReviewInput
+  reviewTags?: Prisma.ReviewTagCreateNestedManyWithoutReviewInput
 }
 
 export type ReviewUncheckedCreateWithoutUserInput = {
@@ -630,6 +652,7 @@ export type ReviewUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   likes?: Prisma.LikeUncheckedCreateNestedManyWithoutReviewInput
+  reviewTags?: Prisma.ReviewTagUncheckedCreateNestedManyWithoutReviewInput
 }
 
 export type ReviewCreateOrConnectWithoutUserInput = {
@@ -683,6 +706,7 @@ export type ReviewCreateWithoutDishInput = {
   user: Prisma.UserCreateNestedOneWithoutReviewsInput
   restaurant: Prisma.RestaurantCreateNestedOneWithoutReviewsInput
   likes?: Prisma.LikeCreateNestedManyWithoutReviewInput
+  reviewTags?: Prisma.ReviewTagCreateNestedManyWithoutReviewInput
 }
 
 export type ReviewUncheckedCreateWithoutDishInput = {
@@ -695,6 +719,7 @@ export type ReviewUncheckedCreateWithoutDishInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   likes?: Prisma.LikeUncheckedCreateNestedManyWithoutReviewInput
+  reviewTags?: Prisma.ReviewTagUncheckedCreateNestedManyWithoutReviewInput
 }
 
 export type ReviewCreateOrConnectWithoutDishInput = {
@@ -733,6 +758,7 @@ export type ReviewCreateWithoutLikesInput = {
   user: Prisma.UserCreateNestedOneWithoutReviewsInput
   restaurant: Prisma.RestaurantCreateNestedOneWithoutReviewsInput
   dish?: Prisma.DishCreateNestedOneWithoutReviewsInput
+  reviewTags?: Prisma.ReviewTagCreateNestedManyWithoutReviewInput
 }
 
 export type ReviewUncheckedCreateWithoutLikesInput = {
@@ -745,6 +771,7 @@ export type ReviewUncheckedCreateWithoutLikesInput = {
   dishId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewTags?: Prisma.ReviewTagUncheckedCreateNestedManyWithoutReviewInput
 }
 
 export type ReviewCreateOrConnectWithoutLikesInput = {
@@ -773,6 +800,7 @@ export type ReviewUpdateWithoutLikesInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
   restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutReviewsNestedInput
   dish?: Prisma.DishUpdateOneWithoutReviewsNestedInput
+  reviewTags?: Prisma.ReviewTagUpdateManyWithoutReviewNestedInput
 }
 
 export type ReviewUncheckedUpdateWithoutLikesInput = {
@@ -785,6 +813,7 @@ export type ReviewUncheckedUpdateWithoutLikesInput = {
   dishId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewTags?: Prisma.ReviewTagUncheckedUpdateManyWithoutReviewNestedInput
 }
 
 export type ReviewCreateWithoutRestaurantInput = {
@@ -797,6 +826,7 @@ export type ReviewCreateWithoutRestaurantInput = {
   user: Prisma.UserCreateNestedOneWithoutReviewsInput
   dish?: Prisma.DishCreateNestedOneWithoutReviewsInput
   likes?: Prisma.LikeCreateNestedManyWithoutReviewInput
+  reviewTags?: Prisma.ReviewTagCreateNestedManyWithoutReviewInput
 }
 
 export type ReviewUncheckedCreateWithoutRestaurantInput = {
@@ -809,6 +839,7 @@ export type ReviewUncheckedCreateWithoutRestaurantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   likes?: Prisma.LikeUncheckedCreateNestedManyWithoutReviewInput
+  reviewTags?: Prisma.ReviewTagUncheckedCreateNestedManyWithoutReviewInput
 }
 
 export type ReviewCreateOrConnectWithoutRestaurantInput = {
@@ -837,6 +868,74 @@ export type ReviewUpdateManyWithWhereWithoutRestaurantInput = {
   data: Prisma.XOR<Prisma.ReviewUpdateManyMutationInput, Prisma.ReviewUncheckedUpdateManyWithoutRestaurantInput>
 }
 
+export type ReviewCreateWithoutReviewTagsInput = {
+  id?: string
+  rating: number
+  comment?: string | null
+  images?: Prisma.ReviewCreateimagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutReviewsInput
+  restaurant: Prisma.RestaurantCreateNestedOneWithoutReviewsInput
+  dish?: Prisma.DishCreateNestedOneWithoutReviewsInput
+  likes?: Prisma.LikeCreateNestedManyWithoutReviewInput
+}
+
+export type ReviewUncheckedCreateWithoutReviewTagsInput = {
+  id?: string
+  rating: number
+  comment?: string | null
+  images?: Prisma.ReviewCreateimagesInput | string[]
+  userId: string
+  restaurantId: string
+  dishId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutReviewInput
+}
+
+export type ReviewCreateOrConnectWithoutReviewTagsInput = {
+  where: Prisma.ReviewWhereUniqueInput
+  create: Prisma.XOR<Prisma.ReviewCreateWithoutReviewTagsInput, Prisma.ReviewUncheckedCreateWithoutReviewTagsInput>
+}
+
+export type ReviewUpsertWithoutReviewTagsInput = {
+  update: Prisma.XOR<Prisma.ReviewUpdateWithoutReviewTagsInput, Prisma.ReviewUncheckedUpdateWithoutReviewTagsInput>
+  create: Prisma.XOR<Prisma.ReviewCreateWithoutReviewTagsInput, Prisma.ReviewUncheckedCreateWithoutReviewTagsInput>
+  where?: Prisma.ReviewWhereInput
+}
+
+export type ReviewUpdateToOneWithWhereWithoutReviewTagsInput = {
+  where?: Prisma.ReviewWhereInput
+  data: Prisma.XOR<Prisma.ReviewUpdateWithoutReviewTagsInput, Prisma.ReviewUncheckedUpdateWithoutReviewTagsInput>
+}
+
+export type ReviewUpdateWithoutReviewTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.IntFieldUpdateOperationsInput | number
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  images?: Prisma.ReviewUpdateimagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
+  restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutReviewsNestedInput
+  dish?: Prisma.DishUpdateOneWithoutReviewsNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutReviewNestedInput
+}
+
+export type ReviewUncheckedUpdateWithoutReviewTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  rating?: Prisma.IntFieldUpdateOperationsInput | number
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  images?: Prisma.ReviewUpdateimagesInput | string[]
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  restaurantId?: Prisma.StringFieldUpdateOperationsInput | string
+  dishId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutReviewNestedInput
+}
+
 export type ReviewCreateManyUserInput = {
   id?: string
   rating: number
@@ -858,6 +957,7 @@ export type ReviewUpdateWithoutUserInput = {
   restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutReviewsNestedInput
   dish?: Prisma.DishUpdateOneWithoutReviewsNestedInput
   likes?: Prisma.LikeUpdateManyWithoutReviewNestedInput
+  reviewTags?: Prisma.ReviewTagUpdateManyWithoutReviewNestedInput
 }
 
 export type ReviewUncheckedUpdateWithoutUserInput = {
@@ -870,6 +970,7 @@ export type ReviewUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   likes?: Prisma.LikeUncheckedUpdateManyWithoutReviewNestedInput
+  reviewTags?: Prisma.ReviewTagUncheckedUpdateManyWithoutReviewNestedInput
 }
 
 export type ReviewUncheckedUpdateManyWithoutUserInput = {
@@ -904,6 +1005,7 @@ export type ReviewUpdateWithoutDishInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
   restaurant?: Prisma.RestaurantUpdateOneRequiredWithoutReviewsNestedInput
   likes?: Prisma.LikeUpdateManyWithoutReviewNestedInput
+  reviewTags?: Prisma.ReviewTagUpdateManyWithoutReviewNestedInput
 }
 
 export type ReviewUncheckedUpdateWithoutDishInput = {
@@ -916,6 +1018,7 @@ export type ReviewUncheckedUpdateWithoutDishInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   likes?: Prisma.LikeUncheckedUpdateManyWithoutReviewNestedInput
+  reviewTags?: Prisma.ReviewTagUncheckedUpdateManyWithoutReviewNestedInput
 }
 
 export type ReviewUncheckedUpdateManyWithoutDishInput = {
@@ -950,6 +1053,7 @@ export type ReviewUpdateWithoutRestaurantInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
   dish?: Prisma.DishUpdateOneWithoutReviewsNestedInput
   likes?: Prisma.LikeUpdateManyWithoutReviewNestedInput
+  reviewTags?: Prisma.ReviewTagUpdateManyWithoutReviewNestedInput
 }
 
 export type ReviewUncheckedUpdateWithoutRestaurantInput = {
@@ -962,6 +1066,7 @@ export type ReviewUncheckedUpdateWithoutRestaurantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   likes?: Prisma.LikeUncheckedUpdateManyWithoutReviewNestedInput
+  reviewTags?: Prisma.ReviewTagUncheckedUpdateManyWithoutReviewNestedInput
 }
 
 export type ReviewUncheckedUpdateManyWithoutRestaurantInput = {
@@ -982,10 +1087,12 @@ export type ReviewUncheckedUpdateManyWithoutRestaurantInput = {
 
 export type ReviewCountOutputType = {
   likes: number
+  reviewTags: number
 }
 
 export type ReviewCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   likes?: boolean | ReviewCountOutputTypeCountLikesArgs
+  reviewTags?: boolean | ReviewCountOutputTypeCountReviewTagsArgs
 }
 
 /**
@@ -1005,6 +1112,13 @@ export type ReviewCountOutputTypeCountLikesArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.LikeWhereInput
 }
 
+/**
+ * ReviewCountOutputType without action
+ */
+export type ReviewCountOutputTypeCountReviewTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReviewTagWhereInput
+}
+
 
 export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1020,6 +1134,7 @@ export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   restaurant?: boolean | Prisma.RestaurantDefaultArgs<ExtArgs>
   dish?: boolean | Prisma.Review$dishArgs<ExtArgs>
   likes?: boolean | Prisma.Review$likesArgs<ExtArgs>
+  reviewTags?: boolean | Prisma.Review$reviewTagsArgs<ExtArgs>
   _count?: boolean | Prisma.ReviewCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
 
@@ -1071,6 +1186,7 @@ export type ReviewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   restaurant?: boolean | Prisma.RestaurantDefaultArgs<ExtArgs>
   dish?: boolean | Prisma.Review$dishArgs<ExtArgs>
   likes?: boolean | Prisma.Review$likesArgs<ExtArgs>
+  reviewTags?: boolean | Prisma.Review$reviewTagsArgs<ExtArgs>
   _count?: boolean | Prisma.ReviewCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ReviewIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1091,6 +1207,7 @@ export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     restaurant: Prisma.$RestaurantPayload<ExtArgs>
     dish: Prisma.$DishPayload<ExtArgs> | null
     likes: Prisma.$LikePayload<ExtArgs>[]
+    reviewTags: Prisma.$ReviewTagPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1500,6 +1617,7 @@ export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends runtime.T
   restaurant<T extends Prisma.RestaurantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RestaurantDefaultArgs<ExtArgs>>): Prisma.Prisma__RestaurantClient<runtime.Types.Result.GetResult<Prisma.$RestaurantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   dish<T extends Prisma.Review$dishArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Review$dishArgs<ExtArgs>>): Prisma.Prisma__DishClient<runtime.Types.Result.GetResult<Prisma.$DishPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   likes<T extends Prisma.Review$likesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Review$likesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewTags<T extends Prisma.Review$reviewTagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Review$reviewTagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1979,6 +2097,30 @@ export type Review$likesArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.LikeScalarFieldEnum | Prisma.LikeScalarFieldEnum[]
+}
+
+/**
+ * Review.reviewTags
+ */
+export type Review$reviewTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReviewTag
+   */
+  select?: Prisma.ReviewTagSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReviewTag
+   */
+  omit?: Prisma.ReviewTagOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReviewTagInclude<ExtArgs> | null
+  where?: Prisma.ReviewTagWhereInput
+  orderBy?: Prisma.ReviewTagOrderByWithRelationInput | Prisma.ReviewTagOrderByWithRelationInput[]
+  cursor?: Prisma.ReviewTagWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReviewTagScalarFieldEnum | Prisma.ReviewTagScalarFieldEnum[]
 }
 
 /**

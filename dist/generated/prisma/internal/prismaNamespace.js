@@ -74,13 +74,15 @@ export const ModelName = {
     Verification: 'Verification',
     ContactUs: 'ContactUs',
     Dish: 'Dish',
-    Tag: 'Tag',
-    DishTag: 'DishTag',
     Like: 'Like',
     OwnerProfile: 'OwnerProfile',
     ReviewerProfile: 'ReviewerProfile',
     Restaurant: 'Restaurant',
-    Review: 'Review'
+    Review: 'Review',
+    Tag: 'Tag',
+    DishTag: 'DishTag',
+    RestaurantTag: 'RestaurantTag',
+    ReviewTag: 'ReviewTag'
 };
 /**
  * Enums
@@ -168,19 +170,12 @@ export const DishScalarFieldEnum = {
     description: 'description',
     price: 'price',
     image: 'image',
+    ingredients: 'ingredients',
     restaurantId: 'restaurantId',
     ratingAvg: 'ratingAvg',
     totalReviews: 'totalReviews',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
-};
-export const TagScalarFieldEnum = {
-    id: 'id',
-    name: 'name'
-};
-export const DishTagScalarFieldEnum = {
-    dishId: 'dishId',
-    tagId: 'tagId'
 };
 export const LikeScalarFieldEnum = {
     id: 'id',
@@ -239,6 +234,22 @@ export const ReviewScalarFieldEnum = {
     dishId: 'dishId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
+};
+export const TagScalarFieldEnum = {
+    id: 'id',
+    name: 'name'
+};
+export const DishTagScalarFieldEnum = {
+    dishId: 'dishId',
+    tagId: 'tagId'
+};
+export const RestaurantTagScalarFieldEnum = {
+    restaurantId: 'restaurantId',
+    tagId: 'tagId'
+};
+export const ReviewTagScalarFieldEnum = {
+    reviewId: 'reviewId',
+    tagId: 'tagId'
 };
 export const SortOrder = {
     asc: 'asc',

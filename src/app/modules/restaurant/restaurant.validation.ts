@@ -41,6 +41,7 @@ const createRestaurantSchema = z.object({
     }),
     contact: z.string().optional(),
     images: z.array(z.string()).optional(),
+    tags: z.array(z.string().min(1, "Tag cannot be empty")).optional(),
 });
 
 const updateRestaurantSchema = z.object({
@@ -56,6 +57,7 @@ const updateRestaurantSchema = z.object({
     }).optional(),
     contact: z.string().optional(),
     images: z.array(z.string()).optional(),
+    tags: z.array(z.string().min(1, "Tag cannot be empty")).optional(),
 });
 
 export { createRestaurantSchema, updateRestaurantSchema };

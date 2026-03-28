@@ -7,6 +7,7 @@ model Review {
 
   userId        String
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags          String[]   @default([])
 
   restaurantId  String
   restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)

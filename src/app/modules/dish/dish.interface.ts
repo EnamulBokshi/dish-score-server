@@ -5,6 +5,7 @@ export interface ICreateDishPayload {
   image?: string;
   ingredients: string[];
   restaurantId: string;
+  tags?: string[];
 }
 
 export interface IUpdateDishPayload {
@@ -13,4 +14,5 @@ export interface IUpdateDishPayload {
   price?: number;
   image?: string;
   ingredients?: string[];
+  tags?: string[]
 }

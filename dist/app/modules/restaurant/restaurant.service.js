@@ -30,12 +30,24 @@ const assertCanModifyRestaurant = async (restaurantId, requester) => {
     throw new AppError(status.FORBIDDEN, "You can only modify your own restaurant profile");
 };
 const createRestaurant = async (payload, createdByUserId) => {
-    return await prisma.restaurant.create({
+    const { tagIds, ...restaurantData } = payload;
+    const restaurant = await prisma.restaurant.create({
         data: {
-            ...payload,
+            ...restaurantData,
             createdByUserId,
         }
     });
+    // Create restaurant tags if tagIds are provided
+    if (tagIds && tagIds.length > 0) {
+        await prisma.restaurantTag.createMany({
+            data: tagIds.map(tagId => ({
+                restaurantId: restaurant.id,
+                tagId,
+            })),
+            skipDuplicates: true,
+        });
+    }
+    return restaurant;
 };
 const getRestaurants = async (query) => {
     const qeuryBuilder = new QueryBuilder(prisma.restaurant, query, {
@@ -193,8 +205,9 @@ const getRestaurantById = async (id) => {
 };
 const updateRestaurant = async (id, payload, requester) => {
     await assertCanModifyRestaurant(id, requester);
+    const { tagIds, ...restaurantData } = payload;
     // If new images are provided, delete old images from Cloudinary
-    if (payload.images && payload.images.length > 0) {
+    if (restaurantData.images && restaurantData.images.length > 0) {
         const existingRestaurant = await prisma.restaurant.findFirst({
             where: { id },
             select: { images: true },
@@ -211,10 +224,28 @@ const updateRestaurant = async (id, payload, requester) => {
             }
         }
     }
-    return await prisma.restaurant.update({
+    const updatedRestaurant = await prisma.restaurant.update({
         where: { id },
-        data: payload
+        data: restaurantData
     });
+    // Update tags if tagIds are provided
+    if (tagIds) {
+        // Delete existing tags
+        await prisma.restaurantTag.deleteMany({
+            where: { restaurantId: id },
+        });
+        // Create new tags
+        if (tagIds.length > 0) {
+            await prisma.restaurantTag.createMany({
+                data: tagIds.map(tagId => ({
+                    restaurantId: id,
+                    tagId,
+                })),
+                skipDuplicates: true,
+            });
+        }
+    }
+    return updatedRestaurant;
 };
 const softDeleteRestaurant = async (id, requester) => {
     await assertCanModifyRestaurant(id, requester);

@@ -38,6 +38,7 @@ export interface ICreateRestaurantPayload{
     }; 
     contact?: string;
     images: string[];
+    tagIds?: string[];
 }
 
 export interface IRestaurant{
@@ -101,4 +102,5 @@ export interface IUpdateRestaurantPayload{
     }; 
     contact?: string;
     images?: string[];
+    tagIds?: string[];
 }

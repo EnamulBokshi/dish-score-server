@@ -39,6 +39,7 @@ const createRestaurantSchema = z.object({
     }),
     contact: z.string().optional(),
     images: z.array(z.string()).optional(),
+    tagIds: z.array(z.string()).optional(),
 });
 const updateRestaurantSchema = z.object({
     name: z.string().min(1, "Name is required").optional(),
@@ -53,5 +54,6 @@ const updateRestaurantSchema = z.object({
     }).optional(),
     contact: z.string().optional(),
     images: z.array(z.string()).optional(),
+    tagIds: z.array(z.string()).optional(),
 });
 export { createRestaurantSchema, updateRestaurantSchema };

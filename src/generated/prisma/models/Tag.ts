@@ -159,12 +159,16 @@ export type TagWhereInput = {
   id?: Prisma.StringFilter<"Tag"> | string
   name?: Prisma.StringFilter<"Tag"> | string
   dishes?: Prisma.DishTagListRelationFilter
+  restaurantTags?: Prisma.RestaurantTagListRelationFilter
+  reviewTags?: Prisma.ReviewTagListRelationFilter
 }
 
 export type TagOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   dishes?: Prisma.DishTagOrderByRelationAggregateInput
+  restaurantTags?: Prisma.RestaurantTagOrderByRelationAggregateInput
+  reviewTags?: Prisma.ReviewTagOrderByRelationAggregateInput
 }
 
 export type TagWhereUniqueInput = Prisma.AtLeast<{
@@ -174,6 +178,8 @@ export type TagWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TagWhereInput[]
   NOT?: Prisma.TagWhereInput | Prisma.TagWhereInput[]
   dishes?: Prisma.DishTagListRelationFilter
+  restaurantTags?: Prisma.RestaurantTagListRelationFilter
+  reviewTags?: Prisma.ReviewTagListRelationFilter
 }, "id" | "name">
 
 export type TagOrderByWithAggregationInput = {
@@ -196,24 +202,32 @@ export type TagCreateInput = {
   id?: string
   name: string
   dishes?: Prisma.DishTagCreateNestedManyWithoutTagInput
+  restaurantTags?: Prisma.RestaurantTagCreateNestedManyWithoutTagInput
+  reviewTags?: Prisma.ReviewTagCreateNestedManyWithoutTagInput
 }
 
 export type TagUncheckedCreateInput = {
   id?: string
   name: string
   dishes?: Prisma.DishTagUncheckedCreateNestedManyWithoutTagInput
+  restaurantTags?: Prisma.RestaurantTagUncheckedCreateNestedManyWithoutTagInput
+  reviewTags?: Prisma.ReviewTagUncheckedCreateNestedManyWithoutTagInput
 }
 
 export type TagUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   dishes?: Prisma.DishTagUpdateManyWithoutTagNestedInput
+  restaurantTags?: Prisma.RestaurantTagUpdateManyWithoutTagNestedInput
+  reviewTags?: Prisma.ReviewTagUpdateManyWithoutTagNestedInput
 }
 
 export type TagUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   dishes?: Prisma.DishTagUncheckedUpdateManyWithoutTagNestedInput
+  restaurantTags?: Prisma.RestaurantTagUncheckedUpdateManyWithoutTagNestedInput
+  reviewTags?: Prisma.ReviewTagUncheckedUpdateManyWithoutTagNestedInput
 }
 
 export type TagCreateManyInput = {
@@ -265,14 +279,46 @@ export type TagUpdateOneRequiredWithoutDishesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TagUpdateToOneWithWhereWithoutDishesInput, Prisma.TagUpdateWithoutDishesInput>, Prisma.TagUncheckedUpdateWithoutDishesInput>
 }
 
+export type TagCreateNestedOneWithoutRestaurantTagsInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutRestaurantTagsInput, Prisma.TagUncheckedCreateWithoutRestaurantTagsInput>
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutRestaurantTagsInput
+  connect?: Prisma.TagWhereUniqueInput
+}
+
+export type TagUpdateOneRequiredWithoutRestaurantTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutRestaurantTagsInput, Prisma.TagUncheckedCreateWithoutRestaurantTagsInput>
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutRestaurantTagsInput
+  upsert?: Prisma.TagUpsertWithoutRestaurantTagsInput
+  connect?: Prisma.TagWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TagUpdateToOneWithWhereWithoutRestaurantTagsInput, Prisma.TagUpdateWithoutRestaurantTagsInput>, Prisma.TagUncheckedUpdateWithoutRestaurantTagsInput>
+}
+
+export type TagCreateNestedOneWithoutReviewTagsInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutReviewTagsInput, Prisma.TagUncheckedCreateWithoutReviewTagsInput>
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutReviewTagsInput
+  connect?: Prisma.TagWhereUniqueInput
+}
+
+export type TagUpdateOneRequiredWithoutReviewTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.TagCreateWithoutReviewTagsInput, Prisma.TagUncheckedCreateWithoutReviewTagsInput>
+  connectOrCreate?: Prisma.TagCreateOrConnectWithoutReviewTagsInput
+  upsert?: Prisma.TagUpsertWithoutReviewTagsInput
+  connect?: Prisma.TagWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TagUpdateToOneWithWhereWithoutReviewTagsInput, Prisma.TagUpdateWithoutReviewTagsInput>, Prisma.TagUncheckedUpdateWithoutReviewTagsInput>
+}
+
 export type TagCreateWithoutDishesInput = {
   id?: string
   name: string
+  restaurantTags?: Prisma.RestaurantTagCreateNestedManyWithoutTagInput
+  reviewTags?: Prisma.ReviewTagCreateNestedManyWithoutTagInput
 }
 
 export type TagUncheckedCreateWithoutDishesInput = {
   id?: string
   name: string
+  restaurantTags?: Prisma.RestaurantTagUncheckedCreateNestedManyWithoutTagInput
+  reviewTags?: Prisma.ReviewTagUncheckedCreateNestedManyWithoutTagInput
 }
 
 export type TagCreateOrConnectWithoutDishesInput = {
@@ -294,11 +340,103 @@ export type TagUpdateToOneWithWhereWithoutDishesInput = {
 export type TagUpdateWithoutDishesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  restaurantTags?: Prisma.RestaurantTagUpdateManyWithoutTagNestedInput
+  reviewTags?: Prisma.ReviewTagUpdateManyWithoutTagNestedInput
 }
 
 export type TagUncheckedUpdateWithoutDishesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  restaurantTags?: Prisma.RestaurantTagUncheckedUpdateManyWithoutTagNestedInput
+  reviewTags?: Prisma.ReviewTagUncheckedUpdateManyWithoutTagNestedInput
+}
+
+export type TagCreateWithoutRestaurantTagsInput = {
+  id?: string
+  name: string
+  dishes?: Prisma.DishTagCreateNestedManyWithoutTagInput
+  reviewTags?: Prisma.ReviewTagCreateNestedManyWithoutTagInput
+}
+
+export type TagUncheckedCreateWithoutRestaurantTagsInput = {
+  id?: string
+  name: string
+  dishes?: Prisma.DishTagUncheckedCreateNestedManyWithoutTagInput
+  reviewTags?: Prisma.ReviewTagUncheckedCreateNestedManyWithoutTagInput
+}
+
+export type TagCreateOrConnectWithoutRestaurantTagsInput = {
+  where: Prisma.TagWhereUniqueInput
+  create: Prisma.XOR<Prisma.TagCreateWithoutRestaurantTagsInput, Prisma.TagUncheckedCreateWithoutRestaurantTagsInput>
+}
+
+export type TagUpsertWithoutRestaurantTagsInput = {
+  update: Prisma.XOR<Prisma.TagUpdateWithoutRestaurantTagsInput, Prisma.TagUncheckedUpdateWithoutRestaurantTagsInput>
+  create: Prisma.XOR<Prisma.TagCreateWithoutRestaurantTagsInput, Prisma.TagUncheckedCreateWithoutRestaurantTagsInput>
+  where?: Prisma.TagWhereInput
+}
+
+export type TagUpdateToOneWithWhereWithoutRestaurantTagsInput = {
+  where?: Prisma.TagWhereInput
+  data: Prisma.XOR<Prisma.TagUpdateWithoutRestaurantTagsInput, Prisma.TagUncheckedUpdateWithoutRestaurantTagsInput>
+}
+
+export type TagUpdateWithoutRestaurantTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  dishes?: Prisma.DishTagUpdateManyWithoutTagNestedInput
+  reviewTags?: Prisma.ReviewTagUpdateManyWithoutTagNestedInput
+}
+
+export type TagUncheckedUpdateWithoutRestaurantTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  dishes?: Prisma.DishTagUncheckedUpdateManyWithoutTagNestedInput
+  reviewTags?: Prisma.ReviewTagUncheckedUpdateManyWithoutTagNestedInput
+}
+
+export type TagCreateWithoutReviewTagsInput = {
+  id?: string
+  name: string
+  dishes?: Prisma.DishTagCreateNestedManyWithoutTagInput
+  restaurantTags?: Prisma.RestaurantTagCreateNestedManyWithoutTagInput
+}
+
+export type TagUncheckedCreateWithoutReviewTagsInput = {
+  id?: string
+  name: string
+  dishes?: Prisma.DishTagUncheckedCreateNestedManyWithoutTagInput
+  restaurantTags?: Prisma.RestaurantTagUncheckedCreateNestedManyWithoutTagInput
+}
+
+export type TagCreateOrConnectWithoutReviewTagsInput = {
+  where: Prisma.TagWhereUniqueInput
+  create: Prisma.XOR<Prisma.TagCreateWithoutReviewTagsInput, Prisma.TagUncheckedCreateWithoutReviewTagsInput>
+}
+
+export type TagUpsertWithoutReviewTagsInput = {
+  update: Prisma.XOR<Prisma.TagUpdateWithoutReviewTagsInput, Prisma.TagUncheckedUpdateWithoutReviewTagsInput>
+  create: Prisma.XOR<Prisma.TagCreateWithoutReviewTagsInput, Prisma.TagUncheckedCreateWithoutReviewTagsInput>
+  where?: Prisma.TagWhereInput
+}
+
+export type TagUpdateToOneWithWhereWithoutReviewTagsInput = {
+  where?: Prisma.TagWhereInput
+  data: Prisma.XOR<Prisma.TagUpdateWithoutReviewTagsInput, Prisma.TagUncheckedUpdateWithoutReviewTagsInput>
+}
+
+export type TagUpdateWithoutReviewTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  dishes?: Prisma.DishTagUpdateManyWithoutTagNestedInput
+  restaurantTags?: Prisma.RestaurantTagUpdateManyWithoutTagNestedInput
+}
+
+export type TagUncheckedUpdateWithoutReviewTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  dishes?: Prisma.DishTagUncheckedUpdateManyWithoutTagNestedInput
+  restaurantTags?: Prisma.RestaurantTagUncheckedUpdateManyWithoutTagNestedInput
 }
 
 
@@ -308,10 +446,14 @@ export type TagUncheckedUpdateWithoutDishesInput = {
 
 export type TagCountOutputType = {
   dishes: number
+  restaurantTags: number
+  reviewTags: number
 }
 
 export type TagCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dishes?: boolean | TagCountOutputTypeCountDishesArgs
+  restaurantTags?: boolean | TagCountOutputTypeCountRestaurantTagsArgs
+  reviewTags?: boolean | TagCountOutputTypeCountReviewTagsArgs
 }
 
 /**
@@ -331,11 +473,27 @@ export type TagCountOutputTypeCountDishesArgs<ExtArgs extends runtime.Types.Exte
   where?: Prisma.DishTagWhereInput
 }
 
+/**
+ * TagCountOutputType without action
+ */
+export type TagCountOutputTypeCountRestaurantTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RestaurantTagWhereInput
+}
+
+/**
+ * TagCountOutputType without action
+ */
+export type TagCountOutputTypeCountReviewTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReviewTagWhereInput
+}
+
 
 export type TagSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   dishes?: boolean | Prisma.Tag$dishesArgs<ExtArgs>
+  restaurantTags?: boolean | Prisma.Tag$restaurantTagsArgs<ExtArgs>
+  reviewTags?: boolean | Prisma.Tag$reviewTagsArgs<ExtArgs>
   _count?: boolean | Prisma.TagCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tag"]>
 
@@ -357,6 +515,8 @@ export type TagSelectScalar = {
 export type TagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name", ExtArgs["result"]["tag"]>
 export type TagInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dishes?: boolean | Prisma.Tag$dishesArgs<ExtArgs>
+  restaurantTags?: boolean | Prisma.Tag$restaurantTagsArgs<ExtArgs>
+  reviewTags?: boolean | Prisma.Tag$reviewTagsArgs<ExtArgs>
   _count?: boolean | Prisma.TagCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TagIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -366,6 +526,8 @@ export type $TagPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name: "Tag"
   objects: {
     dishes: Prisma.$DishTagPayload<ExtArgs>[]
+    restaurantTags: Prisma.$RestaurantTagPayload<ExtArgs>[]
+    reviewTags: Prisma.$ReviewTagPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -765,6 +927,8 @@ readonly fields: TagFieldRefs;
 export interface Prisma__TagClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   dishes<T extends Prisma.Tag$dishesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tag$dishesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DishTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  restaurantTags<T extends Prisma.Tag$restaurantTagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tag$restaurantTagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RestaurantTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewTags<T extends Prisma.Tag$reviewTagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tag$reviewTagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1210,6 +1374,54 @@ export type Tag$dishesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.DishTagScalarFieldEnum | Prisma.DishTagScalarFieldEnum[]
+}
+
+/**
+ * Tag.restaurantTags
+ */
+export type Tag$restaurantTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RestaurantTag
+   */
+  select?: Prisma.RestaurantTagSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RestaurantTag
+   */
+  omit?: Prisma.RestaurantTagOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RestaurantTagInclude<ExtArgs> | null
+  where?: Prisma.RestaurantTagWhereInput
+  orderBy?: Prisma.RestaurantTagOrderByWithRelationInput | Prisma.RestaurantTagOrderByWithRelationInput[]
+  cursor?: Prisma.RestaurantTagWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RestaurantTagScalarFieldEnum | Prisma.RestaurantTagScalarFieldEnum[]
+}
+
+/**
+ * Tag.reviewTags
+ */
+export type Tag$reviewTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReviewTag
+   */
+  select?: Prisma.ReviewTagSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReviewTag
+   */
+  omit?: Prisma.ReviewTagOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReviewTagInclude<ExtArgs> | null
+  where?: Prisma.ReviewTagWhereInput
+  orderBy?: Prisma.ReviewTagOrderByWithRelationInput | Prisma.ReviewTagOrderByWithRelationInput[]
+  cursor?: Prisma.ReviewTagWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReviewTagScalarFieldEnum | Prisma.ReviewTagScalarFieldEnum[]
 }
 
 /**

@@ -8,6 +8,9 @@ model Restaurant {
   road        String
   location   Json
 
+
+  tags        String[]   @default([])
+
   createdByUserId String
   createdBy       User     @relation(fields: [createdByUserId], references: [id], onDelete: Restrict)
 

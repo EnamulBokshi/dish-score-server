@@ -60,6 +60,7 @@ const createDish = async (payload: ICreateDishPayload) => {
     },
   });
 
+ 
   if (!restaurant) {
     throw new AppError(status.NOT_FOUND, "Restaurant not found");
   }
@@ -170,8 +171,8 @@ const getDishesByUserId = async (userId: string, query: IQueryParams) => {
     prisma.dish,
     query,
     {
-      searchableFields: ["name", "description", "restaurant.name"],
-      filterableFields: ["name", "restaurantId", "price", "ratingAvg"],
+      searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "dishTags.tag.name", "ingredients", "price", "ratingAvg"],
+      filterableFields: ["name", "restaurantId", "price", "ratingAvg" ],
     },
   );
 

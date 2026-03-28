@@ -77,16 +77,6 @@ export type ContactUs = Prisma.ContactUsModel
  */
 export type Dish = Prisma.DishModel
 /**
- * Model Tag
- * 
- */
-export type Tag = Prisma.TagModel
-/**
- * Model DishTag
- * 
- */
-export type DishTag = Prisma.DishTagModel
-/**
  * Model Like
  * 
  */
@@ -111,3 +101,23 @@ export type Restaurant = Prisma.RestaurantModel
  * 
  */
 export type Review = Prisma.ReviewModel
+/**
+ * Model Tag
+ * 
+ */
+export type Tag = Prisma.TagModel
+/**
+ * Model DishTag
+ * 
+ */
+export type DishTag = Prisma.DishTagModel
+/**
+ * Model RestaurantTag
+ * 
+ */
+export type RestaurantTag = Prisma.RestaurantTagModel
+/**
+ * Model ReviewTag
+ * 
+ */
+export type ReviewTag = Prisma.ReviewTagModel

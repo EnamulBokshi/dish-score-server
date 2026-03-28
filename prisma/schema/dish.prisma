@@ -6,11 +6,11 @@ model Dish {
   image       String?
   ingredients String[]
   // Relation fields
+  tags        String[]   @default([])
   restaurantId String
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
 
   reviews      Review[]
-  dishTags     DishTag[]
   ratingAvg    Float     @default(0)
   totalReviews Int       @default(0)
 
