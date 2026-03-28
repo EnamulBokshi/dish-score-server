@@ -3,6 +3,7 @@ export interface ICreateDishPayload {
   description?: string;
   price?: number;
   image?: string;
+  ingredients: string[];
   restaurantId: string;
 }
 
@@ -11,4 +12,5 @@ export interface IUpdateDishPayload {
   description?: string;
   price?: number;
   image?: string;
+  ingredients?: string[];
 }
