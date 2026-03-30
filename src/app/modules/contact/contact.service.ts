@@ -9,6 +9,7 @@ import { QueryBuilder } from "../../utils/QueryBuilder";
 import { sendEmail } from "../../utils/email";
 import {
   ICreateContactPayload,
+  IReplyContactPayload,
   IUpdateContactStatusPayload,
 } from "./contact.interface";
 
@@ -110,9 +111,78 @@ const updateContactStatus = async (
   return updatedContact;
 };
 
+const replyContact = async (
+  id: string,
+  payload: IReplyContactPayload,
+  requester: IContactRequester,
+) => {
+  if (requester.role !== UserRole.ADMIN && requester.role !== UserRole.SUPER_ADMIN) {
+    throw new AppError(status.FORBIDDEN, "Only admin or super admin can reply to contact requests");
+  }
+
+  const existingContact = await prisma.contactUs.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+    },
+  });
+
+  if (!existingContact) {
+    throw new AppError(status.NOT_FOUND, "Contact request not found");
+  }
+
+  await sendEmail({
+    to: existingContact.email,
+    subject: payload.subject,
+    template: "contact-reply",
+    templateData: {
+      name: existingContact.name,
+      subject: payload.subject,
+      message: payload.message,
+      appName: "Dish Score",
+      supportEmail: env.SUPER_ADMIN_EMAIL,
+    },
+  });
+
+  const updatedContact = await prisma.contactUs.update({
+    where: { id },
+    data: {
+      status: ContactMessageStatus.RESOLVED,
+      respondedAt: new Date(),
+    },
+  });
+
+  return updatedContact;
+};
+
+const deleteContact = async (id: string, requester: IContactRequester) => {
+  if (requester.role !== UserRole.ADMIN && requester.role !== UserRole.SUPER_ADMIN) {
+    throw new AppError(status.FORBIDDEN, "Only admin or super admin can delete contact requests");
+  }
+
+  const existingContact = await prisma.contactUs.findUnique({
+    where: { id },
+    select: { id: true },
+  });
+
+  if (!existingContact) {
+    throw new AppError(status.NOT_FOUND, "Contact request not found");
+  }
+
+  const deletedContact = await prisma.contactUs.delete({
+    where: { id },
+  });
+
+  return deletedContact;
+};
+
 export const ContactService = {
   createContact,
   getContacts,
   getContactById,
   updateContactStatus,
+  replyContact,
+  deleteContact,
 };

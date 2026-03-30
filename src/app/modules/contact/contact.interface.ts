@@ -11,3 +11,8 @@ export interface ICreateContactPayload {
 export interface IUpdateContactStatusPayload {
   status: ContactMessageStatus;
 }
+
+export interface IReplyContactPayload {
+  subject: string;
+  message: string;
+}

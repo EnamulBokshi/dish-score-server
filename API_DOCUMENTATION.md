@@ -657,11 +657,58 @@ Allowed status values:
 - `IN_PROGRESS`
 - `RESOLVED`
 
+### 12.5 Reply To Contact Request
+- Method: `POST`
+- Path: `/contact-us/:id/reply`
+- Auth: `ADMIN`, `SUPER_ADMIN`
+
+Request body:
+
+```json
+{
+  "subject": "Regarding your support request",
+  "message": "Thanks for reaching out. We have resolved your issue."
+}
+```
+
+Behavior:
+- Sends an email reply to the contact request email address.
+- Updates the contact request status to `RESOLVED`.
+- Sets `respondedAt` with the current timestamp.
+
+### 12.6 Delete Contact Request
+- Method: `DELETE`
+- Path: `/contact-us/:id`
+- Auth: `ADMIN`, `SUPER_ADMIN`
+
+Behavior:
+- Permanently deletes the contact request record.
+- Returns `404` if the contact request does not exist.
+
 ## 13. Stats API
 
 Base path: `/stats`
 
-### 13.1 Get Dashboard Stats
+### 13.1 Get Public Stats
+- Method: `GET`
+- Path: `/stats/public`
+- Auth: Public
+
+Behavior:
+- Returns top-level platform counters for public display.
+
+Response data shape:
+
+```json
+{
+  "totalReviews": 120,
+  "totalReviewer": 45,
+  "totalRestaurants": 30,
+  "totalDishes": 210
+}
+```
+
+### 13.2 Get Dashboard Stats
 - Method: `GET`
 - Path: `/stats`
 - Auth: `ADMIN`, `SUPER_ADMIN`, `OWNER`, `CONSUMER`
@@ -805,8 +852,11 @@ Notes:
 - `GET /contact-us`
 - `GET /contact-us/:id`
 - `PATCH /contact-us/:id/status`
+- `POST /contact-us/:id/reply`
+- `DELETE /contact-us/:id`
 
 ### Stats
+- `GET /stats/public`
 - `GET /stats`
 
 ### Unified

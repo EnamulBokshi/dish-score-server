@@ -11,7 +11,7 @@ import { cookieUtils } from "../../utils/cookie";
 
 
 
-const registerReviwer = catchAsync(async(req:Request, res: Response) => {
+const registerUser = catchAsync(async(req:Request, res: Response) => {
     console.log("Registering reviewer with payload", req.body);
   const payload = req.body?.data ? JSON.parse(req.body.data) : req.body;
   const imagePath = req.file?.path;
@@ -27,7 +27,7 @@ const registerReviwer = catchAsync(async(req:Request, res: Response) => {
     sendResponse(res, {
         httpStatusCode: status.CREATED,
         success: true,
-        message: "Reviwer registered successfully",
+        message: "User registered successfully",
         data: {
             token,
             accessToken,
@@ -271,7 +271,7 @@ const googleSignInFailure = catchAsync(async (req: Request, res: Response) => {
 
 export const AuthController = {
   loginUser,
-  registerReviwer,
+  registerUser,
   getNewToken,
   getMe,
   changePassword,

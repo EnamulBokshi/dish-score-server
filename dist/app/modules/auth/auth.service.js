@@ -1,5 +1,5 @@
 import status from "http-status";
-import { UserStatus } from "../../../generated/prisma/client";
+import { UserRole, UserStatus } from "../../../generated/prisma/client";
 import { auth } from "../../lib/auth";
 import prisma from "../../lib/prisma";
 import { tokenUtils } from "../../utils/token";
@@ -7,7 +7,10 @@ import { jwtUtils } from "../../utils/jwt";
 import { env } from "../../../config/env";
 import AppError from "../../helpers/errorHelpers/AppError";
 const registerUser = async (payload) => {
-    const { name, email, password, image } = payload;
+    const { name, email, password, image, role } = payload;
+    if (role && role !== UserRole.CONSUMER && role !== UserRole.OWNER) {
+        throw new AppError(status.BAD_REQUEST, "Invalid role specified. Only CONSUMER and OWNER roles are allowed during registration.");
+    }
     const isUserExist = await prisma.user.findUnique({
         where: {
             email
@@ -22,20 +25,30 @@ const registerUser = async (payload) => {
             email,
             password,
             image,
+            role: role || UserRole.CONSUMER
         }
     });
     if (!data.user) {
         throw new AppError(status.INTERNAL_SERVER_ERROR, "Failed to register user");
     }
     try {
-        const reviwer = await prisma.$transaction(async (tx) => {
-            const createdReviewerProfile = await tx.reviewerProfile.create({
-                data: {
-                    userId: data.user.id,
-                    bio: "",
-                }
-            });
-            return createdReviewerProfile;
+        const newUser = await prisma.$transaction(async (tx) => {
+            if (data.user.role === UserRole.CONSUMER) {
+                return await tx.reviewerProfile.create({
+                    data: {
+                        userId: data.user.id,
+                        bio: "",
+                    }
+                });
+            }
+            else if (data.user.role === UserRole.OWNER) {
+                return await tx.ownerProfile.create({
+                    data: {
+                        userId: data.user.id,
+                        ...(payload.businessName && { businessName: payload.businessName }),
+                    }
+                });
+            }
         });
         const accessToken = tokenUtils.getAccessToken({
             userId: data.user.id,
@@ -59,11 +72,11 @@ const registerUser = async (payload) => {
             ...data,
             accessToken,
             refreshToken,
-            reviwer
+            newUser
         };
     }
     catch (error) {
-        console.error("Error creating reviwer profile:", error);
+        console.error("Error creating user profile:", error);
         await prisma.user.delete({
             where: {
                 id: data.user.id

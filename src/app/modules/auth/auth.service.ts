@@ -1,5 +1,5 @@
 import status from "http-status";
-import { User, UserStatus } from "../../../generated/prisma/client";
+import { User, UserRole, UserStatus } from "../../../generated/prisma/client";
 import { auth } from "../../lib/auth";
 import prisma from "../../lib/prisma";
 import { tokenUtils } from "../../utils/token";
@@ -11,7 +11,11 @@ import { IRequestUser } from "../../../interfaces";
 import { IChangePasswordPayload, RegisterUserPayload } from "./auth.interface";
 
 const registerUser = async(payload: RegisterUserPayload) => {
-    const {name,email, password, image} = payload;
+    const {name,email, password, image, role} = payload;
+    if(role && role !== UserRole.CONSUMER && role !== UserRole.OWNER){
+        throw new AppError(status.BAD_REQUEST, "Invalid role specified. Only CONSUMER and OWNER roles are allowed during registration.");
+    }
+
     const isUserExist = await prisma.user.findUnique({
         where: {
             email
@@ -26,6 +30,7 @@ const registerUser = async(payload: RegisterUserPayload) => {
             email, 
             password,
             image,
+            role: role || UserRole.CONSUMER
         }
     })
 
@@ -34,15 +39,23 @@ const registerUser = async(payload: RegisterUserPayload) => {
     }
 
    try {
-     const reviwer = await prisma.$transaction(async (tx)=> {
-         const createdReviewerProfile = await tx.reviewerProfile.create({
+
+     const newUser = await prisma.$transaction(async (tx)=> {
+            if(data.user.role === UserRole.CONSUMER){
+         return await tx.reviewerProfile.create({
              data: {
                  userId: data.user.id,
                  bio: "",
- 
              }
          })
-         return createdReviewerProfile;
+        } else if(data.user.role === UserRole.OWNER){
+             return await tx.ownerProfile.create({
+                data: {
+                    userId: data.user.id,
+                    ...(payload.businessName && {businessName: payload.businessName}),
+                }
+            })
+        }   
      })
      const accessToken = tokenUtils.getAccessToken({
         userId: data.user.id,
@@ -68,11 +81,11 @@ const registerUser = async(payload: RegisterUserPayload) => {
          ...data,
          accessToken,
          refreshToken,
-         reviwer
+         newUser
          
      }
    } catch (error) {
-    console.error("Error creating reviwer profile:", error);
+    console.error("Error creating user profile:", error);
     await prisma.user.delete({
         where: {
             id: data.user.id

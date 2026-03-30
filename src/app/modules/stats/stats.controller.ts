@@ -14,6 +14,18 @@ const getDashboardStats = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getPublicStats = catchAsync(async (_req: Request, res: Response) => {
+  const result = await StatsService.getPublicStats();
+
+  sendResponse(res, {
+    httpStatusCode: 200,
+    success: true,
+    data: result,
+    message: "Public stats retrieved successfully",
+  });
+});
+
 export const StatsController = {
   getDashboardStats,
+  getPublicStats,
 };

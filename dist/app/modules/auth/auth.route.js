@@ -4,7 +4,7 @@ import { UserRole } from "../../../generated/prisma/enums";
 import authCheck from "../../middleware/authCheck";
 import { multerUpload } from "../../../config/multerConfig";
 const router = Router();
-router.post("/sign-up/email", multerUpload.single("image"), AuthController.registerReviwer);
+router.post("/sign-up/email", multerUpload.single("image"), AuthController.registerUser);
 router.post("/sign-in/email", AuthController.loginUser);
 router.get("/me", authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CONSUMER, UserRole.OWNER), AuthController.getMe);
 router.get("/refresh-token", AuthController.getNewToken);

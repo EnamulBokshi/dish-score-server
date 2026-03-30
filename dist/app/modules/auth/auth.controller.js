@@ -7,7 +7,7 @@ import AppError from "../../helpers/errorHelpers/AppError";
 import { env } from "../../../config/env";
 import { auth } from "../../lib/auth";
 import { cookieUtils } from "../../utils/cookie";
-const registerReviwer = catchAsync(async (req, res) => {
+const registerUser = catchAsync(async (req, res) => {
     console.log("Registering reviewer with payload", req.body);
     const payload = req.body?.data ? JSON.parse(req.body.data) : req.body;
     const imagePath = req.file?.path;
@@ -22,7 +22,7 @@ const registerReviwer = catchAsync(async (req, res) => {
     sendResponse(res, {
         httpStatusCode: status.CREATED,
         success: true,
-        message: "Reviwer registered successfully",
+        message: "User registered successfully",
         data: {
             token,
             accessToken,
@@ -223,7 +223,7 @@ const googleSignInFailure = catchAsync(async (req, res) => {
 });
 export const AuthController = {
     loginUser,
-    registerReviwer,
+    registerUser,
     getNewToken,
     getMe,
     changePassword,

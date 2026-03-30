@@ -43,9 +43,32 @@ const updateContactStatus = catchAsync(async (req, res) => {
         message: "Contact request status updated successfully",
     });
 });
+const replyContact = catchAsync(async (req, res) => {
+    const id = req.params.id;
+    const payload = req.body;
+    const result = await ContactService.replyContact(id, payload, req.user);
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "Contact reply sent successfully",
+    });
+});
+const deleteContact = catchAsync(async (req, res) => {
+    const id = req.params.id;
+    const result = await ContactService.deleteContact(id, req.user);
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "Contact request deleted successfully",
+    });
+});
 export const ContactController = {
     createContact,
     getContacts,
     getContactById,
     updateContactStatus,
+    replyContact,
+    deleteContact,
 };

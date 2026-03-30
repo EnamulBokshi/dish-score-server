@@ -219,6 +219,36 @@ const getDashboardStats = async (user) => {
     }
     return statsData;
 };
+const getPublicStats = async () => {
+    const [totalReviews, totalReviewer, totalRestaurants, totalDishes] = await Promise.all([
+        prisma.review.count(),
+        prisma.user.count({
+            where: {
+                role: UserRole.CONSUMER,
+                isDeleted: false,
+            },
+        }),
+        prisma.restaurant.count({
+            where: {
+                isDeleted: false,
+            },
+        }),
+        prisma.dish.count({
+            where: {
+                restaurant: {
+                    isDeleted: false,
+                },
+            },
+        }),
+    ]);
+    return {
+        totalReviews,
+        totalReviewer,
+        totalRestaurants,
+        totalDishes,
+    };
+};
 export const StatsService = {
     getDashboardStats,
+    getPublicStats,
 };

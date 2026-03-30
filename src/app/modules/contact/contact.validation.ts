@@ -13,4 +13,9 @@ const updateContactStatusSchema = z.object({
   status: z.enum(ContactMessageStatus, "Status must be PENDING, IN_PROGRESS, or RESOLVED"),
 });
 
-export { createContactSchema, updateContactStatusSchema };
+const replyContactSchema = z.object({
+  subject: z.string().min(1, "Subject is required"),
+  message: z.string().min(1, "Message is required"),
+});
+
+export { createContactSchema, updateContactStatusSchema, replyContactSchema };

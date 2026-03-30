@@ -66,8 +66,6 @@ export const  authCheck = (...roles: UserRole[]) => {
                      email: user.email,
                      role: user.role as UserRole,
                 }
-
-
             }
 
             
@@ -84,6 +82,16 @@ export const  authCheck = (...roles: UserRole[]) => {
             if(verifiedToken.data!.role && roles.length > 0 && !roles.includes(verifiedToken.data!.role as UserRole)) {
                 throw new AppError(status.FORBIDDEN, "Forbidden: You don't have permission to access this resource");
             }
+            
+            // Ensure req.user is always set from access token if not already set from session
+            if (!req.user) {
+                req.user = {
+                    userId: verifiedToken.data!.userId,
+                    email: verifiedToken.data!.email,
+                    role: verifiedToken.data!.role as UserRole,
+                };
+            }
+            
             console.log("Authentication successful for user:", verifiedToken.data!.email);
             next();
         } catch (error) {

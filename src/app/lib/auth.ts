@@ -105,7 +105,7 @@ export const auth = betterAuth({
         }
 
         // Only send registration verification OTP through this template for consumer accounts.
-        if (user.role !== UserRole.CONSUMER || user.emailVerified) {
+        if ((user.role !== UserRole.CONSUMER && user.role !== UserRole.OWNER) || user.emailVerified ) {
           return;
         }
 

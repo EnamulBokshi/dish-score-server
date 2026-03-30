@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { ContactController } from "./contact.controller";
 import requestValidator from "../../middleware/requestValidator";
-import { createContactSchema, updateContactStatusSchema } from "./contact.validation";
+import {
+  createContactSchema,
+  replyContactSchema,
+  updateContactStatusSchema,
+} from "./contact.validation";
 import authCheck from "../../middleware/authCheck";
 import { UserRole } from "../../../generated/prisma/enums";
 
@@ -15,6 +19,17 @@ router.patch(
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   requestValidator(updateContactStatusSchema),
   ContactController.updateContactStatus,
+);
+router.post(
+  "/:id/reply",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  requestValidator(replyContactSchema),
+  ContactController.replyContact,
+);
+router.delete(
+  "/:id",
+  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  ContactController.deleteContact,
 );
 
 export const contactRoute = router;
