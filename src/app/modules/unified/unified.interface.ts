@@ -6,8 +6,9 @@ export interface IUnifiedRequester {
 }
 
 export interface IUnifiedCreatePayload {
-  restaurant: {
-    data: {
+  restaurantId?: string;
+  restaurant?: {
+    data?: {
       name: string;
       description?: string;
       address: string;
@@ -23,8 +24,9 @@ export interface IUnifiedCreatePayload {
     };
     images?: string[];
   };
-  dish: {
-    data: {
+  dishId?: string;
+  dish?: {
+    data?: {
       name: string;
       description?: string;
       price?: number;

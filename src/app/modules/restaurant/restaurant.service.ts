@@ -5,7 +5,7 @@ import status from "http-status";
 import AppError from "../../helpers/errorHelpers/AppError";
 import prisma from "../../lib/prisma";
 import { QueryBuilder } from "../../utils/QueryBuilder";
-import { restaurantEnumFields, restaurantFilterableFields, restaurantSearchableExactFields, restaurantSearchableFields } from "./restaurant.constats";
+import { restaurantEnumFields, restaurantFilterableFields, restaurantSearchableArrayFields, restaurantSearchableExactFields, restaurantSearchableFields } from "./restaurant.constats";
 import { deleteFileCloudinary } from "../../../config/cloudinary";
 import { ICreateRestaurantPayload } from "./restaurant.interface";
 
@@ -62,6 +62,7 @@ const getRestaurants = async (query: IQueryParams) => {
         query,
         {
             searchableFields:restaurantSearchableFields,
+            searchableArrayFields: restaurantSearchableArrayFields,
             filterableFields: restaurantFilterableFields,
             searchableEnumFields: restaurantEnumFields,
             searchableExactFields: restaurantSearchableExactFields,
@@ -112,6 +113,7 @@ const getRestaurantsByUserId = async (userId: string, query: IQueryParams) => {
         query,
         {
             searchableFields: restaurantSearchableFields,
+            searchableArrayFields: restaurantSearchableArrayFields,
             filterableFields: restaurantFilterableFields,
             searchableEnumFields: restaurantEnumFields,
             searchableExactFields: restaurantSearchableExactFields,
@@ -161,6 +163,9 @@ const getTopRatedRestaurants = async () => {
     const result = await prisma.restaurant.findMany({
         where: {
             isDeleted: false,
+            ratingAvg: {
+                gt: 0,
+            }
         },
         orderBy: [
             {

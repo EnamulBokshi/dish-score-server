@@ -723,60 +723,99 @@ Behavior:
 
 Base path: `/unified`
 
-### 14.1 Create Restaurant, Dish, and Review in One Transaction
+### 14.1 Create or Use Existing Restaurant, Dish, and Review
 - Method: `POST`
 - Path: `/unified/create-all`
-- Auth:  `CONSUMER`
+- Auth: `CONSUMER`, `OWNER`, `ADMIN`, `SUPER_ADMIN`
 - Content-Type: `multipart/form-data`
 
+**Flexible behavior:** You can create new records or use existing ones:
+- **Option A**: Create all three (restaurant + dish + review)
+- **Option B**: Use existing restaurant + create dish + review
+- **Option C**: Use existing restaurant + existing dish + review only
+
 Behavior:
-- Creates records in order: `Restaurant -> Dish -> Review`.
 - Uses one Prisma transaction, so if any step fails, all are rolled back.
+- Ratings are recalculated from all existing reviews for the restaurant and dish.
+- Validates that dish belongs to the specified restaurant (if using existing IDs).
 
 #### Form-data fields
 - `data` (text, JSON string)
-- `restaurantImages` (file, multiple)
-- `dishImages` (file, multiple)
-- `reviewImages` (file, multiple)
+- `restaurantImages` (file, multiple) - optional, only needed if creating new restaurant
+- `dishImages` (file, multiple) - optional, only needed if creating new dish
+- `reviewImages` (file, multiple) - optional, for review images
 
-#### `data` JSON example
+#### `data` JSON examples
 
+**Create all new:**
 ```json
 {
   "restaurant": {
     "data": {
       "name": "Food Hub",
-      "description": "Family restaurant",
       "address": "Road 12, House 3",
       "city": "Dhaka",
       "state": "Dhaka",
       "road": "Dhanmondi 12",
-      "location": {
-        "lat": "23.746",
-        "lng": "90.376"
-      },
-      "contact": "01800000000",
-      "tags": ["family", "bbq"]
+      "location": {"lat": "23.746", "lng": "90.376"}
     }
   },
   "dish": {
     "data": {
       "name": "Chicken Burger",
-      "description": "Spicy grilled burger",
       "price": 249,
-      "ingredients": ["chicken", "bun", "lettuce"],
-      "tags": ["spicy", "popular"]
+      "ingredients": ["chicken", "bun", "lettuce"]
     }
   },
   "review": {
     "data": {
       "rating": 5,
-      "comment": "Excellent combo",
-      "tags": ["must-try"]
+      "comment": "Excellent combo"
     }
   }
 }
 ```
+
+**Use existing restaurant, create dish + review:**
+```json
+{
+  "restaurantId": "clxx...id",
+  "dish": {
+    "data": {
+      "name": "New Burger",
+      "price": 299,
+      "ingredients": ["beef", "bun"]
+    }
+  },
+  "review": {
+    "data": {
+      "rating": 4,
+      "comment": "Good"
+    }
+  }
+}
+```
+
+**Use existing restaurant + dish, create review only:**
+```json
+{
+  "restaurantId": "clxx...id",
+  "dishId": "clxx...id",
+  "review": {
+    "data": {
+      "rating": 5,
+      "comment": "Amazing!"
+    }
+  }
+}
+```
+
+#### Validation rules
+- Must provide: Either `restaurantId` OR `restaurant.data` (one is required)
+- Must provide: Either `dishId` OR `dish.data` (one is required)
+- Must provide: `review` data with rating (1-5) is always required
+- If using `dishId`, it must belong to the specified restaurant
+- Referenced restaurant/dish cannot be soft-deleted
 
 #### Postman quick setup
 - Method: `POST`

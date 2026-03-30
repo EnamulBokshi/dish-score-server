@@ -35,9 +35,17 @@ export class QueryBuilder<
 
   search(): this {
     const { searchTerm } = this.queryParams;
-    const { searchableFields, searchableExactFields, searchableEnumFields } =
+    const {
+      searchableFields,
+      searchableExactFields,
+      searchableArrayFields,
+      searchableListRelationFields,
+      searchableEnumFields,
+    } =
       this.config;
     const exactSearchFields = new Set(searchableExactFields ?? []);
+    const arraySearchFields = new Set(searchableArrayFields ?? []);
+    const listRelationSearchFields = new Set(searchableListRelationFields ?? []);
     // doctorSearchableFields = ['user.name', 'user.email', 'specialties.specialty.title' , 'specialties.specialty.description']
     if (searchTerm && searchableFields && searchableFields.length > 0) {
       const searchConditions = searchableFields
@@ -66,6 +74,15 @@ export class QueryBuilder<
             return null;
           }
 
+          // Prisma scalar list fields (e.g. String[]) do not support `contains`.
+          if (arraySearchFields.has(field)) {
+            return {
+              [field]: {
+                has: searchTerm,
+              },
+            };
+          }
+
           if (field.includes(".")) {
             const parts = field.split(".");
 
@@ -77,6 +94,16 @@ export class QueryBuilder<
                     contains: searchTerm,
                     mode: "insensitive" as const,
                   } as PrismaStringFilter);
+
+              if (listRelationSearchFields.has(field)) {
+                return {
+                  [relation]: {
+                    some: {
+                      [nestedField]: filterValue,
+                    },
+                  },
+                };
+              }
 
               return {
                 [relation]: {
@@ -137,7 +164,8 @@ export class QueryBuilder<
   // /doctors?searchTerm=john&page=1&sortBy=name&specialty=cardiology&appointmentFee[lt]=100 => {}
   // { specialty: 'cardiology', appointmentFee: { lt: '100' } }
   filter(): this {
-    const { filterableFields } = this.config;
+    const { filterableFields, filterableListRelationFields } = this.config;
+    const listRelationFilterFields = new Set(filterableListRelationFields ?? []);
     const excludedField = [
       "searchTerm",
       "page",
@@ -184,6 +212,20 @@ export class QueryBuilder<
 
         if (parts.length === 2) {
           const [relation, nestedField] = parts;
+
+          if (listRelationFilterFields.has(key)) {
+            queryWhere[relation] = {
+              some: {
+                [nestedField]: this.parseFilterValue(value),
+              },
+            };
+            countQueryWhere[relation] = {
+              some: {
+                [nestedField]: this.parseFilterValue(value),
+              },
+            };
+            return;
+          }
 
           if (!queryWhere[relation]) {
             queryWhere[relation] = {};

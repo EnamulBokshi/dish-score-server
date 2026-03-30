@@ -41,8 +41,11 @@ export interface IQueryParams {
 export interface IQueryConfig {
   searchableFields?: string[];
   searchableExactFields?: string[];
+  searchableArrayFields?: string[];
+  searchableListRelationFields?: string[];
   searchableEnumFields?: Record<string, string[]>;
   filterableFields?: string[];
+  filterableListRelationFields?: string[];
 }
 
 export interface PrismaStringFilter {

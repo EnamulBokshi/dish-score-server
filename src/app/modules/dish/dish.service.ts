@@ -13,6 +13,37 @@ interface IDishRequester {
   role: UserRole;
 }
 
+const toPositiveInt = (value: unknown, fallback: number) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
+};
+
+const includesTerm = (value: unknown, term: string) => {
+  if (typeof value !== "string") return false;
+  return value.toLowerCase().includes(term);
+};
+
+const matchesDishSearchTerm = (
+  dish: {
+    name: string;
+    description: string | null;
+    tags: string[];
+    ingredients: string[];
+    restaurant: { name: string };
+    reviews: { comment: string | null }[];
+  },
+  term: string,
+) => {
+  return (
+    includesTerm(dish.name, term) ||
+    includesTerm(dish.description, term) ||
+    includesTerm(dish.restaurant.name, term) ||
+    dish.tags.some((tag) => includesTerm(tag, term)) ||
+    dish.ingredients.some((ingredient) => includesTerm(ingredient, term)) ||
+    dish.reviews.some((review) => includesTerm(review.comment, term))
+  );
+};
+
 const assertCanMutateDish = async (dishId: string, requester: IDishRequester) => {
   const dish = await prisma.dish.findFirst({
     where: {
@@ -71,11 +102,89 @@ const createDish = async (payload: ICreateDishPayload) => {
 };
 
 const getDishes = async (query: IQueryParams) => {
+  const rawSearchTerm = typeof query.searchTerm === "string" ? query.searchTerm.trim() : "";
+  const normalizedSearchTerm = rawSearchTerm.toLowerCase();
+
+  // Fallback for partial text matching on scalar-list fields (tags/ingredients) and review comments.
+  if (normalizedSearchTerm) {
+    const baseQueryBuilder = new QueryBuilder<Dish, Prisma.DishWhereInput, Prisma.DishInclude>(
+      prisma.dish,
+      query,
+      {
+        filterableFields: ["name", "restaurantId", "price", "ratingAvg"],
+      },
+    );
+
+    const baseQuery = baseQueryBuilder
+      .filter()
+      .where({
+        restaurant: {
+          isDeleted: false,
+        },
+      })
+      .include({
+        restaurant: {
+          select: {
+            id: true,
+            name: true,
+            city: true,
+            state: true,
+          },
+        },
+        reviews: {
+          select: {
+            id: true,
+            rating: true,
+            comment: true,
+          },
+        },
+      })
+      .sort()
+      .getQuery();
+
+    const dishes = await prisma.dish.findMany({
+      where: baseQuery.where as Prisma.DishWhereInput,
+      include: baseQuery.include as Prisma.DishInclude,
+      orderBy: baseQuery.orderBy as Prisma.DishOrderByWithRelationInput | Prisma.DishOrderByWithRelationInput[],
+    });
+
+    const filteredDishes = dishes.filter((dish) =>
+      matchesDishSearchTerm(
+        {
+          name: dish.name,
+          description: dish.description,
+          tags: dish.tags,
+          ingredients: dish.ingredients,
+          restaurant: { name: dish.restaurant.name },
+          reviews: dish.reviews.map((review) => ({ comment: review.comment })),
+        },
+        normalizedSearchTerm,
+      ),
+    );
+
+    const page = toPositiveInt(query.page, 1);
+    const limit = toPositiveInt(query.limit, 10);
+    const skip = (page - 1) * limit;
+    const paginatedData = filteredDishes.slice(skip, skip + limit);
+
+    return {
+      data: paginatedData,
+      meta: {
+        page,
+        limit,
+        total: filteredDishes.length,
+        totalPages: Math.ceil(filteredDishes.length / limit),
+      },
+    };
+  }
+
   const queryBuilder = new QueryBuilder<Dish, Prisma.DishWhereInput, Prisma.DishInclude>(
     prisma.dish,
     query,
     {
-      searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "tags", "ingredients", "price", "ratingAvg"],
+      searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "tags", "ingredients"],
+      searchableArrayFields: ["tags", "ingredients"],
+      searchableListRelationFields: ["reviews.comment"],
       filterableFields: ["name", "restaurantId", "price", "ratingAvg"],
     },
   );
@@ -147,11 +256,89 @@ const getDishById = async (id: string) => {
 };
 
 const getDishesByUserId = async (userId: string, query: IQueryParams) => {
+  const rawSearchTerm = typeof query.searchTerm === "string" ? query.searchTerm.trim() : "";
+  const normalizedSearchTerm = rawSearchTerm.toLowerCase();
+
+  if (normalizedSearchTerm) {
+    const baseQueryBuilder = new QueryBuilder<Dish, Prisma.DishWhereInput, Prisma.DishInclude>(
+      prisma.dish,
+      query,
+      {
+        filterableFields: ["name", "restaurantId", "price", "ratingAvg"],
+      },
+    );
+
+    const baseQuery = baseQueryBuilder
+      .filter()
+      .where({
+        restaurant: {
+          isDeleted: false,
+          createdByUserId: userId,
+        },
+      })
+      .include({
+        restaurant: {
+          select: {
+            id: true,
+            name: true,
+            city: true,
+            state: true,
+          },
+        },
+        reviews: {
+          select: {
+            id: true,
+            rating: true,
+            comment: true,
+          },
+        },
+      })
+      .sort()
+      .getQuery();
+
+    const dishes = await prisma.dish.findMany({
+      where: baseQuery.where as Prisma.DishWhereInput,
+      include: baseQuery.include as Prisma.DishInclude,
+      orderBy: baseQuery.orderBy as Prisma.DishOrderByWithRelationInput | Prisma.DishOrderByWithRelationInput[],
+    });
+
+    const filteredDishes = dishes.filter((dish) =>
+      matchesDishSearchTerm(
+        {
+          name: dish.name,
+          description: dish.description,
+          tags: dish.tags,
+          ingredients: dish.ingredients,
+          restaurant: { name: dish.restaurant.name },
+          reviews: dish.reviews.map((review) => ({ comment: review.comment })),
+        },
+        normalizedSearchTerm,
+      ),
+    );
+
+    const page = toPositiveInt(query.page, 1);
+    const limit = toPositiveInt(query.limit, 10);
+    const skip = (page - 1) * limit;
+    const paginatedData = filteredDishes.slice(skip, skip + limit);
+
+    return {
+      data: paginatedData,
+      meta: {
+        page,
+        limit,
+        total: filteredDishes.length,
+        totalPages: Math.ceil(filteredDishes.length / limit),
+      },
+    };
+  }
+
   const queryBuilder = new QueryBuilder<Dish, Prisma.DishWhereInput, Prisma.DishInclude>(
     prisma.dish,
     query,
     {
-      searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "tags", "ingredients", "price", "ratingAvg"],
+      searchableFields: ["name", "description", "restaurant.name", "reviews.comment", "tags", "ingredients"],
+      searchableArrayFields: ["tags", "ingredients"],
+      searchableListRelationFields: ["reviews.comment"],
       filterableFields: ["name", "restaurantId", "price", "ratingAvg" ],
     },
   );

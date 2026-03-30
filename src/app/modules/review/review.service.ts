@@ -122,7 +122,8 @@ const getReviews = async (query: IQueryParams) => {
     prisma.review,
     query,
     {
-      searchableFields: ["comment", "user.name", "restaurant.name", "dish.name", "tags", "rating", "createdAt" ],
+      searchableFields: ["comment", "user.name", "restaurant.name", "dish.name", "tags"],
+      searchableArrayFields: ["tags"],
       filterableFields: ["restaurantId", "dishId", "userId", "rating", "createdAt"],
     },
   );
@@ -185,7 +186,8 @@ const getReviewsByUserId = async (userId: string, query: IQueryParams) => {
     prisma.review,
     query,
     {
-      searchableFields: ["comment", "restaurant.name", "dish.name", "likes.user.name", 'tags', "rating", "createdAt"],
+      searchableFields: ["comment", "restaurant.name", "dish.name", "likes.user.name", "tags"],
+      searchableArrayFields: ["tags"],
       filterableFields: ["restaurantId", "dishId", "rating", "createdAt"],
     },
   );

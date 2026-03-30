@@ -22,6 +22,7 @@ import { Prisma } from "../../../generated/prisma/client";
 import { UserRole } from "../../../generated/prisma/enums";
 
 export const restaurantSearchableFields = ['name', 'description', 'address', 'city', 'state', 'road', 'tags'] ;
+export const restaurantSearchableArrayFields = ['tags'];
 
 export const restaurantFilterableFields = ['name', 'city', 'state', 'ratingAvg'] ;
 

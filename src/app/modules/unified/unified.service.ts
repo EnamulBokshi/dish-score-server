@@ -1,7 +1,9 @@
 import prisma from "../../lib/prisma";
 import { IUnifiedCreatePayload, IUnifiedRequester } from "./unified.interface";
 
-const normalizeReviewImages = (payload: IUnifiedCreatePayload["review"]) => {
+const normalizeReviewImages = (payload: IUnifiedCreatePayload["review"] | undefined) => {
+  if (!payload) return [];
+  
   if (payload.images && payload.images.length > 0) {
     return payload.images;
   }
@@ -17,60 +19,131 @@ const normalizeReviewImages = (payload: IUnifiedCreatePayload["review"]) => {
   return [];
 };
 
-const getDishImage = (payload: IUnifiedCreatePayload["dish"]) => {
+const getDishImage = (payload: IUnifiedCreatePayload["dish"] | undefined) => {
+  if (!payload) return undefined;
+  
   if (payload.images && payload.images.length > 0) {
     return payload.images[0];
   }
 
-  return payload.data.image;
+  return payload.data?.image;
 };
 
 const createRestaurantDishReview = async (
   payload: IUnifiedCreatePayload,
   requester: IUnifiedRequester,
 ) => {
-  const { restaurant, dish, review } = payload;
+  const { restaurantId, restaurant, dishId, dish, review } = payload;
 
   const result = await prisma.$transaction(async (tx) => {
-    const createdRestaurant = await tx.restaurant.create({
-      data: {
-        ...restaurant.data,
-        images: restaurant.images ?? [],
-        createdByUserId: requester.userId,
-      },
-    });
+    // Handle restaurant: use existing ID or create new
+    let resId: string;
+    let createdRestaurant: any;
+    if (restaurantId) {
+      const existingRestaurant = await tx.restaurant.findUnique({
+        where: { id: restaurantId, isDeleted: false },
+      });
+      if (!existingRestaurant) {
+        throw new Error(`Restaurant with ID ${restaurantId} not found or is deleted`);
+      }
+      resId = restaurantId;
+      createdRestaurant = existingRestaurant;
+    } else {
+      const restaurantData = restaurant!.data!;
+      createdRestaurant = await tx.restaurant.create({
+        data: {
+          name: restaurantData.name,
+          address: restaurantData.address,
+          city: restaurantData.city,
+          state: restaurantData.state,
+          road: restaurantData.road,
+          location: restaurantData.location,
+          description: restaurantData.description ?? "",
+          contact: restaurantData.contact,
+          tags: restaurantData.tags ?? [],
+          images: restaurant?.images ?? [],
+          createdByUserId: requester.userId,
+        },
+      });
+      resId = createdRestaurant.id;
+    }
 
-    const createdDish = await tx.dish.create({
-      data: {
-        ...dish.data,
-        image: getDishImage(dish),
-        restaurantId: createdRestaurant.id,
-      },
-    });
+    // Handle dish: use existing ID or create new
+    let dishIdFinal: string;
+    let createdDish: any;
+    if (dishId) {
+      const existingDish = await tx.dish.findUnique({
+        where: { id: dishId },
+        include: { restaurant: { select: { isDeleted: true } } },
+      });
+      if (!existingDish || existingDish.restaurant.isDeleted) {
+        throw new Error(`Dish with ID ${dishId} not found or belongs to deleted restaurant`);
+      }
+      if (existingDish.restaurantId !== resId) {
+        throw new Error(`Dish with ID ${dishId} does not belong to the specified restaurant`);
+      }
+      dishIdFinal = dishId;
+      createdDish = existingDish;
+    } else {
+      const dishData = dish!.data!;
+      createdDish = await tx.dish.create({
+        data: {
+          name: dishData.name,
+          ingredients: dishData.ingredients ?? [],
+          description: dishData.description ?? "",
+          price: dishData.price,
+          tags: dishData.tags ?? [],
+          image: getDishImage(dish!),
+          restaurantId: resId,
+        },
+      });
+      dishIdFinal = createdDish.id;
+    }
 
+    // Create review
     const createdReview = await tx.review.create({
       data: {
         ...review.data,
         images: normalizeReviewImages(review),
-        restaurantId: createdRestaurant.id,
-        dishId: createdDish.id,
+        restaurantId: resId,
+        dishId: dishIdFinal,
         userId: requester.userId,
       },
     });
 
+    // Recalculate restaurant ratings from all reviews
+    const restaurantReviews = await tx.review.findMany({
+      where: { restaurantId: resId },
+      select: { rating: true },
+    });
+    const restAvgRating =
+      restaurantReviews.length > 0
+        ? restaurantReviews.reduce((sum, r) => sum + r.rating, 0) / restaurantReviews.length
+        : 0;
+
     await tx.restaurant.update({
-      where: { id: createdRestaurant.id },
+      where: { id: resId },
       data: {
-        ratingAvg: createdReview.rating,
-        totalReviews: 1,
+        ratingAvg: restAvgRating,
+        totalReviews: restaurantReviews.length,
       },
     });
 
+    // Recalculate dish ratings from all reviews
+    const dishReviews = await tx.review.findMany({
+      where: { dishId: dishIdFinal },
+      select: { rating: true },
+    });
+    const dishAvgRating =
+      dishReviews.length > 0
+        ? dishReviews.reduce((sum, r) => sum + r.rating, 0) / dishReviews.length
+        : 0;
+
     await tx.dish.update({
-      where: { id: createdDish.id },
+      where: { id: dishIdFinal },
       data: {
-        ratingAvg: createdReview.rating,
-        totalReviews: 1,
+        ratingAvg: dishAvgRating,
+        totalReviews: dishReviews.length,
       },
     });
 

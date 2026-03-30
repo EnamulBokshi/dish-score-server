@@ -12,18 +12,19 @@ const createRestaurantDishReview = catchAsync(async (req: Request, res: Response
   const reviewImages = (files.reviewImages || []).map((file) => file.path);
 
   const preparedPayload = {
-    ...payload,
-    restaurant: {
+    restaurantId: payload.restaurantId,
+    restaurant: payload.restaurant ? {
       ...payload.restaurant,
       images:
         restaurantImages.length > 0
           ? restaurantImages
           : (payload.restaurant?.images ?? []),
-    },
-    dish: {
+    } : undefined,
+    dishId: payload.dishId,
+    dish: payload.dish ? {
       ...payload.dish,
       images: dishImages.length > 0 ? dishImages : (payload.dish?.images ?? []),
-    },
+    } : undefined,
     review: {
       ...payload.review,
       images:
@@ -37,7 +38,7 @@ const createRestaurantDishReview = catchAsync(async (req: Request, res: Response
     httpStatusCode: 201,
     success: true,
     data: result,
-    message: "Restaurant, dish and review created successfully",
+    message: "Review created successfully",
   });
 });
 

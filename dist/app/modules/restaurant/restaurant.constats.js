@@ -19,6 +19,7 @@ export interface IRestaurant{
 */
 import { UserRole } from "../../../generated/prisma/enums";
 export const restaurantSearchableFields = ['name', 'description', 'address', 'city', 'state', 'road', 'tags'];
+export const restaurantSearchableArrayFields = ['tags'];
 export const restaurantFilterableFields = ['name', 'city', 'state', 'ratingAvg'];
 export const restaurantDefaultFields = ['id', 'name', 'description', 'address', 'city', 'state', 'road', 'location', 'contact', 'images', 'ratingAvg', 'totalReviews'];
 export const restaurantSearchableExactFields = ['name', 'city', 'state'];
