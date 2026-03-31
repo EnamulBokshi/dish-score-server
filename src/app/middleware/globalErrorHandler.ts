@@ -12,11 +12,12 @@ import AppError from "../helpers/errorHelpers/AppError";
 
 
 export const globalErrorHandler = async (
-  err: any,
+  err: unknown,
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  void next;
   if (env.NODE_ENV === "development") {
     console.error("Error from global error handler:", err);
   }
@@ -63,7 +64,7 @@ export const globalErrorHandler = async (
     statusCode = zodErrorResponse.statusCode;
     message =
       zodErrorResponse.message +
-      `: ${zodErrorResponse.errorSources.map((source:any) => `${source.message}`).join(", ")}`;
+      `: ${zodErrorResponse.errorSources.map((source: IErrorSource) => `${source.message}`).join(", ")}`;
     errorSources = [...zodErrorResponse.errorSources];
     stack = err.stack;
   } else if (err instanceof AppError) {

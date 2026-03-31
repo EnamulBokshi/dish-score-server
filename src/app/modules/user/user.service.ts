@@ -1,6 +1,5 @@
 import status from "http-status";
 import {
-  Admin,
   Prisma,
   UserRole,
   UserStatus,
@@ -293,7 +292,7 @@ const deleteUser = async (userId: string) => {
     });
 
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error during user deletion process:", error);
     throw new AppError(
       status.INTERNAL_SERVER_ERROR,

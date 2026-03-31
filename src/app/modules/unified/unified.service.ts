@@ -1,3 +1,4 @@
+import { Dish, Restaurant } from "../../../generated/prisma/client";
 import prisma from "../../lib/prisma";
 import { IUnifiedCreatePayload, IUnifiedRequester } from "./unified.interface";
 
@@ -38,7 +39,7 @@ const createRestaurantDishReview = async (
   const result = await prisma.$transaction(async (tx) => {
     // Handle restaurant: use existing ID or create new
     let resId: string;
-    let createdRestaurant: any;
+    let createdRestaurant: Restaurant;
     if (restaurantId) {
       const existingRestaurant = await tx.restaurant.findUnique({
         where: { id: restaurantId, isDeleted: false },
@@ -70,7 +71,7 @@ const createRestaurantDishReview = async (
 
     // Handle dish: use existing ID or create new
     let dishIdFinal: string;
-    let createdDish: any;
+    let createdDish: Dish;
     if (dishId) {
       const existingDish = await tx.dish.findUnique({
         where: { id: dishId },

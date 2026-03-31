@@ -86,7 +86,7 @@ const seedSuperAdmin = async()=> {
         console.log("Super Admin profile created successfully.");
         console.log("******************")
     }
-    catch (error:any) {
+    catch (error: unknown) {
         console.error("Error creating super admin profile:", error);
         // rollback -delete the user created for super admin
         await prisma.user.delete({

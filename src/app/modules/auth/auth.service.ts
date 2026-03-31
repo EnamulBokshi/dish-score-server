@@ -1,5 +1,5 @@
 import status from "http-status";
-import { User, UserRole, UserStatus } from "../../../generated/prisma/client";
+import { UserRole, UserStatus } from "../../../generated/prisma/client";
 import { auth } from "../../lib/auth";
 import prisma from "../../lib/prisma";
 import { tokenUtils } from "../../utils/token";
@@ -427,14 +427,22 @@ const resetPassword = async(payload: {email: string, otp: string, newPassword: s
      })
 }
 
-const googleSignInSuccess = async(session: Record<string, any>) => {
+interface IGoogleSession {
+    user: {
+        id: string;
+        name: string;
+        role: string;
+    };
+}
+
+const googleSignInSuccess = async(session: IGoogleSession) => {
     const isReviewerExist = await prisma.user.findUnique({
         where: {
             id: session.user.id,
         }
     });
     if(!isReviewerExist){
-        const user = await prisma.reviewerProfile.create({
+        await prisma.reviewerProfile.create({
             data: {
                 userId: session.user.id,
                 bio: "",
@@ -442,15 +450,20 @@ const googleSignInSuccess = async(session: Record<string, any>) => {
         })
     };
 
+    const sessionRole = session.user.role as UserRole;
+    const resolvedRole = Object.values(UserRole).includes(sessionRole)
+      ? sessionRole
+      : (isReviewerExist?.role ?? UserRole.CONSUMER);
+
     const accessToken = tokenUtils.getAccessToken({
         userId: session.user.id,
         name: session.user.name,
-        role: session.user.role,
+        role: resolvedRole,
     });
     const refreshToken = tokenUtils.getRefreshToken({
         userId: session.user.id,
         name: session.user.name,
-        role: session.user.role,
+        role: resolvedRole,
     });
 
     return {

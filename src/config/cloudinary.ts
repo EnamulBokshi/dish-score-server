@@ -42,7 +42,7 @@ export const uploadFileToCloudinary = async(buffer: Buffer, fileName: string, ):
         .join('.')
         .toLocaleLowerCase()
         .replace(/\s+/g, '-') // Replace spaces with hyphens
-        .replace(/[^a-z0-9\-]/g, ''); // Remove special characters except hyphens
+        .replace(/[^a-z0-9-]/g, ''); // Remove special characters except hyphens
 
         const uniqueName = Math.random().toString(36).substring(2)+"-"+Date.now()+"-"+fileNameWithoutExt;
 

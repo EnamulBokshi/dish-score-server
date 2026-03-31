@@ -9,6 +9,7 @@ import { likeRoute } from "../modules/like/like.route";
 import { contactRoute } from "../modules/contact/contact.route";
 import { statsRoute } from "../modules/stats/stats.route";
 import { unifiedRoute } from "../modules/unified/unified.route";
+import { searchRoute } from "../modules/search/search.route";
 
 const router =  Router();
 
@@ -22,6 +23,7 @@ router.use("/likes", likeRoute);
 router.use("/contact-us", contactRoute);
 router.use("/stats", statsRoute);
 router.use("/unified", unifiedRoute);
+router.use("/search", searchRoute);
 
  const IndexRoute = router;
  export default IndexRoute;

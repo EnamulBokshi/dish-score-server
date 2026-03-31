@@ -36,7 +36,7 @@ const createContact = async (payload: ICreateContactPayload) => {
         superAdminEmail: env.SUPER_ADMIN_EMAIL,
       },
     });
-  } catch (_error) {
+  } catch {
     // Keep API semantics strict: only return success if confirmation email is sent.
     await prisma.contactUs.delete({ where: { id: createdContact.id } }).catch(() => {
       // Swallow cleanup errors to preserve original email failure.

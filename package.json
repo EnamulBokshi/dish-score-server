@@ -13,7 +13,7 @@
     "studio": "prisma studio",
     "push": "prisma db push",
     "pull": "prisma db pull",
-    "lint": "eslint ./src/**/*",
+    "lint": "eslint ./src/**/* --no-warn-ignored",
     "stripe:webhook": "stripe listen --forward-to localhost:5000/webhook",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

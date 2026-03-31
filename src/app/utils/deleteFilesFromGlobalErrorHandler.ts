@@ -32,7 +32,7 @@ export const deleteFileFromGlobalErrorHandler = async (req: Request) => {
     if(filesToDelete.length > 0){
         await Promise.all(filesToDelete.map((url) => deleteFileCloudinary(url)));
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error deleting file in global error handler:", error);
   }
 };

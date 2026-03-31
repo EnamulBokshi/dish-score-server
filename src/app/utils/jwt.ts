@@ -15,10 +15,11 @@ const verifyToken = (token: string, secret: string) => {
         success: true,
         data: decoded
        };
-    } catch (error:any) {
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Token verification failed";
         return {
         success: false,
-        message: error.message
+        message
        }
     }
 }

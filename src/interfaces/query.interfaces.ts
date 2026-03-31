@@ -23,8 +23,8 @@ export interface PrismaCountArgs {
 }
 
 export interface PrismaModelDelegate {
-  findMany(args?: any): Promise<any[]>;
-  count(args?: any): Promise<number>;
+  findMany(args?: unknown): Promise<unknown[]>;
+  count(args?: unknown): Promise<number>;
 }
 
 export interface IQueryParams {
@@ -35,7 +35,7 @@ export interface IQueryParams {
   sortOrder?: "asc" | "desc";
   fields?: string;
   includes?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface IQueryConfig {
