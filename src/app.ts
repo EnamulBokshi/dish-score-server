@@ -1,7 +1,5 @@
-import express, { Application,  Request, Response} from "express";
+import express, { Application, Request, Response, RequestHandler } from "express";
 import cookieParser from "cookie-parser";
-import { toNodeHandler } from "better-auth/node";
-import { auth } from "./app/lib/auth";
 import path from "node:path";
 import cors from "cors";
 import { env } from "./config/env";
@@ -29,8 +27,30 @@ app.use( cors({
 }))
 app.use(logger);
 
+let authHandlerPromise: Promise<RequestHandler> | null = null;
 
-app.use("/api/auth/", toNodeHandler(auth));
+const getAuthHandler = async () => {
+  if (!authHandlerPromise) {
+    authHandlerPromise = (async () => {
+      const [{ toNodeHandler }, { auth }] = await Promise.all([
+        import("better-auth/node"),
+        import("./app/lib/auth"),
+      ]);
+      return toNodeHandler(auth);
+    })();
+  }
+
+  return authHandlerPromise;
+};
+
+app.use("/api/auth/", async (req, res, next) => {
+  try {
+    const authHandler = await getAuthHandler();
+    return authHandler(req, res, next);
+  } catch (error) {
+    return next(error);
+  }
+});
 
 // Logger middleware
 

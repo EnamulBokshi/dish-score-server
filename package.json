@@ -14,12 +14,16 @@
     "push": "prisma db push",
     "pull": "prisma db pull",
     "lint": "eslint ./src/**/* --no-warn-ignored",
-    "stripe:webhook": "stripe listen --forward-to localhost:5000/webhook",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vercel-build": "prisma generate && prisma migrate deploy"
+
   },
   "keywords": [],
   "author": "",
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "license": "ISC",
   "packageManager": "pnpm@10.26.2",
   "dependencies": {
