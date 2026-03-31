@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/server.js",
-    "build": "tsc",
+    "start": "tsx src/server.ts",
+    "build": "prisma generate && tsc",
     "dev": "tsx watch src/server.ts",
     "seed:admin": "tsx src/scripts/seedAdmin.ts",
     "migrate": "prisma migrate dev",

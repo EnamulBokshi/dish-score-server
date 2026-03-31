@@ -7,6 +7,7 @@ import { handlePrismaClientKnownRequestError, handlePrismaClientUnknownError, ha
 import zodErrorHelper from "../helpers/errorHelpers/zodErrorHelper";
 import AppError from "../helpers/errorHelpers/AppError";
 export const globalErrorHandler = async (err, req, res, next) => {
+    void next;
     if (env.NODE_ENV === "development") {
         console.error("Error from global error handler:", err);
     }

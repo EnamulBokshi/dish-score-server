@@ -1,4 +1,4 @@
-import express, { Application, NextFunction, Request, Response} from "express";
+import express, { Application,  Request, Response} from "express";
 import cookieParser from "cookie-parser";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./app/lib/auth";
@@ -46,17 +46,6 @@ app.get("/", (req: Request, res:Response) => {
   res.send("Hello World!");
 });
 
-// cron.schedule("*/25 * * * *", async ()=> {
-//   try {
-    
-//     console.log('Runnng cron job to cancel unpaid appointments');
-//     await AppointmentService.cancelUnpaidAppointments();
-//   } catch (error:any) {
-//     console.error('Error occurred while canceling unpaid appointments:', error);
-
-//   }
-
-// })
 
 
 app.use("/api/v1", IndexRoute);

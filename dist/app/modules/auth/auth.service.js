@@ -380,7 +380,7 @@ const googleSignInSuccess = async (session) => {
         }
     });
     if (!isReviewerExist) {
-        const user = await prisma.reviewerProfile.create({
+        await prisma.reviewerProfile.create({
             data: {
                 userId: session.user.id,
                 bio: "",
@@ -388,15 +388,19 @@ const googleSignInSuccess = async (session) => {
         });
     }
     ;
+    const sessionRole = session.user.role;
+    const resolvedRole = Object.values(UserRole).includes(sessionRole)
+        ? sessionRole
+        : (isReviewerExist?.role ?? UserRole.CONSUMER);
     const accessToken = tokenUtils.getAccessToken({
         userId: session.user.id,
         name: session.user.name,
-        role: session.user.role,
+        role: resolvedRole,
     });
     const refreshToken = tokenUtils.getRefreshToken({
         userId: session.user.id,
         name: session.user.name,
-        role: session.user.role,
+        role: resolvedRole,
     });
     return {
         accessToken,

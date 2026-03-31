@@ -12,9 +12,10 @@ const verifyToken = (token, secret) => {
         };
     }
     catch (error) {
+        const message = error instanceof Error ? error.message : "Token verification failed";
         return {
             success: false,
-            message: error.message
+            message
         };
     }
 };

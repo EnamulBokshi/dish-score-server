@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prisma";
-import { bearer, emailOTP } from "better-auth/plugins";
+import { bearer, emailOTP, oAuthProxy } from "better-auth/plugins";
 import { sendEmail } from "../utils/email";
 
 import { UserRole, UserStatus } from "../../generated/prisma/enums";
@@ -11,6 +11,7 @@ import { env } from "../../config/env";
 export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
+  trustedOrigins: [env.BETTER_AUTH_URL || "http://localhost:5000", env.FRONTEND_URL || "http://localhost:3000"],
   database: prismaAdapter(prisma, {
     provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
@@ -123,7 +124,8 @@ export const auth = betterAuth({
       },
       expiresIn: 2 * 60,
       otpLength: 6,
-    })
+    }),
+    oAuthProxy()
   ],
   session: {
     expiresIn: env.BETTER_AUTH_SESSION_TOKEN_EXPIRES_IN,
@@ -137,26 +139,29 @@ export const auth = betterAuth({
     signIn: `${env.BETTER_AUTH_URL}/api/v1/auth/google/success`,
   },
 
-   trustedOrigins: [env.BETTER_AUTH_URL || "http://localhost:5000", env.FRONTEND_URL || "http://localhost:3000"],
   advanced: {
-    // disableCSRFCheck: true, // Disable CSRF check for development purposes. Make sure to enable it in production!
+    disableCSRFCheck: true, // Disable CSRF check for development purposes. Make sure to enable it in production!
     cookies: {
       state: {
+        name:"better-auth.session_token",
         attributes: {
           sameSite: "none",
           secure: env.NODE_ENV === "production",
           httpOnly: true,
           path: '/',
+          partitioned: true,
         }
       },
      
     },
     sessionToken: {
+      name: "better-auth.session_token",
       attributes: {
         sameSite: "none",
         secure: env.NODE_ENV === "production",
         httpOnly: true,
-        path: '/'
+        path: '/',
+        partitioned: true,
       }
     }
   }

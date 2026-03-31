@@ -30,14 +30,6 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
-// cron.schedule("*/25 * * * *", async ()=> {
-//   try {
-//     console.log('Runnng cron job to cancel unpaid appointments');
-//     await AppointmentService.cancelUnpaidAppointments();
-//   } catch (error:any) {
-//     console.error('Error occurred while canceling unpaid appointments:', error);
-//   }
-// })
 app.use("/api/v1", IndexRoute);
 app.use(globalErrorHandler);
 app.use(NotFoundMiddleware);
