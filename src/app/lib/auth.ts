@@ -8,6 +8,8 @@ import { UserRole, UserStatus } from "../../generated/prisma/enums";
 import { env } from "../../config/env";
 // If your Prisma file is located elsewhere, you can change the path
 
+const isProduction = env.NODE_ENV === "production";
+
 export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
@@ -140,19 +142,9 @@ export const auth = betterAuth({
   },
 
   advanced: {
-    disableCSRFCheck: true, // Disable CSRF check for development purposes. Make sure to enable it in production!
+    disableCSRFCheck: !isProduction,
     cookies: {
-      state: {
-        name:"better-auth.session_token",
-        attributes: {
-          sameSite: "none",
-          secure: env.NODE_ENV === "production",
-          httpOnly: true,
-          path: '/',
-          partitioned: true,
-        }
-      },
-     
+      // Keep Better Auth default state cookie naming/behavior to avoid OAuth state collisions.
     },
     sessionToken: {
       name: "better-auth.session_token",
@@ -161,7 +153,6 @@ export const auth = betterAuth({
         secure: env.NODE_ENV === "production",
         httpOnly: true,
         path: '/',
-        partitioned: true,
       }
     }
   }
