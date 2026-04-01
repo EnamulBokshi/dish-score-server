@@ -20,11 +20,15 @@ const updateAdminSchema = z.object({
     role: z.enum(AdminRole, "Role must be either ADMIN or SUPER_ADMIN").optional(),
 });
 
+const userStatusSchema = z
+    .union([z.enum(UserStatus), z.literal("SUSPENDED")])
+    .transform((value) => (value === "SUSPENDED" ? UserStatus.BANNED : value));
+
 
 const userUpdateSchema = z.object({
     name: z.string().min(1, "Name is required").optional(),
     image: z.url("Invalid image URL").optional(),
-    status: z.enum(UserStatus, "Status must be either ACTIVE, SUSPENDED, or DELETED").optional(),
+        status: userStatusSchema.optional(),
     role: z.enum(UserRole, "Role must be either CONSUMER, ADMIN, or SUPER_ADMIN").optional(),
     isDeleted: z.boolean().optional(),
 })

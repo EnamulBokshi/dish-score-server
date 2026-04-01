@@ -77,12 +77,15 @@ const getConsumerStatsData = async (user: IRequestUser) => {
       where: {
         restaurant: {
           isDeleted: false,
+          createdByUserId: user.userId,
         },
+        
       },
     }),
     prisma.restaurant.count({
       where: {
         isDeleted: false,
+        createdByUserId: user.userId,
       },
     }),
     prisma.review.findMany({
