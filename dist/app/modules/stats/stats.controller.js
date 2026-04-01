@@ -1,0 +1,25 @@
+import catchAsync from "../../helpers/catchAsync";
+import { sendResponse } from "../../helpers/sendResponse";
+import { StatsService } from "./stats.service";
+const getDashboardStats = catchAsync(async (req, res) => {
+    const result = await StatsService.getDashboardStats(req.user);
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "Dashboard stats retrieved successfully",
+    });
+});
+const getPublicStats = catchAsync(async (_req, res) => {
+    const result = await StatsService.getPublicStats();
+    sendResponse(res, {
+        httpStatusCode: 200,
+        success: true,
+        data: result,
+        message: "Public stats retrieved successfully",
+    });
+});
+export const StatsController = {
+    getDashboardStats,
+    getPublicStats,
+};

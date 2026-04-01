@@ -1,0 +1,27 @@
+/*
+
+model Restaurant {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  address     String
+  city        String
+  state       String
+  road        String
+  location   Json
+
+  contact     String?
+  images      String[]
+
+  dishes      Dish[]
+  reviews     Review[]
+
+  ratingAvg   Float    @default(0)
+  totalReviews Int     @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+*/
+export {};

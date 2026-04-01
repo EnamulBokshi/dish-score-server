@@ -1,0 +1,22 @@
+/*
+enum AdminRole {
+    ADMIN
+    SUPER_ADMIN
+}
+
+model Admin {
+    id            String   @id @default(cuid())
+    userId        String   @unique
+    name          String
+    email         String   @unique
+    contactNumber String?
+    profilePhoto  String?
+    role         AdminRole   @default(ADMIN)
+    user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+}
+
+*/
+export {};
