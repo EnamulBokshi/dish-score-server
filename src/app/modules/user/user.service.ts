@@ -103,7 +103,11 @@ const getAllUsers = async (query: IQueryParams) => {
       admin: true,
     })
     .sort()
+    .where({
+      isDeleted: false,
+    })
     .execute();
+
 
   return result;
 };
