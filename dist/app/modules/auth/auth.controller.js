@@ -218,11 +218,41 @@ const googleSignInSuccess = catchAsync(async (req, res) => {
     if (!sessionToken) {
         return res.redirect(`${env.FRONTEND_URL}/login?error=oauth_failed`);
     }
-    const session = await auth.api.getSession({
-        headers: {
-            Cookie: `better-auth.session_token=${sessionToken}`,
-        },
-    });
+    const decodedSessionToken = decodeURIComponent(sessionToken);
+    const unsignedSessionToken = decodedSessionToken.split(".")[0];
+    const sessionTokenCandidates = Array.from(new Set([sessionToken, decodedSessionToken, unsignedSessionToken].filter(Boolean)));
+    const incomingCookieHeader = req.headers.cookie;
+    const cookieHeadersToTry = [
+        incomingCookieHeader || "",
+        ...sessionTokenCandidates.flatMap((token) => [
+            `better-auth.session_token=${encodeURIComponent(token)}`,
+            `__Secure-better-auth.session_token=${encodeURIComponent(token)}`,
+            `__Host-better-auth.session_token=${encodeURIComponent(token)}`,
+        ]),
+    ].filter(Boolean);
+    let session = null;
+    for (const cookieHeader of cookieHeadersToTry) {
+        session = await auth.api.getSession({
+            headers: {
+                Cookie: cookieHeader,
+            },
+        });
+        if (session) {
+            break;
+        }
+    }
+    if (!session) {
+        for (const token of sessionTokenCandidates) {
+            session = await auth.api.getSession({
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (session) {
+                break;
+            }
+        }
+    }
     if (!session) {
         return res.redirect(`${env.FRONTEND_URL}/login?error=no_session_found`);
     }
