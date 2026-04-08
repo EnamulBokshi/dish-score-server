@@ -131,13 +131,22 @@ const getDishes = async (query: IQueryParams) => {
             state: true,
           },
         },
+        
         reviews: {
           select: {
             id: true,
             rating: true,
             comment: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+              }
+            }
           },
         },
+        
       })
       .sort()
       .getQuery();
@@ -243,6 +252,13 @@ const getDishById = async (id: string) => {
           id: true,
           rating: true,
           comment: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            }
+          },
         },
       },
     },

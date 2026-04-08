@@ -10,6 +10,7 @@ model Dish {
   restaurantId String
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
 
+
   reviews      Review[]
   ratingAvg    Float     @default(0)
   totalReviews Int       @default(0)
@@ -18,4 +19,5 @@ model Dish {
   updatedAt DateTime @updatedAt
 
   @@index([restaurantId])
+
 }
