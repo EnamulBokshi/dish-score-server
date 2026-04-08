@@ -29,6 +29,10 @@ const loadEnvVariables = () => {
         "CLOUDINARY_CLOUD_NAME",
         "CLOUDINARY_API_KEY",
         "CLOUDINARY_API_SECRET",
+        "GOOGLE_CALLBACK_URL",
+        "FRONTEND_URL",
+        "GEMINI_API_KEY",
+        "GEMINI_MODEL",
     ];
     for (const envVar of requiredEnvVars) {
         if (!process.env[envVar]) {
@@ -54,6 +58,10 @@ const loadEnvVariables = () => {
         SUPER_ADMIN_PHONE: process.env.SUPER_ADMIN_PHONE,
         SUPER_ADMIN_PROFILE_PHOTO_URL: process.env
             .SUPER_ADMIN_PROFILE_PHOTO_URL,
+        GEMINI: {
+            API_KEY: process.env.GEMINI_API_KEY,
+            MODEL: process.env.GEMINI_MODEL,
+        },
         SMTP_SENDER: {
             USER: process.env.EMAIL_SENDER_SMTP_USER,
             PASSWORD: process.env.EMAIL_SENDER_SMTP_PASSWORD,

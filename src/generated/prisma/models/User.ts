@@ -236,6 +236,7 @@ export type UserWhereInput = {
   admin?: Prisma.XOR<Prisma.AdminNullableScalarRelationFilter, Prisma.AdminWhereInput> | null
   ownerProfile?: Prisma.XOR<Prisma.OwnerProfileNullableScalarRelationFilter, Prisma.OwnerProfileWhereInput> | null
   reviewerProfile?: Prisma.XOR<Prisma.ReviewerProfileNullableScalarRelationFilter, Prisma.ReviewerProfileWhereInput> | null
+  testimonials?: Prisma.TestimonialListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
 }
@@ -258,6 +259,7 @@ export type UserOrderByWithRelationInput = {
   admin?: Prisma.AdminOrderByWithRelationInput
   ownerProfile?: Prisma.OwnerProfileOrderByWithRelationInput
   reviewerProfile?: Prisma.ReviewerProfileOrderByWithRelationInput
+  testimonials?: Prisma.TestimonialOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
 }
@@ -283,6 +285,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   admin?: Prisma.XOR<Prisma.AdminNullableScalarRelationFilter, Prisma.AdminWhereInput> | null
   ownerProfile?: Prisma.XOR<Prisma.OwnerProfileNullableScalarRelationFilter, Prisma.OwnerProfileWhereInput> | null
   reviewerProfile?: Prisma.XOR<Prisma.ReviewerProfileNullableScalarRelationFilter, Prisma.ReviewerProfileWhereInput> | null
+  testimonials?: Prisma.TestimonialListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
 }, "id" | "email">
@@ -339,6 +342,7 @@ export type UserCreateInput = {
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -361,6 +365,7 @@ export type UserUncheckedCreateInput = {
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileUncheckedCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -383,6 +388,7 @@ export type UserUpdateInput = {
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -405,6 +411,7 @@ export type UserUncheckedUpdateInput = {
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUncheckedUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -618,6 +625,20 @@ export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewsInput, Prisma.UserUpdateWithoutReviewsInput>, Prisma.UserUncheckedUpdateWithoutReviewsInput>
 }
 
+export type UserCreateNestedOneWithoutTestimonialsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTestimonialsInput, Prisma.UserUncheckedCreateWithoutTestimonialsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTestimonialsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTestimonialsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTestimonialsInput, Prisma.UserUncheckedCreateWithoutTestimonialsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTestimonialsInput
+  upsert?: Prisma.UserUpsertWithoutTestimonialsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTestimonialsInput, Prisma.UserUpdateWithoutTestimonialsInput>, Prisma.UserUncheckedUpdateWithoutTestimonialsInput>
+}
+
 export type UserCreateWithoutAdminInput = {
   id: string
   name: string
@@ -635,6 +656,7 @@ export type UserCreateWithoutAdminInput = {
   restaurants?: Prisma.RestaurantCreateNestedManyWithoutCreatedByInput
   ownerProfile?: Prisma.OwnerProfileCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -656,6 +678,7 @@ export type UserUncheckedCreateWithoutAdminInput = {
   restaurants?: Prisma.RestaurantUncheckedCreateNestedManyWithoutCreatedByInput
   ownerProfile?: Prisma.OwnerProfileUncheckedCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -693,6 +716,7 @@ export type UserUpdateWithoutAdminInput = {
   restaurants?: Prisma.RestaurantUpdateManyWithoutCreatedByNestedInput
   ownerProfile?: Prisma.OwnerProfileUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -714,6 +738,7 @@ export type UserUncheckedUpdateWithoutAdminInput = {
   restaurants?: Prisma.RestaurantUncheckedUpdateManyWithoutCreatedByNestedInput
   ownerProfile?: Prisma.OwnerProfileUncheckedUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -736,6 +761,7 @@ export type UserCreateWithoutSessionsInput = {
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
 
@@ -757,6 +783,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileUncheckedCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -794,6 +821,7 @@ export type UserUpdateWithoutSessionsInput = {
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
 
@@ -815,6 +843,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUncheckedUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -836,6 +865,7 @@ export type UserCreateWithoutAccountsInput = {
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
@@ -857,6 +887,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileUncheckedCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -894,6 +925,7 @@ export type UserUpdateWithoutAccountsInput = {
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
@@ -915,6 +947,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUncheckedUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -935,6 +968,7 @@ export type UserCreateWithoutLikesInput = {
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -956,6 +990,7 @@ export type UserUncheckedCreateWithoutLikesInput = {
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileUncheckedCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -993,6 +1028,7 @@ export type UserUpdateWithoutLikesInput = {
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1014,6 +1050,7 @@ export type UserUncheckedUpdateWithoutLikesInput = {
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUncheckedUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1035,6 +1072,7 @@ export type UserCreateWithoutOwnerProfileInput = {
   restaurants?: Prisma.RestaurantCreateNestedManyWithoutCreatedByInput
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1056,6 +1094,7 @@ export type UserUncheckedCreateWithoutOwnerProfileInput = {
   restaurants?: Prisma.RestaurantUncheckedCreateNestedManyWithoutCreatedByInput
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1093,6 +1132,7 @@ export type UserUpdateWithoutOwnerProfileInput = {
   restaurants?: Prisma.RestaurantUpdateManyWithoutCreatedByNestedInput
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1114,6 +1154,7 @@ export type UserUncheckedUpdateWithoutOwnerProfileInput = {
   restaurants?: Prisma.RestaurantUncheckedUpdateManyWithoutCreatedByNestedInput
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1135,6 +1176,7 @@ export type UserCreateWithoutReviewerProfileInput = {
   restaurants?: Prisma.RestaurantCreateNestedManyWithoutCreatedByInput
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1156,6 +1198,7 @@ export type UserUncheckedCreateWithoutReviewerProfileInput = {
   restaurants?: Prisma.RestaurantUncheckedCreateNestedManyWithoutCreatedByInput
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileUncheckedCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1193,6 +1236,7 @@ export type UserUpdateWithoutReviewerProfileInput = {
   restaurants?: Prisma.RestaurantUpdateManyWithoutCreatedByNestedInput
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1214,6 +1258,7 @@ export type UserUncheckedUpdateWithoutReviewerProfileInput = {
   restaurants?: Prisma.RestaurantUncheckedUpdateManyWithoutCreatedByNestedInput
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUncheckedUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1235,6 +1280,7 @@ export type UserCreateWithoutRestaurantsInput = {
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1256,6 +1302,7 @@ export type UserUncheckedCreateWithoutRestaurantsInput = {
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileUncheckedCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1293,6 +1340,7 @@ export type UserUpdateWithoutRestaurantsInput = {
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1314,6 +1362,7 @@ export type UserUncheckedUpdateWithoutRestaurantsInput = {
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUncheckedUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1335,6 +1384,7 @@ export type UserCreateWithoutReviewsInput = {
   admin?: Prisma.AdminCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1356,6 +1406,7 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
   ownerProfile?: Prisma.OwnerProfileUncheckedCreateNestedOneWithoutUserInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedCreateNestedOneWithoutUserInput
+  testimonials?: Prisma.TestimonialUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1393,6 +1444,7 @@ export type UserUpdateWithoutReviewsInput = {
   admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1414,6 +1466,111 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
   ownerProfile?: Prisma.OwnerProfileUncheckedUpdateOneWithoutUserNestedInput
   reviewerProfile?: Prisma.ReviewerProfileUncheckedUpdateOneWithoutUserNestedInput
+  testimonials?: Prisma.TestimonialUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutTestimonialsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  restaurants?: Prisma.RestaurantCreateNestedManyWithoutCreatedByInput
+  admin?: Prisma.AdminCreateNestedOneWithoutUserInput
+  ownerProfile?: Prisma.OwnerProfileCreateNestedOneWithoutUserInput
+  reviewerProfile?: Prisma.ReviewerProfileCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutTestimonialsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  restaurants?: Prisma.RestaurantUncheckedCreateNestedManyWithoutCreatedByInput
+  admin?: Prisma.AdminUncheckedCreateNestedOneWithoutUserInput
+  ownerProfile?: Prisma.OwnerProfileUncheckedCreateNestedOneWithoutUserInput
+  reviewerProfile?: Prisma.ReviewerProfileUncheckedCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTestimonialsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTestimonialsInput, Prisma.UserUncheckedCreateWithoutTestimonialsInput>
+}
+
+export type UserUpsertWithoutTestimonialsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTestimonialsInput, Prisma.UserUncheckedUpdateWithoutTestimonialsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTestimonialsInput, Prisma.UserUncheckedCreateWithoutTestimonialsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTestimonialsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTestimonialsInput, Prisma.UserUncheckedUpdateWithoutTestimonialsInput>
+}
+
+export type UserUpdateWithoutTestimonialsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  restaurants?: Prisma.RestaurantUpdateManyWithoutCreatedByNestedInput
+  admin?: Prisma.AdminUpdateOneWithoutUserNestedInput
+  ownerProfile?: Prisma.OwnerProfileUpdateOneWithoutUserNestedInput
+  reviewerProfile?: Prisma.ReviewerProfileUpdateOneWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTestimonialsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  restaurants?: Prisma.RestaurantUncheckedUpdateManyWithoutCreatedByNestedInput
+  admin?: Prisma.AdminUncheckedUpdateOneWithoutUserNestedInput
+  ownerProfile?: Prisma.OwnerProfileUncheckedUpdateOneWithoutUserNestedInput
+  reviewerProfile?: Prisma.ReviewerProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1427,6 +1584,7 @@ export type UserCountOutputType = {
   likes: number
   reviews: number
   restaurants: number
+  testimonials: number
   sessions: number
   accounts: number
 }
@@ -1435,6 +1593,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   likes?: boolean | UserCountOutputTypeCountLikesArgs
   reviews?: boolean | UserCountOutputTypeCountReviewsArgs
   restaurants?: boolean | UserCountOutputTypeCountRestaurantsArgs
+  testimonials?: boolean | UserCountOutputTypeCountTestimonialsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
 }
@@ -1473,6 +1632,13 @@ export type UserCountOutputTypeCountRestaurantsArgs<ExtArgs extends runtime.Type
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountTestimonialsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TestimonialWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SessionWhereInput
 }
@@ -1503,6 +1669,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   admin?: boolean | Prisma.User$adminArgs<ExtArgs>
   ownerProfile?: boolean | Prisma.User$ownerProfileArgs<ExtArgs>
   reviewerProfile?: boolean | Prisma.User$reviewerProfileArgs<ExtArgs>
+  testimonials?: boolean | Prisma.User$testimonialsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1558,6 +1725,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   admin?: boolean | Prisma.User$adminArgs<ExtArgs>
   ownerProfile?: boolean | Prisma.User$ownerProfileArgs<ExtArgs>
   reviewerProfile?: boolean | Prisma.User$reviewerProfileArgs<ExtArgs>
+  testimonials?: boolean | Prisma.User$testimonialsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1574,6 +1742,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     admin: Prisma.$AdminPayload<ExtArgs> | null
     ownerProfile: Prisma.$OwnerProfilePayload<ExtArgs> | null
     reviewerProfile: Prisma.$ReviewerProfilePayload<ExtArgs> | null
+    testimonials: Prisma.$TestimonialPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
   }
@@ -1989,6 +2158,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   admin<T extends Prisma.User$adminArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adminArgs<ExtArgs>>): Prisma.Prisma__AdminClient<runtime.Types.Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   ownerProfile<T extends Prisma.User$ownerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownerProfileArgs<ExtArgs>>): Prisma.Prisma__OwnerProfileClient<runtime.Types.Result.GetResult<Prisma.$OwnerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   reviewerProfile<T extends Prisma.User$reviewerProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewerProfileArgs<ExtArgs>>): Prisma.Prisma__ReviewerProfileClient<runtime.Types.Result.GetResult<Prisma.$ReviewerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  testimonials<T extends Prisma.User$testimonialsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$testimonialsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TestimonialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2550,6 +2720,30 @@ export type User$reviewerProfileArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.ReviewerProfileInclude<ExtArgs> | null
   where?: Prisma.ReviewerProfileWhereInput
+}
+
+/**
+ * User.testimonials
+ */
+export type User$testimonialsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Testimonial
+   */
+  select?: Prisma.TestimonialSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Testimonial
+   */
+  omit?: Prisma.TestimonialOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TestimonialInclude<ExtArgs> | null
+  where?: Prisma.TestimonialWhereInput
+  orderBy?: Prisma.TestimonialOrderByWithRelationInput | Prisma.TestimonialOrderByWithRelationInput[]
+  cursor?: Prisma.TestimonialWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TestimonialScalarFieldEnum | Prisma.TestimonialScalarFieldEnum[]
 }
 
 /**

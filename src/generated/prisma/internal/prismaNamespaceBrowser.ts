@@ -62,7 +62,8 @@ export const ModelName = {
   OwnerProfile: 'OwnerProfile',
   ReviewerProfile: 'ReviewerProfile',
   Restaurant: 'Restaurant',
-  Review: 'Review'
+  Review: 'Review',
+  Testimonial: 'Testimonial'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -272,6 +273,19 @@ export const ReviewScalarFieldEnum = {
 } as const
 
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const TestimonialScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  feedback: 'feedback',
+  rating: 'rating',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TestimonialScalarFieldEnum = (typeof TestimonialScalarFieldEnum)[keyof typeof TestimonialScalarFieldEnum]
 
 
 export const SortOrder = {

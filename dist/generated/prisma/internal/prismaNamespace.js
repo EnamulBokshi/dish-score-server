@@ -78,7 +78,8 @@ export const ModelName = {
     OwnerProfile: 'OwnerProfile',
     ReviewerProfile: 'ReviewerProfile',
     Restaurant: 'Restaurant',
-    Review: 'Review'
+    Review: 'Review',
+    Testimonial: 'Testimonial'
 };
 /**
  * Enums
@@ -231,6 +232,15 @@ export const ReviewScalarFieldEnum = {
     tags: 'tags',
     restaurantId: 'restaurantId',
     dishId: 'dishId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const TestimonialScalarFieldEnum = {
+    id: 'id',
+    title: 'title',
+    feedback: 'feedback',
+    rating: 'rating',
+    userId: 'userId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };

@@ -77,3 +77,8 @@ export type Restaurant = Prisma.RestaurantModel
  * 
  */
 export type Review = Prisma.ReviewModel
+/**
+ * Model Testimonial
+ * 
+ */
+export type Testimonial = Prisma.TestimonialModel
