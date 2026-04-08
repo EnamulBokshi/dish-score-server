@@ -309,9 +309,10 @@ const resendVerificationOtp = async (email) => {
     });
 };
 const forgetPassword = async (email) => {
+    const normalizedEmail = email.trim().toLowerCase();
     const isUserExist = await prisma.user.findUnique({
         where: {
-            email
+            email: normalizedEmail
         }
     });
     if (!isUserExist) {
@@ -320,7 +321,7 @@ const forgetPassword = async (email) => {
     if (!isUserExist.emailVerified) {
         throw new AppError(status.BAD_REQUEST, "Email is not verified. Please verify your email before resetting password.");
     }
-    if (isUserExist.status === UserStatus.BANNED || isUserExist.status === UserStatus.DELETED) {
+    if (isUserExist.isDeleted || isUserExist.status === UserStatus.BANNED || isUserExist.status === UserStatus.DELETED || isUserExist.status === UserStatus.INACTIVE) {
         throw new AppError(status.FORBIDDEN, "Your account is not active. Please contact support.");
     }
     const account = await prisma.account.findFirst({
@@ -333,14 +334,15 @@ const forgetPassword = async (email) => {
     }
     await auth.api.requestPasswordResetEmailOTP({
         body: {
-            email
+            email: normalizedEmail
         }
     });
 };
 const resetPassword = async (payload) => {
+    const normalizedEmail = payload.email.trim().toLowerCase();
     const isUserExist = await prisma.user.findUnique({
         where: {
-            email: payload.email
+            email: normalizedEmail
         }
     });
     if (!isUserExist) {
@@ -349,7 +351,7 @@ const resetPassword = async (payload) => {
     if (!isUserExist.emailVerified) {
         throw new AppError(status.BAD_REQUEST, "Email is not verified. Please verify your email before resetting password.");
     }
-    if (isUserExist.status === UserStatus.BANNED || isUserExist.status === UserStatus.DELETED) {
+    if (isUserExist.isDeleted || isUserExist.status === UserStatus.BANNED || isUserExist.status === UserStatus.DELETED || isUserExist.status === UserStatus.INACTIVE) {
         throw new AppError(status.FORBIDDEN, "Your account is not active. Please contact support.");
     }
     const account = await prisma.account.findFirst({
@@ -362,7 +364,7 @@ const resetPassword = async (payload) => {
     }
     await auth.api.resetPasswordEmailOTP({
         body: {
-            email: payload.email,
+            email: normalizedEmail,
             otp: payload.otp,
             password: payload.newPassword
         }

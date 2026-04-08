@@ -9,6 +9,18 @@ import { env } from "../../../config/env";
 import { auth } from "../../lib/auth";
 import { cookieUtils } from "../../utils/cookie";
 
+const isProduction = env.NODE_ENV === "production";
+const cookieSameSite: "lax" | "none" = isProduction ? "none" : "lax";
+
+const getRequestOrigin = (req: Request) => {
+  const forwardedProto = req.headers["x-forwarded-proto"];
+  const proto = Array.isArray(forwardedProto)
+    ? forwardedProto[0]
+    : forwardedProto || req.protocol;
+  const host = req.get("host");
+  return `${proto}://${host}`;
+};
+
 
 
 const registerUser = catchAsync(async(req:Request, res: Response) => {
@@ -147,18 +159,21 @@ const logoutUser = catchAsync(async (req: Request, res: Response) => {
 
   cookieUtils.clearCookie(res, "accessToken", {
     httpOnly: true,
-    secure: true,
-    sameSite: true,
+    secure: isProduction,
+    sameSite: cookieSameSite,
+    path: "/",
   });
   cookieUtils.clearCookie(res, "refreshToken", {
     httpOnly: true,
-    secure: true,
-    sameSite: true,
+    secure: isProduction,
+    sameSite: cookieSameSite,
+    path: "/",
   });
   cookieUtils.clearBetterAuthSessionCookies(res, {
     httpOnly: true,
-    secure: true,
-    sameSite: true,
+    secure: isProduction,
+    sameSite: cookieSameSite,
+    path: "/",
   });
 
   sendResponse(res, {
@@ -233,10 +248,11 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
 const googleSignIn = catchAsync(async (req: Request, res: Response) => {
   const redirectPath = req.query.redirect || "/dashboard";
   const encodedRedirectPath = encodeURIComponent(redirectPath as string);
-  const callbackURL = `${env.BETTER_AUTH_URL}/api/v1/auth/google/success?redirect=${encodedRedirectPath}`;
+  const authBaseUrl = getRequestOrigin(req);
+  const callbackURL = `${authBaseUrl}/api/v1/auth/google/success?redirect=${encodedRedirectPath}`;
   res.render("googleRedirect", {
     callbackURL,
-    betterAuthUrl: env.BETTER_AUTH_URL,
+    betterAuthUrl: authBaseUrl,
   });
 });
 const googleSignInSuccess = catchAsync(async (req: Request, res: Response) => {

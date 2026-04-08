@@ -9,6 +9,7 @@ import { env } from "../../config/env";
 // If your Prisma file is located elsewhere, you can change the path
 
 const isProduction = env.NODE_ENV === "production";
+const cookieSameSite = isProduction ? "none" : "lax";
 
 export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
@@ -149,8 +150,8 @@ export const auth = betterAuth({
     sessionToken: {
       name: "better-auth.session_token",
       attributes: {
-        sameSite: "none",
-        secure: env.NODE_ENV === "production",
+        sameSite: cookieSameSite,
+        secure: isProduction,
         httpOnly: true,
         path: '/',
       }

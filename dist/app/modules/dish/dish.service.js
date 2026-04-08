@@ -97,6 +97,13 @@ const getDishes = async (query) => {
                     id: true,
                     rating: true,
                     comment: true,
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            image: true,
+                        }
+                    }
                 },
             },
         })
@@ -187,6 +194,13 @@ const getDishById = async (id) => {
                     id: true,
                     rating: true,
                     comment: true,
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            image: true,
+                        }
+                    },
                 },
             },
         },

@@ -10,7 +10,7 @@ export const authCheck = (...roles) => {
         try {
             // session token check
             console.log("Checking authentication for request to:", req.path);
-            const sessionToken = cookieUtils.getCookie(req, "better-auth.session_token");
+            const sessionToken = cookieUtils.getBetterAuthSessionToken(req);
             if (!sessionToken) {
                 return res.status(401).json({
                     success: false,

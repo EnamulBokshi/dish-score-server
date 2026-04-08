@@ -7,6 +7,16 @@ import AppError from "../../helpers/errorHelpers/AppError";
 import { env } from "../../../config/env";
 import { auth } from "../../lib/auth";
 import { cookieUtils } from "../../utils/cookie";
+const isProduction = env.NODE_ENV === "production";
+const cookieSameSite = isProduction ? "none" : "lax";
+const getRequestOrigin = (req) => {
+    const forwardedProto = req.headers["x-forwarded-proto"];
+    const proto = Array.isArray(forwardedProto)
+        ? forwardedProto[0]
+        : forwardedProto || req.protocol;
+    const host = req.get("host");
+    return `${proto}://${host}`;
+};
 const registerUser = catchAsync(async (req, res) => {
     console.log("Registering reviewer with payload", req.body);
     const payload = req.body?.data ? JSON.parse(req.body.data) : req.body;
@@ -68,9 +78,12 @@ const getMe = catchAsync(async (req, res) => {
 });
 const getNewToken = catchAsync(async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
-    const sessionToken = req.cookies["better-auth.session_token"];
+    const sessionToken = cookieUtils.getBetterAuthSessionToken(req);
     if (!refreshToken) {
         throw new AppError(status.UNAUTHORIZED, "Refresh token is missing");
+    }
+    if (!sessionToken) {
+        throw new AppError(status.UNAUTHORIZED, "Session token is missing");
     }
     const result = await AuthService.getNewToken(refreshToken, sessionToken);
     const { accessToken, refreshToken: newRefreshToken, sessionToken: newSessionToken, } = result;
@@ -89,8 +102,11 @@ const getNewToken = catchAsync(async (req, res) => {
     });
 });
 const changePassword = catchAsync(async (req, res) => {
-    const sessionToken = req.cookies["better-auth.session_token"];
+    const sessionToken = cookieUtils.getBetterAuthSessionToken(req);
     const payload = req.body;
+    if (!sessionToken) {
+        throw new AppError(status.UNAUTHORIZED, "Session token is missing");
+    }
     if (!payload.currentPassword || !payload.newPassword) {
         throw new AppError(status.BAD_REQUEST, "Missing required fields: currentPassword, newPassword");
     }
@@ -107,25 +123,28 @@ const changePassword = catchAsync(async (req, res) => {
     });
 });
 const logoutUser = catchAsync(async (req, res) => {
-    const sessionToken = req.cookies["better-auth.session_token"];
+    const sessionToken = cookieUtils.getBetterAuthSessionToken(req);
     if (!sessionToken) {
         throw new AppError(status.BAD_REQUEST, "Session token is missing");
     }
     await AuthService.logoutUser(sessionToken);
     cookieUtils.clearCookie(res, "accessToken", {
         httpOnly: true,
-        secure: true,
-        sameSite: true,
+        secure: isProduction,
+        sameSite: cookieSameSite,
+        path: "/",
     });
     cookieUtils.clearCookie(res, "refreshToken", {
         httpOnly: true,
-        secure: true,
-        sameSite: true,
+        secure: isProduction,
+        sameSite: cookieSameSite,
+        path: "/",
     });
-    cookieUtils.clearCookie(res, "better-auth.session_token", {
+    cookieUtils.clearBetterAuthSessionCookies(res, {
         httpOnly: true,
-        secure: true,
-        sameSite: true,
+        secure: isProduction,
+        sameSite: cookieSameSite,
+        path: "/",
     });
     sendResponse(res, {
         httpStatusCode: status.OK,
@@ -186,15 +205,16 @@ const resetPassword = catchAsync(async (req, res) => {
 const googleSignIn = catchAsync(async (req, res) => {
     const redirectPath = req.query.redirect || "/dashboard";
     const encodedRedirectPath = encodeURIComponent(redirectPath);
-    const callbackURL = `${env.BETTER_AUTH_URL}/api/v1/auth/google/success?redirect=${encodedRedirectPath}`;
+    const authBaseUrl = getRequestOrigin(req);
+    const callbackURL = `${authBaseUrl}/api/v1/auth/google/success?redirect=${encodedRedirectPath}`;
     res.render("googleRedirect", {
         callbackURL,
-        betterAuthUrl: env.BETTER_AUTH_URL,
+        betterAuthUrl: authBaseUrl,
     });
 });
 const googleSignInSuccess = catchAsync(async (req, res) => {
     const redirectPath = req.query.redirect || "/dashboard";
-    const sessionToken = req.cookies["better-auth.session_token"];
+    const sessionToken = cookieUtils.getBetterAuthSessionToken(req);
     if (!sessionToken) {
         return res.redirect(`${env.FRONTEND_URL}/login?error=oauth_failed`);
     }

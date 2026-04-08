@@ -6,6 +6,8 @@ import { sendEmail } from "../utils/email";
 import { UserRole, UserStatus } from "../../generated/prisma/enums";
 import { env } from "../../config/env";
 // If your Prisma file is located elsewhere, you can change the path
+const isProduction = env.NODE_ENV === "production";
+const cookieSameSite = isProduction ? "none" : "lax";
 export const auth = betterAuth({
     baseURL: env.BETTER_AUTH_URL,
     secret: env.BETTER_AUTH_SECRET,
@@ -124,27 +126,17 @@ export const auth = betterAuth({
         signIn: `${env.BETTER_AUTH_URL}/api/v1/auth/google/success`,
     },
     advanced: {
-        disableCSRFCheck: true, // Disable CSRF check for development purposes. Make sure to enable it in production!
+        disableCSRFCheck: !isProduction,
         cookies: {
-            state: {
-                name: "better-auth.session_token",
-                attributes: {
-                    sameSite: "none",
-                    secure: env.NODE_ENV === "production",
-                    httpOnly: true,
-                    path: '/',
-                    partitioned: true,
-                }
-            },
+        // Keep Better Auth default state cookie naming/behavior to avoid OAuth state collisions.
         },
         sessionToken: {
             name: "better-auth.session_token",
             attributes: {
-                sameSite: "none",
-                secure: env.NODE_ENV === "production",
+                sameSite: cookieSameSite,
+                secure: isProduction,
                 httpOnly: true,
                 path: '/',
-                partitioned: true,
             }
         }
     }
