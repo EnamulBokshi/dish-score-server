@@ -35,10 +35,7 @@ const createTestimonial = async (payload: ICreateTestimonialPayload, requester: 
 	return result;
 };
 
-const getTestimonials = async (query: IQueryParams, requester: ITestimonialRequester) => {
-	if (!isAdminRole(requester.role)) {
-		throw new AppError(status.FORBIDDEN, "Only admin or super admin can view all testimonials");
-	}
+const getTestimonials = async (query: IQueryParams) => {
 
 	const queryBuilder = new QueryBuilder<
 		Testimonial,

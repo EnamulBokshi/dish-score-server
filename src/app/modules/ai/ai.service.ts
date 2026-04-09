@@ -3,7 +3,7 @@ import { Prisma } from "../../../generated/prisma/client";
 import z from "zod";
 import AppError from "../../helpers/errorHelpers/AppError";
 import prisma from "../../lib/prisma";
-import { geminiModel } from "../../lib/gemini";
+import { generateAIText } from "../../lib/aiProvider";
 
 interface IChatPayload {
   query: string;
@@ -24,6 +24,27 @@ interface IReviewDescriptionPayload {
 interface ISearchSuggestionsPayload {
   query: string;
   limit?: number;
+}
+
+interface IChatRecommendation {
+  dishName: string;
+  restaurantName: string;
+  price: number | null;
+  rating: number;
+  reason: string;
+}
+
+interface IChatResponse {
+  allowed: boolean;
+  answer: string;
+  recommendations: IChatRecommendation[];
+  confidence: "high" | "medium" | "low";
+  source?: "live" | "cache" | "fallback";
+}
+
+interface ISearchSuggestionsResponse {
+  suggestions: string[];
+  source: "database" | "hybrid" | "cache";
 }
 
 const FOOD_QUERY_KEYWORDS = [
@@ -49,7 +70,63 @@ const FOOD_QUERY_KEYWORDS = [
   "rice",
   "drink",
   "dessert",
+  "healthy",
+  "vegan",
+  "vegetarian",
+  "protein",
+  "low calorie",
+  "salad",
 ];
+
+const QUERY_STOPWORDS = new Set([
+  "top",
+  "best",
+  "food",
+  "dish",
+  "dishes",
+  "restaurant",
+  "restaurants",
+  "meal",
+  "meals",
+  "review",
+  "reviews",
+  "rating",
+  "ratings",
+  "price",
+  "prices",
+  "affordable",
+  "cheap",
+  "budget",
+  "popular",
+  "recommend",
+  "recommendations",
+  "suggest",
+  "suggestions",
+  "me",
+  "the",
+  "a",
+  "an",
+  "in",
+  "for",
+  "of",
+  "with",
+  "and",
+  "to",
+  "3",
+  "5",
+  "10",
+]);
+
+const CHAT_CACHE_TTL_MS = 90 * 1000;
+const SUGGESTION_CACHE_TTL_MS = 2 * 60 * 1000;
+
+type TCacheEntry<T> = {
+  value: T;
+  expiresAt: number;
+};
+
+const chatCache = new Map<string, TCacheEntry<IChatResponse>>();
+const suggestionCache = new Map<string, TCacheEntry<ISearchSuggestionsResponse>>();
 
 const isFoodRelatedQuery = (query: string) => {
   const normalized = query.toLowerCase();
@@ -58,14 +135,98 @@ const isFoodRelatedQuery = (query: string) => {
 
 const normalizeText = (value: string) => value.trim().replace(/\s+/g, " ");
 
-const toWordTokens = (query: string) => {
+const extractRequestedTop = (query: string, fallback: number) => {
+  const match = query.match(/\b([1-9]|10)\b/);
+  if (!match) return fallback;
+
+  const value = Number(match[1]);
+  return Number.isFinite(value) && value > 0 ? value : fallback;
+};
+
+const isAffordableIntent = (query: string) => {
+  const normalized = query.toLowerCase();
+  return /(affordable|cheap|budget|low\s*price|under\s*\d+)/i.test(normalized);
+};
+
+const parseBudgetFromQuery = (query: string): number | undefined => {
+  const normalized = query.toLowerCase();
+
+  const relationalPatterns = [
+    /(?:under|below|less than|within)\s*(?:tk\.?|bdt\.?|taka)?\s*(\d{2,5})/i,
+    /(?:tk\.?|bdt\.?|taka)\s*(\d{2,5})\s*(?:or less|max|maximum)?/i,
+  ];
+
+  for (const pattern of relationalPatterns) {
+    const match = normalized.match(pattern);
+    if (!match) continue;
+
+    const parsed = Number(match[1]);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  }
+
+  return undefined;
+};
+
+const detectQueryIntents = (query: string) => {
+  const normalized = query.toLowerCase();
+  return {
+    affordable: isAffordableIntent(query),
+    healthy: /(healthy|low\s*calorie|protein|nutritious|diet)/i.test(normalized),
+    spicy: /(spicy|hot|chili|chilli)/i.test(normalized),
+    vegan: /(vegan|vegetarian|plant\s*based)/i.test(normalized),
+  };
+};
+
+const buildDietarySignalTokens = (query: string) => {
+  const intents = detectQueryIntents(query);
+  const tokens: string[] = [];
+
+  if (intents.healthy) {
+    tokens.push("healthy", "protein", "salad", "grill", "boiled");
+  }
+  if (intents.spicy) {
+    tokens.push("spicy", "chili", "chilli", "hot");
+  }
+  if (intents.vegan) {
+    tokens.push("vegan", "vegetarian", "plant-based");
+  }
+
+  return Array.from(new Set(tokens));
+};
+
+const buildCacheKey = (parts: unknown[]) => JSON.stringify(parts);
+
+const getCached = <T>(cache: Map<string, TCacheEntry<T>>, key: string): T | null => {
+  const entry = cache.get(key);
+  if (!entry) return null;
+  if (Date.now() > entry.expiresAt) {
+    cache.delete(key);
+    return null;
+  }
+  return entry.value;
+};
+
+const setCached = <T>(
+  cache: Map<string, TCacheEntry<T>>,
+  key: string,
+  value: T,
+  ttlMs: number,
+) => {
+  cache.set(key, {
+    value,
+    expiresAt: Date.now() + ttlMs,
+  });
+};
+
+const getMeaningfulTokens = (query: string) => {
   return Array.from(
     new Set(
       query
         .toLowerCase()
         .split(/[^a-z0-9]+/)
         .map((token) => token.trim())
-        .filter((token) => token.length >= 3),
+        .filter((token) => token.length >= 3)
+        .filter((token) => !QUERY_STOPWORDS.has(token)),
     ),
   ).slice(0, 6);
 };
@@ -81,7 +242,7 @@ const extractJsonFromText = (raw: string) => {
 };
 
 const generateStructuredOutput = async <T>(prompt: string, schema: z.ZodSchema<T>) => {
-  const response = await geminiModel.generateContent({
+  const rawText = await generateAIText({
     contents: [{ role: "user", parts: [{ text: prompt }] }],
     generationConfig: {
       temperature: 0.3,
@@ -89,7 +250,6 @@ const generateStructuredOutput = async <T>(prompt: string, schema: z.ZodSchema<T
     },
   });
 
-  const rawText = response.response.text();
   const jsonText = extractJsonFromText(rawText);
 
   try {
@@ -100,8 +260,48 @@ const generateStructuredOutput = async <T>(prompt: string, schema: z.ZodSchema<T
   }
 };
 
+const buildChatFallbackResponse = (
+  query: string,
+  top: number,
+  dishes: Array<{
+    name: string;
+    price: number | null;
+    ratingAvg: number;
+    totalReviews: number;
+    restaurant: { name: string };
+  }>,
+): IChatResponse => {
+  const recommendations = dishes.slice(0, top).map((dish) => ({
+    dishName: dish.name,
+    restaurantName: dish.restaurant.name,
+    price: dish.price,
+    rating: dish.ratingAvg,
+    reason:
+      dish.totalReviews > 0
+        ? `Good rating (${dish.ratingAvg.toFixed(1)}) from ${dish.totalReviews} reviews`
+        : `Available on the platform${dish.price === null ? "" : ` with price ${dish.price}`}`,
+  }));
+
+  const answer =
+    recommendations.length > 0
+      ? `Live AI is temporarily unavailable, but here are top data-based picks for "${query}".`
+      : "Live AI is temporarily unavailable right now. Please try again shortly.";
+
+  return {
+    allowed: true,
+    answer,
+    recommendations,
+    confidence: recommendations.length > 0 ? "medium" : "low",
+    source: "fallback",
+  };
+};
+
 const getDishContextForChat = async (query: string, maxPrice: number | undefined, limit: number) => {
-  const tokens = toWordTokens(query);
+  const intents = detectQueryIntents(query);
+  const affordableIntent = intents.affordable;
+  const tokens = getMeaningfulTokens(query);
+  const dietarySignalTokens = buildDietarySignalTokens(query);
+  const allTokens = Array.from(new Set([...tokens, ...dietarySignalTokens]));
   const tokenFilters: Prisma.DishWhereInput[] = tokens.flatMap((token) => [
     { name: { contains: token, mode: "insensitive" } },
     { description: { contains: token, mode: "insensitive" } },
@@ -109,6 +309,14 @@ const getDishContextForChat = async (query: string, maxPrice: number | undefined
     { tags: { has: token } },
     { ingredients: { has: token } },
   ]);
+
+  for (const token of dietarySignalTokens) {
+    tokenFilters.push(
+      { tags: { has: token } },
+      { ingredients: { has: token } },
+      { description: { contains: token, mode: "insensitive" } },
+    );
+  }
 
   const where: Prisma.DishWhereInput = {
     restaurant: {
@@ -118,10 +326,49 @@ const getDishContextForChat = async (query: string, maxPrice: number | undefined
     ...(tokenFilters.length > 0 ? { OR: tokenFilters } : {}),
   };
 
-  return prisma.dish.findMany({
+  const hasSpecificSearchTerms = allTokens.length > 0;
+  const orderBy: Prisma.DishOrderByWithRelationInput | Prisma.DishOrderByWithRelationInput[] =
+    affordableIntent && !hasSpecificSearchTerms
+      ? [{ price: "asc" }, { ratingAvg: "desc" }, { totalReviews: "desc" }, { createdAt: "desc" }]
+      : [{ ratingAvg: "desc" }, { totalReviews: "desc" }, { createdAt: "desc" }];
+
+  const dishContext = await prisma.dish.findMany({
     where,
     take: Math.max(limit * 3, 10),
-    orderBy: [{ ratingAvg: "desc" }, { totalReviews: "desc" }, { createdAt: "desc" }],
+    orderBy,
+    select: {
+      id: true,
+      name: true,
+      price: true,
+      tags: true,
+      ingredients: true,
+      ratingAvg: true,
+      totalReviews: true,
+      restaurant: {
+        select: {
+          id: true,
+          name: true,
+          city: true,
+        },
+      },
+    },
+  });
+
+  if (dishContext.length > 0 || hasSpecificSearchTerms) {
+    return dishContext;
+  }
+
+  return prisma.dish.findMany({
+    where: {
+      restaurant: {
+        isDeleted: false,
+      },
+      ...(maxPrice ? { price: { lte: maxPrice } } : {}),
+    },
+    take: Math.max(limit * 3, 10),
+    orderBy: affordableIntent
+      ? [{ price: "asc" }, { ratingAvg: "desc" }, { totalReviews: "desc" }, { createdAt: "desc" }]
+      : [{ ratingAvg: "desc" }, { totalReviews: "desc" }, { createdAt: "desc" }],
     select: {
       id: true,
       name: true,
@@ -142,7 +389,10 @@ const getDishContextForChat = async (query: string, maxPrice: number | undefined
 };
 
 const getRestaurantContextForChat = async (query: string, limit: number) => {
-  const tokens = toWordTokens(query);
+  const intents = detectQueryIntents(query);
+  const affordableIntent = intents.affordable;
+  const tokens = getMeaningfulTokens(query);
+  const dietarySignalTokens = buildDietarySignalTokens(query);
   const tokenFilters: Prisma.RestaurantWhereInput[] = tokens.flatMap((token) => [
     { name: { contains: token, mode: "insensitive" } },
     { description: { contains: token, mode: "insensitive" } },
@@ -150,13 +400,46 @@ const getRestaurantContextForChat = async (query: string, limit: number) => {
     { tags: { has: token } },
   ]);
 
+  for (const token of dietarySignalTokens) {
+    tokenFilters.push(
+      { tags: { has: token } },
+      { description: { contains: token, mode: "insensitive" } },
+    );
+  }
+
   const where: Prisma.RestaurantWhereInput = {
     isDeleted: false,
     ...(tokenFilters.length > 0 ? { OR: tokenFilters } : {}),
   };
 
-  return prisma.restaurant.findMany({
+  const hasSpecificSearchTerms = tokens.length > 0;
+  const orderBy: Prisma.RestaurantOrderByWithRelationInput | Prisma.RestaurantOrderByWithRelationInput[] =
+    affordableIntent && !hasSpecificSearchTerms
+      ? [{ ratingAvg: "desc" }, { totalReviews: "desc" }, { createdAt: "desc" }]
+      : [{ ratingAvg: "desc" }, { totalReviews: "desc" }, { createdAt: "desc" }];
+
+  const restaurantContext = await prisma.restaurant.findMany({
     where,
+    take: Math.max(limit * 2, 6),
+    orderBy,
+    select: {
+      id: true,
+      name: true,
+      city: true,
+      tags: true,
+      ratingAvg: true,
+      totalReviews: true,
+    },
+  });
+
+  if (restaurantContext.length > 0 || tokens.length > 0 || dietarySignalTokens.length > 0) {
+    return restaurantContext;
+  }
+
+  return prisma.restaurant.findMany({
+    where: {
+      isDeleted: false,
+    },
     take: Math.max(limit * 2, 6),
     orderBy: [{ ratingAvg: "desc" }, { totalReviews: "desc" }, { createdAt: "desc" }],
     select: {
@@ -186,32 +469,50 @@ const chatOutputSchema = z.object({
   confidence: z.enum(["high", "medium", "low"]),
 });
 
-const chat = async (payload: IChatPayload) => {
+const chat = async (payload: IChatPayload): Promise<IChatResponse> => {
   const query = normalizeText(payload.query);
-  const top = payload.top ?? 3;
+  const top = extractRequestedTop(query, payload.top ?? 3);
+  const budgetFromText = parseBudgetFromQuery(query);
+  const effectiveMaxPrice =
+    typeof payload.maxPrice === "number" && payload.maxPrice > 0
+      ? payload.maxPrice
+      : budgetFromText;
+
+  const chatCacheKey = buildCacheKey(["chat", query.toLowerCase(), top, effectiveMaxPrice ?? null]);
+  const cachedResponse = getCached(chatCache, chatCacheKey);
+  if (cachedResponse) {
+    return {
+      ...cachedResponse,
+      source: "cache",
+    };
+  }
 
   if (!isFoodRelatedQuery(query)) {
-    return {
+    const blockedResponse: IChatResponse = {
       allowed: false,
       answer:
         "I can only help with food platform queries like dishes, restaurants, prices, ratings, and reviews.",
       recommendations: [],
       confidence: "low",
     };
+    setCached(chatCache, chatCacheKey, blockedResponse, CHAT_CACHE_TTL_MS);
+    return blockedResponse;
   }
 
   const [dishContext, restaurantContext] = await Promise.all([
-    getDishContextForChat(query, payload.maxPrice, top),
+    getDishContextForChat(query, effectiveMaxPrice, top),
     getRestaurantContextForChat(query, top),
   ]);
 
   if (dishContext.length === 0 && restaurantContext.length === 0) {
-    return {
+    const noContextResponse: IChatResponse = {
       allowed: true,
       answer: "I could not find enough matching data right now. Try a more specific food query.",
       recommendations: [],
       confidence: "low",
     };
+    setCached(chatCache, chatCacheKey, noContextResponse, CHAT_CACHE_TTL_MS);
+    return noContextResponse;
   }
 
   const prompt = `You are a food recommendation assistant for this platform.
@@ -220,6 +521,7 @@ Do not invent dishes, restaurants, prices, or ratings.
 
 User query: ${query}
 Top requested: ${top}
+Budget limit: ${effectiveMaxPrice ?? "not specified"}
 
 Context JSON:
 ${JSON.stringify({
@@ -248,12 +550,22 @@ Rules:
 - if affordable/cheap is asked, prioritize lower price dishes
 `;
 
-  const aiResult = await generateStructuredOutput(prompt, chatOutputSchema);
+  let response: IChatResponse;
 
-  return {
-    allowed: true,
-    ...aiResult,
-  };
+  try {
+    const aiResult = await generateStructuredOutput(prompt, chatOutputSchema);
+    response = {
+      allowed: true,
+      ...aiResult,
+      source: "live",
+    };
+  } catch {
+    response = buildChatFallbackResponse(query, top, dishContext);
+  }
+
+  setCached(chatCache, chatCacheKey, response, CHAT_CACHE_TTL_MS);
+
+  return response;
 };
 
 const reviewDescriptionOutputSchema = z.object({
@@ -344,10 +656,21 @@ const buildDeterministicSuggestions = (
   return uniqueLowercase(suggestions).slice(0, limit);
 };
 
-const searchSuggestions = async (payload: ISearchSuggestionsPayload) => {
+const searchSuggestions = async (
+  payload: ISearchSuggestionsPayload,
+): Promise<ISearchSuggestionsResponse> => {
   const query = normalizeText(payload.query);
   const normalizedQuery = query.toLowerCase();
   const limit = payload.limit ?? 8;
+
+  const suggestionCacheKey = buildCacheKey(["suggest", normalizedQuery, limit]);
+  const cachedResponse = getCached(suggestionCache, suggestionCacheKey);
+  if (cachedResponse) {
+    return {
+      ...cachedResponse,
+      source: "cache",
+    };
+  }
 
   const dishCandidates = await prisma.dish.findMany({
     where: {
@@ -373,10 +696,12 @@ const searchSuggestions = async (payload: ISearchSuggestionsPayload) => {
   const deterministicSuggestions = buildDeterministicSuggestions(query, limit, dishCandidates);
 
   if (deterministicSuggestions.length >= limit) {
-    return {
+    const response: ISearchSuggestionsResponse = {
       suggestions: deterministicSuggestions.slice(0, limit),
       source: "database",
     };
+    setCached(suggestionCache, suggestionCacheKey, response, SUGGESTION_CACHE_TTL_MS);
+    return response;
   }
 
   const prompt = `You generate search auto-complete suggestions for a food platform.
@@ -404,10 +729,14 @@ Rules:
     ...aiResult.suggestions,
   ]).slice(0, limit);
 
-  return {
+  const response: ISearchSuggestionsResponse = {
     suggestions: mergedSuggestions,
     source: "hybrid",
   };
+
+  setCached(suggestionCache, suggestionCacheKey, response, SUGGESTION_CACHE_TTL_MS);
+
+  return response;
 };
 
 export const AIService = {

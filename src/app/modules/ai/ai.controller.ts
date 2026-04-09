@@ -5,7 +5,7 @@ import { AIService } from "./ai.service";
 
 const chat = catchAsync(async (req: Request, res: Response) => {
   const result = await AIService.chat(req.body);
-
+console.log("AI chat response generated:", result);
   sendResponse(res, {
     httpStatusCode: 200,
     success: true,

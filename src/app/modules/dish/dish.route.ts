@@ -27,8 +27,8 @@ router.get("/:id", DishController.getDishById);
 router.patch(
   "/me/:id",
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
-  requestValidator(updateDishSchema),
   multerUpload.single("image"),
+  requestValidator(updateDishSchema),
   DishController.updateMyDish,
 );
 router.delete(
@@ -39,8 +39,8 @@ router.delete(
 router.patch(
   "/:id",
   authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.OWNER, UserRole.CONSUMER),
-  requestValidator(updateDishSchema),
   multerUpload.single("image"),
+  requestValidator(updateDishSchema),
   DishController.updateDish,
 );
 router.delete(

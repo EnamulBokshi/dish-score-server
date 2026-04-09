@@ -31,8 +31,6 @@ const loadEnvVariables = () => {
         "CLOUDINARY_API_SECRET",
         "GOOGLE_CALLBACK_URL",
         "FRONTEND_URL",
-        "GEMINI_API_KEY",
-        "GEMINI_MODEL",
     ];
     for (const envVar of requiredEnvVars) {
         if (!process.env[envVar]) {
@@ -58,9 +56,13 @@ const loadEnvVariables = () => {
         SUPER_ADMIN_PHONE: process.env.SUPER_ADMIN_PHONE,
         SUPER_ADMIN_PROFILE_PHOTO_URL: process.env
             .SUPER_ADMIN_PROFILE_PHOTO_URL,
-        GEMINI: {
-            API_KEY: process.env.GEMINI_API_KEY,
-            MODEL: process.env.GEMINI_MODEL,
+        AI: {
+            PROVIDER: process.env.AI_PROVIDER || "auto",
+            OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+            OPENROUTER_MODEL: process.env.OPENROUTER_MODEL || "meta-llama/llama-3.1-8b-instruct:free",
+            OPENROUTER_STRICT_MODEL: process.env.OPENROUTER_STRICT_MODEL !== "false",
+            OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+            OPENAI_MODEL: process.env.OPENAI_MODEL || "gpt-4o-mini",
         },
         SMTP_SENDER: {
             USER: process.env.EMAIL_SENDER_SMTP_USER,

@@ -16,7 +16,6 @@ router.post(
 
 router.get(
   "/",
-  authCheck(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   TestimonialController.getTestimonials,
 );
 
