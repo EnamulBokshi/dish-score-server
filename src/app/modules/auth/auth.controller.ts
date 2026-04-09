@@ -268,6 +268,8 @@ const googleSignInSuccess = catchAsync(async (req: Request, res: Response) => {
     new Set([sessionToken, decodedSessionToken, unsignedSessionToken].filter(Boolean)),
   );
 
+  // try both cookie and authorization header for each candidate token
+
   const incomingCookieHeader = req.headers.cookie;
   const cookieHeadersToTry = [
     incomingCookieHeader || "",
